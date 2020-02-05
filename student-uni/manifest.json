@@ -1,5 +1,5 @@
 {
-    "name" : "student-uni",
+    "name" : "/",
     "appid" : "__UNI__D064FA9",
     "description" : "应用描述",
     "versionName" : "1.0.0",
@@ -10,7 +10,6 @@
         "usingComponents" : true,
         "nvueCompiler" : "uni-app",
         "compilerVersion" : 3,
-        "nvueLaunchMode" : "fast",
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
@@ -121,7 +120,7 @@
         "template" : "template.h5.html",
         "router" : {
             "mode" : "history",
-            "base" : "/student-uni-demo/"
+            "base" : "/"
         },
         "sdkConfigs" : {
             "maps" : {

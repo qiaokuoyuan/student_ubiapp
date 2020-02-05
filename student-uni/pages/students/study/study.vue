@@ -22,9 +22,14 @@
 
 		<!-- 测试按钮 -->
 		<view class=""><button type="primary" @click="testAxios()">测试跨域</button></view>
-		
+
 		<!-- 测试按钮 -->
-		<navigator url="../course/courseDetail/courseDetail" open-type="navigate">详情</navigator>
+		
+			<button type="primary" @click="toCourseDetail()">
+				课程详情
+				<!-- <navigator url="../course/courseDetail/courseDetail" open-type="navigate">详情</navigator> -->
+			</button>
+
 	</view>
 </template>
 
@@ -48,6 +53,12 @@ export default {
 		};
 	},
 	methods: {
+		toCourseDetail() {
+			uni.navigateTo({
+				url:"/pages/students/course/courseDetail/courseDetail"
+			})
+			
+		},
 		testAxios() {
 			uni.request({
 				url: '/api/Common/GetOpenCourseConfig',

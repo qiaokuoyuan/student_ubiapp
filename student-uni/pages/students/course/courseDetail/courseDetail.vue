@@ -60,8 +60,6 @@ import uniCard from '@/components/uni-card/uni-card.vue';
 import mixTree from '@/components/mix-tree/mix-tree';
 import uniFab from '@/components/uni-fab/uni-fab.vue';
 
-import { Button } from 'mint-ui';
-import 'mint-ui/lib/style.css';
 
 const catalog = [
 	{
@@ -105,7 +103,6 @@ export default {
 		uniNoticeBar,
 		uniSection,
 		uniCard,
-		Button,
 		mixTree,
 		uniFab
 	},
