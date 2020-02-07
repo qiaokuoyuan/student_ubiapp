@@ -10,6 +10,20 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+Vue.prototype.fhttp = (url) => {	
+	url = url || ''	
+	if (url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0) {
+		return url
+	}
+
+	if (url.indexOf('//') == 0) {
+		return `${location.protocol}${url}`
+	} else {
+		return `${location.protocol}//${url}`
+	}
+
+}
+
 Vue.prototype.$store = store
 Vue.prototype.$backgroundAudioData = {
 	playing: false,

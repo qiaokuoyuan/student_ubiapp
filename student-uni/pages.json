@@ -1,5 +1,23 @@
 {
 	"pages": [
+		// 课程学习页面
+		{
+			"path": "pages/students/study/study",
+			"style": {
+				"navigationBarTitleText": "课程学习",
+				"app-plus": {
+					"bounce": "vertical",
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue534",
+							"fontSrc": "/static/uni.ttf",
+							"fontSize": "22px",
+							"color": "#FFFFFF"
+						}]
+					}
+				}
+			}
+		},
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/tabBar/component/component",
@@ -19,11 +37,14 @@
 			}
 		},
 
-		// 课程学习页面
+
+
+		// 课程详情页面
 		{
-			"path": "pages/students/study/study",
+			"path": "pages/students/course/courseDetail/courseDetail",
 			"style": {
-				"navigationBarTitleText": "课程学习",
+				"navigationBarTitleText": "课程详情",
+				"navigationStyle": "custom",
 				"app-plus": {
 					"bounce": "vertical",
 					"titleNView": {
@@ -37,12 +58,49 @@
 				}
 			}
 		},
-		// 课程详情页面
+
+		// 我的作品
 		{
-			"path": "pages/students/course/courseDetail/courseDetail",
+			"path": "pages/students/artifact/artifact/artifact",
 			"style": {
-				"navigationBarTitleText": "课程详情",
+				"navigationBarTitleText": "我的作品",
 				"navigationStyle": "custom",
+				"app-plus": {
+					"bounce": "vertical",
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue534",
+							"fontSrc": "/static/uni.ttf",
+							"fontSize": "22px",
+							"color": "#FFFFFF"
+						}]
+					}
+				}
+			}
+		},
+		// 开始学习页面
+		{
+			"path": "pages/students/doStudy/doStudy",
+			"style": {
+				"navigationBarTitleText": "开始学习",				
+				"app-plus": {
+					"bounce": "vertical",
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue534",
+							"fontSrc": "/static/uni.ttf",
+							"fontSize": "22px",
+							"color": "#FFFFFF"
+						}]
+					}
+				}
+			}
+		},
+		// 阅读页面
+		{
+			"path": "pages/students/read/read",
+			"style": {
+				"navigationBarTitleText": "阅读",				
 				"app-plus": {
 					"bounce": "vertical",
 					"titleNView": {
@@ -345,7 +403,19 @@
 			"path": "pages/students/course/courseDetail/courseDetail",
 			"style": {}
 		}
-	],
+	    ,{
+            "path" : "pages/students/doStudy/doStudy",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/students/doStudy/doStudy",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/students/read/read",
+            "style" : {}
+        }
+    ],
 	"subPackages": [{
 			"root": "pages/API",
 			"pages": [{
@@ -1174,26 +1244,37 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
+				"pagePath": "pages/students/study/study",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "我的课程"
+			},
+			{
+				"pagePath": "pages/students/artifact/artifact/artifact",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "我的作品"
+			},
+			{
+				"pagePath": "pages/students/doStudy/doStudy",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "开始学习"
+			}
+			
+			
+			,
+
+
+
+			{
 				"pagePath": "pages/tabBar/component/component",
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
 				"text": "内置组件"
-			},
-			{
-				"pagePath": "pages/students/study/study",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
-				"text": "课程学习"
-			},
-
-			{
-				"pagePath": "pages/students/course/courseDetail/courseDetail",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
-				"text": "课程详情"
-			},
-
-
+			}
+			
+			,
 
 			{
 				"pagePath": "pages/tabBar/API/API",
