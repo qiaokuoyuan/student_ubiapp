@@ -6,7 +6,7 @@
 		</view>
 
 		<!-- 中间目录列表 -->
-		<view class=""><mix-tree :list="courseCatalog"  @itemClick="itemClick"></mix-tree></view>
+		<view class=""><mix-tree :list="courseCatalog" @itemClick="itemClick"></mix-tree></view>
 
 		<!-- 简介抽屉 -->
 		<uni-drawer :visible="show_desc" @close="show_desc = false" :mask="true" mode="right">
@@ -27,7 +27,9 @@
 					:extra="courseDesc.teacherInfo.teacherRank || '暂无称号'"
 					:note="courseDesc.teacherInfo.teacherDesc"
 				>
-					<view class="image-box"><image class="image" mode="aspectFill" src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" /></view>
+					<view class="image-box">
+						<image class="image" mode="aspectFill" src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" />
+						</view>
 				</uni-card>
 
 				<uni-section title="团队成员" type="line"></uni-section>
@@ -60,42 +62,6 @@ import uniCard from '@/components/uni-card/uni-card.vue';
 import mixTree from '@/components/mix-tree/mix-tree';
 import uniFab from '@/components/uni-fab/uni-fab.vue';
 
-
-const catalog = [
-	{
-		id: 1,
-		name: '第一单元云计算概论',
-		children: [
-			{
-				id: 11,
-				name: '1.1云计算概述'
-			},
-			{
-				id: 12,
-				name: '1.2云计算数据中心'
-			}
-		]
-	},
-	{
-		id: 2,
-		name: '第二单元云计算关键技术',
-		children: [
-			{
-				id: 21,
-				name: '2.1虚拟化技术'
-			},
-			{
-				id: 22,
-				name: '2.2虚拟化实验'
-			},
-			{
-				id: 23,
-				name: '2.3云安全技术'
-			}
-		]
-	}
-];
-
 export default {
 	components: {
 		uniNavBar,
@@ -109,13 +75,15 @@ export default {
 
 	created() {
 		setTimeout(() => {
-			this.courseCatalog = catalog;
+			this.reloadCatalog();
 		}, 300);
 	},
 	data() {
 		return {
 			// 是否显示简介
 			show_desc: false,
+
+			courseId: '',
 
 			// 页面中心的课程目录
 			courseCatalog: [],
@@ -181,19 +149,210 @@ export default {
 	},
 
 	methods: {
+		// 刷新课程目录
+		reloadCatalog() {
+			let that = this;
+			let r = {
+				Code: 200,
+				Data: [
+					{
+						id: 'c2f24592-bfcb-40f8-ab7c-f1c1dad0bbab',
+						pId: '0',
+						name: '第一章',
+						fullName: '第一章',
+						showNo: 1,
+						isPart: '0',
+						open: true,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 5,
+						cataLogUserName: null,
+						cataLogUserId: null,
+						isContent: 0,
+						isMy: 0,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: 'f32950c9-9576-469f-b2c4-b001a2f68be0',
+						pId: 'c2f24592-bfcb-40f8-ab7c-f1c1dad0bbab',
+						name: 'maven简介',
+						fullName: 'maven简介',
+						showNo: 1,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 5,
+						cataLogUserName: '熊凡12345',
+						cataLogUserId: '0f79635f-80c0-4a6e-a634-30b925a9413a',
+						isContent: 1,
+						isMy: 1,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: 'eaa3513d-9573-4d34-8ef6-7fc9b02a4257',
+						pId: 'b3fa7334-c278-4fde-a7ed-ffd8ecffd5e2',
+						name: "sacascc'c",
+						fullName: "sacascc'c",
+						showNo: 1,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 4,
+						cataLogUserName: '熊凡12345',
+						cataLogUserId: '0f79635f-80c0-4a6e-a634-30b925a9413a',
+						isContent: 0,
+						isMy: 1,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: 'b3fa7334-c278-4fde-a7ed-ffd8ecffd5e2',
+						pId: '88b5e1d2-e0c4-4771-8198-27c8d97ae15e',
+						name: "sa'cas'c",
+						fullName: "sa'cas'c",
+						showNo: 1,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 0,
+						cataLogUserName: null,
+						cataLogUserId: null,
+						isContent: 0,
+						isMy: 0,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: 'c0ae5569-edcc-4028-91a7-7a1d7739b53a',
+						pId: 'c2f24592-bfcb-40f8-ab7c-f1c1dad0bbab',
+						name: 'maven安装',
+						fullName: 'maven安装',
+						showNo: 2,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 4,
+						cataLogUserName: '熊凡12345',
+						cataLogUserId: '0f79635f-80c0-4a6e-a634-30b925a9413a',
+						isContent: 1,
+						isMy: 1,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: '25e20fda-3fa5-4b4d-b211-41ee82ec1ea5',
+						pId: '0',
+						name: 'maven仓库',
+						fullName: 'maven仓库',
+						showNo: 2,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 4,
+						cataLogUserName: '熊凡12345',
+						cataLogUserId: '0f79635f-80c0-4a6e-a634-30b925a9413a',
+						isContent: 1,
+						isMy: 1,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: '3236cc5d-e49f-4234-a42d-28f430e197d1',
+						pId: '0',
+						name: 'maven插件',
+						fullName: 'maven插件',
+						showNo: 3,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 4,
+						cataLogUserName: '熊凡12345',
+						cataLogUserId: '0f79635f-80c0-4a6e-a634-30b925a9413a',
+						isContent: 0,
+						isMy: 1,
+						isMember: 0,
+						reason: null
+					},
+					{
+						id: '88b5e1d2-e0c4-4771-8198-27c8d97ae15e',
+						pId: '0',
+						name: '第二章',
+						fullName: '第二章',
+						showNo: 4,
+						isPart: '0',
+						open: false,
+						pStatus: 0,
+						introduction: null,
+						progressStatus: 0,
+						cataLogUserName: null,
+						cataLogUserId: null,
+						isContent: 0,
+						isMy: 0,
+						isMember: 0,
+						reason: null
+					}
+				],
+				Error: null,
+				Other: 0,
+				IsMult: false,
+				Ext: null,
+				Extension: null,
+				Total: 0
+			};
+
+			if (r.Code == 200) {
+				function toTree(data) {
+					let result = [];
+					if (!Array.isArray(data)) {
+						return result;
+					}
+					data.forEach(item => {
+						delete item.children;
+					});
+					let map = {};
+					data.forEach(item => {
+						map[item.id] = item;
+					});
+					data.forEach(item => {
+						let parent = map[item.pId];
+						if (parent) {
+							(parent.children || (parent.children = [])).push(item);
+						} else {
+							result.push(item);
+						}
+					});
+					return result;
+				}
+
+				// 转换后的树结构
+				let treeData = toTree(r.Data);
+				this.courseCatalog = treeData;
+			}
+		},
 		trigger(e) {
 			console.log(e);
 		},
 		back() {
-			uni.navigateBack({
-				delta: 1
-			});
+			uni.switchTab({
+				url:"/pages/students/study/study"
+			})
+			
 		},
 		// 树中元素点击事件
 		itemClick(item) {
-			console.log(item);
-		},
-	
+				
+			uni.redirectTo({
+				url:`/pages/students/doStudy/doStudy?courseId=${this.courseId}`
+			} )
+		}
 	}
 };
 </script>

@@ -1,18 +1,28 @@
 <template>
 	<view>
+		<!-- 头部导航 -->
+		<view class="example-body"><uni-nav-bar left-icon="arrowleft" left-text="返回" @clickLeft="back" /></view>
+
 		<!-- 左侧抽屉 -->
 		<uni-drawer :visible="show_left_drawer">
 			<button type="primary" @click="show_left_drawer = false">关闭</button>
 
 			<view class="">asdad</view>
 		</uni-drawer>
-		
-		
+
 		<!-- 中间内容 -->
 		<view v-for="(m, mi) in list_modules" :key="mi">
 			<uni-section :title="m.ModuleName" type="line"></uni-section>
+			
+			<!-- thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" -->
 			<uni-list>
-				<uni-list-item v-for="(res, res_i) in m.CoResourceView" :key="res_i" @click="read(res)" :title="res.ResourceName" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" />
+				<uni-list-item
+					v-for="(res, res_i) in m.CoResourceView"
+					:key="res_i"
+					@click="read(res)"
+					:title="res.ResourceName"
+					
+				/>
 			</uni-list>
 		</view>
 
@@ -21,6 +31,7 @@
 </template>
 
 <script>
+import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
 import uniDrawer from '@/components/uni-drawer/uni-drawer.vue';
 import mixTree from '@/components/mix-tree/mix-tree';
 import uniSection from '@/components/uni-section/uni-section.vue';
@@ -32,7 +43,8 @@ export default {
 		mixTree,
 		uniSection,
 		uniList,
-		uniListItem
+		uniListItem,
+		uniNavBar
 	},
 	data() {
 		return {
@@ -54,11 +66,81 @@ export default {
 		this.reloadModules();
 	},
 	methods: {
-		read(item){
-			uni.navigateTo({
-				url:"/pages/students/read/read?resType=video&resUrl=//1256163091.vod2.myqcloud.com/53f6024cvodtranscq1256163091/69b1b63d5285890798426735646/v.f20.mp4"
-		
-			})
+		// 返回
+		back() {
+			uni.redirectTo({
+				url: '/pages/students/course/courseDetail/courseDetail'
+			});
+		},
+		read(item) {
+			// 如过是知网资源,直接跳转
+			if (item.IsCNKI) {
+				uni.navigateTo({
+					url: item.Link
+				});
+			}
+
+			// 如果是文档阅读
+			if (item.ResourceType == 'wordprocessing') {
+				uni.showLoading({
+					mask: true,
+					title: '正在获取文件，请稍候...'
+				});
+
+				uni.downloadFile({
+					header: {
+						Origin: '*',
+						'Access-Control-Allow-Origin': '*',
+						'Access-Control-Request-Method': '*',
+						'Access-Control-Request-Headers': '*',
+						'Access-Control-Allow-Credentials': false
+					},
+					url: 'https://ve-1256163091.cos.ap-beijing.myqcloud.com/0038938a-4a43-491d-be82-e8d74633f93d.doc',
+					success: function(res) {
+						var filePath = res.tempFilePath;
+						uni.openDocument({
+							filePath: filePath,
+							success: function(res) {
+								console.log('打开文档成功');
+							}
+						});
+					},
+					complete: function() {
+						uni.hideLoading();
+					}
+				});
+			}
+
+			// 如果是pdf阅读
+			if (item.ResourceType == 'pdf') {
+				uni.showLoading({
+					mask: true,
+					title: '正在获取文件，请稍候...'
+				});
+				uni.downloadFile({
+					header: {
+						Origin: '*',
+						'Access-Control-Allow-Origin': '*',
+						'Access-Control-Request-Method': '*',
+						'Access-Control-Request-Headers': '*',
+						'Access-Control-Allow-Credentials': false
+					},
+					url: 'https://ve-1256163091.cos.ap-beijing.myqcloud.com/000483d6-3764-4c1a-a170-f3be6a2744ac.pdf',
+					success: function(res) {
+						var filePath = res.tempFilePath;
+						uni.openDocument({
+							filePath: filePath,
+							success: function(res) {
+								console.log('打开文档成功');
+							}
+						});
+					},
+
+					complete: function() {
+						uni.hideLoading();
+					}
+				});
+			}
 		},
 		reloadModules() {
 			let r = {
