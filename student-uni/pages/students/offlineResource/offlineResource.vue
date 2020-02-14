@@ -8,6 +8,7 @@
 
 <script>
 	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue';
+	import http  from "@/common/request.js"
 	
 	export default {
 		components:{
@@ -22,8 +23,18 @@
 		
 		onLoad(e){
 			this.returnUrl=e.returnUrl
+			this.test()
 		},
 		methods: {
+			
+			test(){
+				console.log("测试 接口 test")
+				http.request("http://ve.cnki.net/coeduApi/api/UserExtended/GetUser?userId=").then(r=>{
+					
+					console.log('测试 接口 返回',r)
+				})
+			},
+			
 			back(){
 				
 				let courseId=uni.getStorageSync("courseId")

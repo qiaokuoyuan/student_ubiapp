@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 头部导航 -->
-		<view class="example-body"><uni-nav-bar left-icon="arrowleft" left-text="返回" @clickLeft="back" rightText="离线资源" @clickRight="show_choose_offline_file=true" /></view>
+		<view class="example-body"><uni-nav-bar left-icon="arrowleft" left-text="返回" @clickLeft="back" :rightText="show_choose_offline_file? '已缓存': '离线缓存'" @clickRight="navRightClick" /></view>
 
 		<!-- 左侧抽屉 -->
 		<uni-drawer :visible="show_left_drawer">
@@ -82,13 +82,31 @@ export default {
 		this.reloadModules();
 	},
 	methods: {
+		// 导航栏右侧点击
+		navRightClick(){
+			let that=this
+			if(that.show_choose_offline_file){
+				// 如过显示的是已缓存的视频,则重定向到已缓存的视频
+				uni.redirectTo({
+					url:"/pages/students/offlineFiles/offlineFiles"
+				})
+			}else{
+				// 如过是正常显示,则显示选择那些文件需要缓存
+				that.show_choose_offline_file=true
+			}
+			
+		},
 		// 将文件存储到本地
-		saveFilesToOffline(){
+		 saveFilesToOffline : function(){
 			
 			let that=this
 			uni.showToast({
 				title:"正在缓存，请稍后。"
 			})
+			
+			// 先打开保存文件和文件id映射关系
+			// let m=uni.
+			
 			
 			// 先查找已经缓存过的文件
 			uni.getSavedFileList({
@@ -96,28 +114,62 @@ export default {
 					
 				
 					let file_list=r.fileList || []
+					console.log("已缓存文件：",file_list)
 					
 					let _saved_file_ids=file_list.map(e=>{return e.filePath}).join(",")
 					
-					
+					// 待下载的文件集合
+					let _file_wait_to_download=[]					
 					that.list_modules.forEach(m=>{
 						m.CoResourceView.forEach(r=>{
 							if(r.isOfflineSaved){
-								// 排除掉已经缓存过的
-								if(_saved_file_ids.indexOf(r.Id)==-1){
+								// 从选中文件中筛选出未下载过的，添加到集合中
+								if(_saved_file_ids.indexOf(r.ResourceCode)==-1){
 									
-									// 保存文件
-									uni.saveFile({
-										tempFilePath:that.offline_file_cache_dir,
-										success(r_save) {
-											
-										}
-									})
+									_file_wait_to_download.push(r)
+									
 									
 								}
 							}
 						})
 					})
+					
+					
+					
+					console.log("需要下载文件集合：" ,_file_wait_to_download)
+					
+					// 下载每一个文件
+					_file_wait_to_download.forEach(e=>{
+						let r_download= uni.downloadFile({
+							url:"https://ve-1256163091.cos.ap-beijing.myqcloud.com/0038938a-4a43-491d-be82-e8d74633f93d.doc"
+						})
+						
+						console.log(r_download)
+						
+						
+					})
+					// uni.downloadFile({
+					// 	url:'https://ve-1256163091.cos.ap-beijing.myqcloud.com/0038938a-4a43-491d-be82-e8d74633f93d.doc',
+					// 		success: (r_download) => {
+					// 			console.log('文件下载到临时目录完成',r_download)
+								
+					// 			// 将文件保存到本地
+					// 			uni.saveFile({
+					// 				tempFilePath:r_download.tempFilePath,
+					// 				success: (r_save) => {
+					// 					console.log('文件保存完毕',r_save)
+										
+					// 					let _saved_files_new=uni.getSavedFileList({
+					// 						success: (r_load_saved) => {
+					// 							console.log("从新获取filelist:",r_load_saved)
+					// 						}
+					// 					})
+										
+					// 				}
+					// 			})
+					// 		}
+					// })
+													
 					
 				}
 			})
@@ -173,6 +225,12 @@ export default {
 				uni.navigateTo({
 					url: item.Link
 				});
+			}
+			// 如果是视频
+			if (item.ResourceType == 'video'){
+				uni.redirectTo({
+					url:"../read/read?resType=video&resUrl=http://1256163091.vod2.myqcloud.com/7d0c14a4vodcq1256163091/aa0e30175285890795940545382/f1TJemEnRMwA.mp4"
+				})
 			}
 
 			// 如果是文档阅读
@@ -525,8 +583,8 @@ export default {
 						CoResourceView: [
 							{
 								ResourceCode: '8e0012fe-279a-469f-8f08-5f88236da6e3',
-								ResourceName: 'maven简介_课程内容',
-								ResourceType: 'richtext',
+								ResourceName: '测试视频.mp4',
+								ResourceType: 'video',
 								Content:
 									'<p style="font-size:16px;font-family:微软雅黑;text-align:center"><img data_source="0dfa748d-9b82-45b9-8749-7fb8f7984f5a" src="http://ve.cnki.net/coeduApi/api/File/ShowFile?filecode=44806dc7-ecaf-4c94-8855-d5701347e826.png" data-meta="mUg7d10mz_a1A_0tUDKE6vZaOc62P9bi9e41QqAy9mrenbgTkNh5apjh69jwXjyzKR3UDAcy4U7S1mGzs9ZtdRtorPqHw7QT3CjUlpyXy9eRwFU_a1A_lTjulN9bL4EZF47bp4HygrBjFyA83zLo5IirsYK6Qg0pMJ_a1A_JZcG6R_a1A_gpCYd75cVAUjhQRBsgrcLF0wywrtHQ4dUw3GzfKnp4vrb0M3S6i3MIw3T2AUv813nzESNd24liSk6senwYpTevsCQc84U0HZFkcjlI9aTkjQ_a1A_0JmfPKGO0yxcXGW_c3C_CqRHuoaC9ie6U00Xz0jv2OpMTN729ZLeyPxDMBMnsJl5QYzxHi4I3ZdzgXwQr5sCU5AZ910z84veJxVTVy6QT23DNufofnVuuRtC95_c3C_5PW6nJ68crFLcBRw_b2B__b2B_" style="max-width:100%;cursor:pointer;" role="999" class="video_fake_img" data-nopop="1" onclick="parent.weditor.open(this)" width="360" height="200"/></p><p style="font-size:16px;font-family:微软雅黑;text-align:center">gs</p><p style="font-size:16px;font-family:微软雅黑;"><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span></p><p style="font-size:16px;font-family:微软雅黑;"><span></span></p><p style="font-size:16px;font-family:微软雅黑;text-align:center"><img data_source="1272b2ac-b389-4be5-81b2-ae0d20ad5884" src="http://ve.cnki.net/coeduApi/api/File/ShowFile?filecode=74c31d16-bf3b-4292-a38e-02efb98dc203.png" data-meta="mUg7d10mz_a1A_0tUDKE6vZaOYTUSZN_a1A_LMZ3VE4f41ngXQgad_c3C_Mqqrr8_c3C_z_a1A_nEjxqwRPM8wn5_a1A_k401PGweGg5DqsMqTJRYKKesNGX8HDH73_a1A_iNqj42rbaZG9PjxjqaVq_a1A_FajOw2tftSti_c3C_iP1_a1A_c7FAEdw8FpXLcwsZaHGRBXZvYvHSIgFsOQWrwFxlMGQFTPX34yiGW9Ms7FO5DIfjMjgwx178ZHo1KrVCqlTDOFFwRibTZjwihtxMSuZMiBRG7nVcZz8tAwYROOJ3aKKSRah5v_c3C_jYeDRj5UL2gEBbpKrpEaYgZlVEcXbv9kfqHj6D3rdOC2CEX7PHxG0vkbbLuNtNvA5EPiLUI8oTwV7NE_a1A_DFv2KIYRK_a1A_rpSLMvjKaTJxbwnxa5tr3Qhpdmrcqg5D4e2ENxp1w_b2B__b2B_" style="max-width:100%;cursor:pointer;" role="999" class="video_fake_img" data-nopop="1" onclick="parent.weditor.open(this)" width="360" height="200"/></p><p style="font-size:16px;font-family:微软雅黑;text-align:center">dh</p><p style="font-size:16px;font-family:微软雅黑;"><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span><span>撒奥奥无多</span></p><p style="font-size:16px;font-family:微软雅黑;text-align:center"><img data_source="3668e1b7-62ee-4116-bea2-0bf4ff739d00" src="http://ve.cnki.net/coeduApi/api/File/ShowFile?filecode=eefcaf25-38b9-4643-9739-5890d77098ab.png" data-meta="odMfJdxVYWhuM5is3edhmclc37D0JMidyV173HEOjPt8gEQOSt4Ojr9dM6LTzmkR_c3C_HTQ_a1A_3dQ_c3C_XtRWyJvo9qno9j1cNtneQaowlhtBX6lA8gpADhkLTzXR4oEg1BsprShiRrArb2fA_a1A_mwP7AcOukUZNfxbGssgrgMPkTjWwPXm7lSaXQ8l7I59qlIU8RBCXu81D9hzA_c3C_LApACk0LN1uI_a1A_7_c3C_gqySuGiNftcxcYe12YfsCRrmvmp6l96c_c3C_rInIz1LEfq4jvc4uPW3SkBK1WMK6wiwqG67s2T3pTxxGST8xy4yOI7goSFdX94UpyG8TLi5dvSPhsyqxZg1k_a1A_jcVQeT8cjNqd0AUXQACAShqT3bQgFqU_b2B_" style="max-width:100%;cursor:pointer;" role="999" class="video_fake_img" data-nopop="1" onclick="parent.weditor.open(this)" width="360" height="200"/></p><p style="font-size:16px;font-family:微软雅黑;text-align:center">数学广角-抽屉原则-分棋子</p><p style="font-size:16px;font-family:微软雅黑;"><span><br/></span><br/></p>',
 								DownloadCode: null,

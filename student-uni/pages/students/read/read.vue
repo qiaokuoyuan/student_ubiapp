@@ -32,13 +32,13 @@
 				></video>
 			</view>
 			<!-- 发送弹幕 -->
-			<view class="uni-list uni-common-mt">
+			<view class="uni-list uni-common-mt" v-if="false">
 				<view class="uni-list-cell">
-					<view><view class="uni-label">弹幕内容</view></view>
-					<view class="uni-list-cell-db"><input v-model="danmuValue" class="uni-input" type="text" placeholder="在此处输入弹幕内容" /></view>
+					<view><view class="uni-label" v-if="false">弹幕内容</view></view>
+					<view class="uni-list-cell-db" v-if="false"><input v-model="danmuValue" class="uni-input" type="text" placeholder="在此处输入弹幕内容" /></view>
 				</view>
 			</view>
-			<view class="uni-btn-v"><button @click="sendDanmu" class="page-body-button">发送弹幕</button></view>
+			<view class="uni-btn-v" v-if="false"><button @click="sendDanmu" class="page-body-button">发送弹幕</button></view>
 		</view>
 
 		<!-- 左侧抽屉 -->
@@ -204,16 +204,16 @@ export default {
 			show_right_drawer: false,
 			show_left_drawer: false,
 			danmuList: [
-				{
-					text: '第 1s 出现的弹幕',
-					color: '#ff0000',
-					time: 1
-				},
-				{
-					text: '第 3s 出现的弹幕',
-					color: '#ff00ff',
-					time: 3
-				}
+				// {
+				// 	text: '第 1s 出现的弹幕',
+				// 	color: '#ff0000',
+				// 	time: 1
+				// },
+				// {
+				// 	text: '第 3s 出现的弹幕',
+				// 	color: '#ff00ff',
+				// 	time: 3
+				// }
 			],
 			danmuValue: '',
 			ed: {

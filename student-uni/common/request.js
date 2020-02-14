@@ -1,27 +1,24 @@
-const base_url = ""
-
-class Request {
+const base_url = "http://ve.cnki.net/coeduApi"
+class HttpRequest {
 	constructor() {
-		console.log("Request")
-	}
-
-	setToken(token) {
-		uni.setStorageSync("token", token)
+		console.log('HttpRequest');
 	}
 
 	request(options) {
-		options.url = base_url + options.url
+		options.url = base_url + options.url;
 		try {
-			// 尝试获取token
-			let token = uni.getStorageSync("token")
-			if (token) {
+			const token = uni.getStorageSync('token');
+			if (token || 1)  {
 				options.header = {
-					Authorization: token
-				}
+					Cookie: 'token=137d5b3376934bebad57c042f6a964fc',    			
+				};
 			}
 		} catch (err) {
-			console.log('request 失败', err)
+			console.log('切面错误',err)
 		}
-		return uni.request(options)
+		console.log('options',JSON.stringify(options) )
+		return uni.request(options);
 	}
 }
+
+export default new HttpRequest;

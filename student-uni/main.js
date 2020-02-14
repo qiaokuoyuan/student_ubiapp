@@ -11,18 +11,21 @@ import store from './store'
 Vue.config.productionTip = false
 
 
-// 离线缓存保存文件路径
-Vue.prototype.offline_file_dir="/"
-
-
-// 离线缓存保存文件临时路径
-Vue.prototype.offline_file_cache_dir="/"
+// 离线缓存文件信息映射关系key
+Vue.prototype.offline_file_info_map_name = "offline_file_info_map_name"
 
 
 
+Vue.prototype.fr = (r) => {
+	try {
+		return r[1].data
+	} catch (e) {
+		return r
+	}
+}
 
-Vue.prototype.fhttp = (url) => {	
-	url = url || ''	
+Vue.prototype.fhttp = (url) => {
+	url = url || ''
 	if (url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0) {
 		return url
 	}

@@ -43,13 +43,20 @@
 		{
 			"path": "pages/students/course/courseDetail/courseDetail",
 			"style": {
-				
-				
+
+
 				"navigationStyle": "custom"
-			
+
 			}
 		},
 
+		// 离线文件页面
+		{
+			"path": "pages/students/offlineFiles/offlineFiles",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
 		// 我的作品
 		{
 			"path": "pages/students/artifact/artifact/artifact",
@@ -74,7 +81,7 @@
 			"path": "pages/students/doStudy/doStudy",
 			"style": {
 				"navigationStyle": "custom"
-				
+
 			}
 		},
 		// 阅读页面
@@ -82,7 +89,7 @@
 			"path": "pages/students/read/read",
 			"style": {
 				"navigationStyle": "custom"
-				
+
 			}
 		},
 		{
@@ -373,26 +380,23 @@
 		}, {
 			"path": "pages/students/course/courseDetail/courseDetail",
 			"style": {}
-		}
-	    ,{
-            "path" : "pages/students/doStudy/doStudy",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/students/doStudy/doStudy",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/students/read/read",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/students/offlineResource/offlineResource",
-            "style" : {
+		}, {
+			"path": "pages/students/doStudy/doStudy",
+			"style": {}
+		}, {
+			"path": "pages/students/doStudy/doStudy",
+			"style": {}
+		}, {
+			"path": "pages/students/read/read",
+			"style": {}
+		}, {
+			"path": "pages/students/offlineResource/offlineResource",
+			"style": {
 				"navigationStyle": "custom"
 			}
-        }
-    ],
+		}
+
+	],
 	"subPackages": [{
 			"root": "pages/API",
 			"pages": [{
@@ -1232,10 +1236,10 @@
 				"selectedIconPath": "static/componentHL.png",
 				"text": "我的作品"
 			}
-			
-			
+
+
 			,
-			
+
 
 
 
@@ -1245,7 +1249,7 @@
 				"selectedIconPath": "static/componentHL.png",
 				"text": "内置组件"
 			}
-			
+
 			,
 
 			{

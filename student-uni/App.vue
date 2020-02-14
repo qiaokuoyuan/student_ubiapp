@@ -34,8 +34,7 @@
             // #endif
         },
         onShow: function() {
-            console.log('App Show')
-			window.token="window-token"
+            
         },
         onHide: function() {
             console.log('App Hide')
