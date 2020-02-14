@@ -10,6 +10,17 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+
+// 离线缓存保存文件路径
+Vue.prototype.offline_file_dir="/"
+
+
+// 离线缓存保存文件临时路径
+Vue.prototype.offline_file_cache_dir="/"
+
+
+
+
 Vue.prototype.fhttp = (url) => {	
 	url = url || ''	
 	if (url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0) {

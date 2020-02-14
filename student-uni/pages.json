@@ -386,6 +386,12 @@
             "path" : "pages/students/read/read",
             "style" : {}
         }
+        ,{
+            "path" : "pages/students/offlineResource/offlineResource",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
     ],
 	"subPackages": [{
 			"root": "pages/API",
@@ -1228,36 +1234,36 @@
 			}
 			
 			
-			// ,
+			,
 			
 
 
 
-			// {
-			// 	"pagePath": "pages/tabBar/component/component",
-			// 	"iconPath": "static/component.png",
-			// 	"selectedIconPath": "static/componentHL.png",
-			// 	"text": "内置组件"
-			// }
+			{
+				"pagePath": "pages/tabBar/component/component",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "内置组件"
+			}
 			
-			// ,
+			,
 
-			// {
-			// 	"pagePath": "pages/tabBar/API/API",
-			// 	"iconPath": "static/api.png",
-			// 	"selectedIconPath": "static/apiHL.png",
-			// 	"text": "接口"
-			// }, {
-			// 	"pagePath": "pages/tabBar/extUI/extUI",
-			// 	"iconPath": "static/extui.png",
-			// 	"selectedIconPath": "static/extuiHL.png",
-			// 	"text": "扩展组件"
-			// }, {
-			// 	"pagePath": "pages/tabBar/template/template",
-			// 	"iconPath": "static/template.png",
-			// 	"selectedIconPath": "static/templateHL.png",
-			// 	"text": "模板"
-			// }
+			{
+				"pagePath": "pages/tabBar/API/API",
+				"iconPath": "static/api.png",
+				"selectedIconPath": "static/apiHL.png",
+				"text": "接口"
+			}, {
+				"pagePath": "pages/tabBar/extUI/extUI",
+				"iconPath": "static/extui.png",
+				"selectedIconPath": "static/extuiHL.png",
+				"text": "扩展组件"
+			}, {
+				"pagePath": "pages/tabBar/template/template",
+				"iconPath": "static/template.png",
+				"selectedIconPath": "static/templateHL.png",
+				"text": "模板"
+			}
 		]
 	}
 }

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 头部导航 -->
-		<view class="example-body"><uni-nav-bar left-icon="arrowleft" left-text="返回" @clickLeft="back" /></view>
+		<view class="example-body"><uni-nav-bar left-icon="arrowleft" left-text="返回" @clickLeft="back" rightText="离线资源" @clickRight="show_choose_offline_file=true" /></view>
 
 		<!-- 左侧抽屉 -->
 		<uni-drawer :visible="show_left_drawer">
@@ -13,18 +13,32 @@
 		<!-- 中间内容 -->
 		<view v-for="(m, mi) in list_modules" :key="mi">
 			<uni-section :title="m.ModuleName" type="line"></uni-section>
-			
+
 			<!-- thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" -->
 			<uni-list>
-				<uni-list-item
-					v-for="(res, res_i) in m.CoResourceView"
-					:key="res_i"
-					@click="read(res)"
-					:title="res.ResourceName"
+				<uni-list-item v-for="(res, res_i) in m.CoResourceView" :key="res_i">
 					
-				/>
+					<!-- 如果是正常模式，直接跳转阅读页面 -->
+					<view class="" @click="read(res)" v-if="!show_choose_offline_file">						
+						{{ res.ResourceName }}
+					</view>
+					
+					<!-- 如果是选择离线文件模式，选中需要缓存的文件
+					 -->
+					 <view v-if="show_choose_offline_file" @click="res.isOfflineSaved=!res.isOfflineSaved">
+					 	<radio :checked="res.isOfflineSaved"></radio>
+					 	{{ res.ResourceName }}
+					 </view>
+					 
+				</uni-list-item>
 			</uni-list>
 		</view>
+		
+		
+		
+		<!-- 如过是选择文件缓存模式，显示退出按钮 -->
+		<button style="margin: 30rpx;" type="warn" v-if="show_choose_offline_file" @click="saveFilesToOffline()">确定</button>		
+		<button style="margin: 30rpx;" type="primary" v-if="show_choose_offline_file" @click="show_choose_offline_file=false">退出</button>
 
 		<!-- 右侧抽屉 -->
 	</view>
@@ -48,6 +62,8 @@ export default {
 	},
 	data() {
 		return {
+			// 是否处于选择离线文件模式
+			show_choose_offline_file:false,
 			show_left_drawer: false,
 			extraIcon1: {
 				color: '#007aff',
@@ -66,6 +82,85 @@ export default {
 		this.reloadModules();
 	},
 	methods: {
+		// 将文件存储到本地
+		saveFilesToOffline(){
+			
+			let that=this
+			uni.showToast({
+				title:"正在缓存，请稍后。"
+			})
+			
+			// 先查找已经缓存过的文件
+			uni.getSavedFileList({
+				success(r) {
+					
+				
+					let file_list=r.fileList || []
+					
+					let _saved_file_ids=file_list.map(e=>{return e.filePath}).join(",")
+					
+					
+					that.list_modules.forEach(m=>{
+						m.CoResourceView.forEach(r=>{
+							if(r.isOfflineSaved){
+								// 排除掉已经缓存过的
+								if(_saved_file_ids.indexOf(r.Id)==-1){
+									
+									// 保存文件
+									uni.saveFile({
+										tempFilePath:that.offline_file_cache_dir,
+										success(r_save) {
+											
+										}
+									})
+									
+								}
+							}
+						})
+					})
+					
+				}
+			})
+			
+			
+			
+			
+			
+			
+		},
+		// 尝试离线缓存
+		offlineSave(t, item) {
+			console.log('offlineSave', arguments);
+			// 如果是询问是否下载
+			if (t == 'ask') {
+				uni.showModal({
+					title: '确认缓存文件：' + item.ResourceName + '吗？',
+					success(e) {
+						if (e.confirm) {
+							// 如果确认缓存
+							console.log('开始缓存', e);
+							uni.saveFile({
+								tempFilePath: '/temp',
+								success(r) {
+									let savedFilePath = r.savedFilePath;
+									uni.showToast({
+										title: `文件存储在：${savedFilePath}`
+									});
+								}
+							});
+						}
+					},
+					complete() {}
+				});
+			}
+		},
+
+		// 查看离线资源
+		goToOfflineResource() {
+			uni.redirectTo({
+				url: '/pages/students/offlineResource/offlineResource'
+			});
+		},
 		// 返回
 		back() {
 			uni.redirectTo({
@@ -946,6 +1041,15 @@ export default {
 				Extension: null,
 				Total: 0
 			};
+
+			// 将 isOfflineSaved 设置为false
+
+			r.Data.forEach(e1 => {
+				e1.CoResourceView.forEach(e => {
+					e.isOfflineSaved = false;
+				});
+			});
+
 			this.list_modules = r.Data;
 		}
 	}
