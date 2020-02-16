@@ -18,6 +18,7 @@ Vue.prototype.offline_file_info_map_name = "offline_file_info_map_name"
 
 Vue.prototype.fr = (r) => {
 	try {
+		console.log("原始返回值:", JSON.stringify(r))
 		return r[1].data
 	} catch (e) {
 		return r
@@ -36,6 +37,33 @@ Vue.prototype.fhttp = (url) => {
 		return `${location.protocol}//${url}`
 	}
 
+}
+
+// 文件下载信息存储位置 (storage/ golbalData)
+Vue.prototype.download_task_save_place="storage"
+
+// 扁平化结构转树接结构
+Vue.prototype.toTree = (data) => {
+	let result = [];
+	if (!Array.isArray(data)) {
+		return result;
+	}
+	data.forEach(item => {
+		delete item.children;
+	});
+	let map = {};
+	data.forEach(item => {
+		map[item.id] = item;
+	});
+	data.forEach(item => {
+		let parent = map[item.pId];
+		if (parent) {
+			(parent.children || (parent.children = [])).push(item);
+		} else {
+			result.push(item);
+		}
+	});
+	return result;
 }
 
 Vue.prototype.$store = store

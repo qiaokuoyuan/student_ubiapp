@@ -1,5 +1,26 @@
 {
-	"pages": [
+	"pages": [{
+			"path": "pages/students/myCourse/myCourse",
+			"style": {
+				// "navigationStyle": "custom",
+				"app-plus": {
+					"pullToRefresh": {
+						"support": true,
+						"color": "#ff3333",
+						"style": "default",
+						"contentdown": {
+							"caption": "下拉可刷新自定义文本"
+						},
+						"contentover": {
+							"caption": "释放可刷新自定义文本"
+						},
+						"contentrefresh": {
+							"caption": "正在刷新自定义文本"
+						}
+					}
+				}
+			}
+		},
 		// 课程学习页面
 		{
 			"path": "pages/students/study/study",
@@ -54,7 +75,7 @@
 		{
 			"path": "pages/students/offlineFiles/offlineFiles",
 			"style": {
-				"navigationStyle": "custom"
+				
 			}
 		},
 		// 我的作品
@@ -392,10 +413,27 @@
 		}, {
 			"path": "pages/students/offlineResource/offlineResource",
 			"style": {
-				"navigationStyle": "custom"
+				// "navigationStyle": "custom"
 			}
 		}
 
+		, {
+			"path": "pages/students/myInfo/myInfo",
+			"style": {}
+		}, {
+			"path": "pages/students/personalCenter/personalCenter",
+			"style": {}
+		}, {
+			"path": "pages/students/courseInfo/courseInfo",
+			"style": {				
+				"app-plus": {
+					// "titleNView": false //禁用原生导航栏
+				}
+			}
+		}, {
+			"path": "pages/students/leanCourse/leanCourse",
+			"style": {}
+		}
 	],
 	"subPackages": [{
 			"root": "pages/API",
@@ -1224,50 +1262,50 @@
 		"selectedColor": "#007AFF",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
-		"list": [{
-				"pagePath": "pages/students/study/study",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
+		"list": [
+			
+			{
+				"pagePath": "pages/students/myCourse/myCourse",
+				"iconPath": "static/template.png",
+				"selectedIconPath": "static/templateHL.png",
 				"text": "我的课程"
 			},
 			{
-				"pagePath": "pages/students/artifact/artifact/artifact",
+				"pagePath": "pages/students/personalCenter/personalCenter",
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
-				"text": "我的作品"
+				"text": "个人中心"
 			}
 
 
-			,
 
 
+			// ,
+			// {
+			// 	"pagePath": "pages/tabBar/component/component",
+			// 	"iconPath": "static/component.png",
+			// 	"selectedIconPath": "static/componentHL.png",
+			// 	"text": "内置组件"
+			// }
 
+			// ,
 
-			{
-				"pagePath": "pages/tabBar/component/component",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
-				"text": "内置组件"
-			}
-
-			,
-
-			{
-				"pagePath": "pages/tabBar/API/API",
-				"iconPath": "static/api.png",
-				"selectedIconPath": "static/apiHL.png",
-				"text": "接口"
-			}, {
-				"pagePath": "pages/tabBar/extUI/extUI",
-				"iconPath": "static/extui.png",
-				"selectedIconPath": "static/extuiHL.png",
-				"text": "扩展组件"
-			}, {
-				"pagePath": "pages/tabBar/template/template",
-				"iconPath": "static/template.png",
-				"selectedIconPath": "static/templateHL.png",
-				"text": "模板"
-			}
+			// {
+			// 	"pagePath": "pages/tabBar/API/API",
+			// 	"iconPath": "static/api.png",
+			// 	"selectedIconPath": "static/apiHL.png",
+			// 	"text": "接口"
+			// }, {
+			// 	"pagePath": "pages/tabBar/extUI/extUI",
+			// 	"iconPath": "static/extui.png",
+			// 	"selectedIconPath": "static/extuiHL.png",
+			// 	"text": "扩展组件"
+			// }, {
+			// 	"pagePath": "pages/tabBar/template/template",
+			// 	"iconPath": "static/template.png",
+			// 	"selectedIconPath": "static/templateHL.png",
+			// 	"text": "模板"
+			// }
 		]
 	}
 }

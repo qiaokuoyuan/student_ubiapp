@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import http from '@/common/request.js';
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -8,11 +10,15 @@ const store = new Vuex.Store({
 		hasLogin: false,
 		loginProvider: "",
 		openid: null,
-		testvuex:false,
-        colorIndex: 0,
-        colorList: ['#FF0000','#00FF00','#0000FF']
+		testvuex: false,
+		colorIndex: 0,
+		colorList: ['#FF0000', '#00FF00', '#0000FF'],
+		userInfo:{}
 	},
 	mutations: {
+		setUserInfo(state,v){
+			state.userInfo=v
+		},
 		login(state, provider) {
 			state.hasLogin = true;
 			state.loginProvider = provider;
@@ -24,24 +30,56 @@ const store = new Vuex.Store({
 		setOpenid(state, openid) {
 			state.openid = openid
 		},
-		setTestTrue(state){
+		setTestTrue(state) {
 			state.testvuex = true
 		},
-		setTestFalse(state){
+		setTestFalse(state) {
 			state.testvuex = false
 		},
-        setColorIndex(state,index){
-            state.colorIndex = index
-        }
+		setColorIndex(state, index) {
+			state.colorIndex = index
+		}
 	},
-    getters:{
-        currentColor(state){
-            return state.colorList[state.colorIndex]
-        }
-    },
+	getters: {
+		currentColor(state) {
+			return state.colorList[state.colorIndex]
+		},
+		
+		getUserInfo(state){
+			return state.userInfo
+		}
+	},
 	actions: {
+
+		// 获取用户信息		
+		getUserInfo(commit,state) {
+			http.request({
+				url: "/api/Student/StudentInfo",
+				method: "post"
+			}).then(r => {
+				try {
+					
+					
+					
+					r = r[1].data.Data.UserInfo
+					
+					console.log(JSON.stringify(r))
+					
+					commit.commit('setUserInfo',r)
+					
+					
+					
+				} catch (e) {
+					commit.commit('setUserInfo',{})
+					console.log(e)
+				}
+			})
+
+		},
+
+
 		// lazy loading openid
-		getUserOpenId: async function ({
+		getUserOpenId: async function({
 			commit,
 			state
 		}) {
@@ -52,7 +90,7 @@ const store = new Vuex.Store({
 					uni.login({
 						success: (data) => {
 							commit('login')
-							setTimeout(function () { //模拟异步请求服务器获取 openid
+							setTimeout(function() { //模拟异步请求服务器获取 openid
 								const openid = '123456789'
 								console.log('uni.request mock openid[' + openid + ']');
 								commit('setOpenid', openid)

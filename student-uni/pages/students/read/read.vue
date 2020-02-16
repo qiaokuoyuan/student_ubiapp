@@ -1,13 +1,7 @@
 <template>
 	<view>
 		<!-- 资源标题 -->
-		<uni-nav-bar
-			:title="resTitle || '资源阅读'"
-			leftText="其他资源"
-			rightText="做笔记"
-			@clickLeft="show_left_drawer = true"
-			@clickRight="show_right_drawer = true"
-		></uni-nav-bar>
+		<uni-nav-bar :title="resTitle" leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar>
 
 		<!-- 如果是文档 -->
 		<view v-if="resType == 'doc'">
@@ -40,68 +34,6 @@
 			</view>
 			<view class="uni-btn-v" v-if="false"><button @click="sendDanmu" class="page-body-button">发送弹幕</button></view>
 		</view>
-
-		<!-- 左侧抽屉 -->
-		<uni-drawer :visible="show_left_drawer" mode="left" @close="show_left_drawer = false"></uni-drawer>
-
-		<!-- 右侧抽屉 -->
-		<uni-drawer :visible="show_right_drawer" mode="right" @close="show_right_drawer = false">
-			<view style="height: 100%; overflow: auto;">
-				<view style="margin: 30rpx 40rpx;">
-					<uni-segmented-control
-						:current="currentRightTab"
-						:values="rightTabs"
-						style-type="button"
-						active-color="#007aff"
-						@clickItem="onClickRightTab"
-					></uni-segmented-control>
-				</view>
-
-				<!-- 如过是问答内容 -->
-				<view class="" v-if="currentRightTab == 0">
-					<view class="uni-flex uni-row" v-for="(a, aii) in list_answers" :key="aii">
-						<!-- 用户logo -->
-						<image style="height: 100rpx; width: 100rpx;" :src="a.HeadImg" mode="scaleToFill"></image>
-						<view class="uni-flex uni-column">
-							<!-- 提问内容 -->
-							<view v-html="a.Content" @longpress="showAnswerMenu(a)"></view>
-
-							<!-- 操作按钮 -->
-							<view class="uni-flex uni-row" v-if="0">
-								<button type="primary">回复</button>
-								<button type="primary">删除</button>
-							</view>
-						</view>
-					</view>
-				</view>
-				<view class="" v-if="currentRightTab == 1">
-					<!-- 每个笔记 -->
-					<view class="uni-flex uni-row" style="margin: 40rpx;" v-for="(n, ni) in list_notes" :key="ni">
-						<!-- 左侧头像 -->
-						<image style="height: 100rpx; width: 100rpx; margin:5rpx;" :src="n.HeadImg" mode="scaleToFill"></image>
-
-						<!-- 右侧笔记内容和编辑按钮 -->
-						<view class=""><view style="word-break: break-all;" v-html="n.Content"></view></view>
-					</view>
-
-					<!-- 添加笔记 -->
-					<section title="添加笔记"></section>
-					<input class="uni-input" v-model="ed.note.content" style="margin: 30rpx;" maxlength="500" placeholder="笔记最多500个字" />
-					<button type="primary" style="margin: 30rpx;" @click="addNote()">添加笔记</button>
-				</view>
-			</view>
-		</uni-drawer>
-
-		<!-- 编辑器弹窗 -->
-		<uni-popup ref="editor">
-			<view class="">
-				<textarea v-model="editorContent" placeholder="" />
-				<view class="uni-flex flex-row">
-					<button type="primary">确定</button>
-					<button type="primary">取消</button>
-				</view>
-			</view>
-		</uni-popup>
 	</view>
 </template>
 
@@ -174,7 +106,7 @@ export default {
 	},
 	data() {
 		return {
-			editorContent:"",
+			editorContent: '',
 			swipOption: [
 				{
 					text: '取消',
@@ -227,14 +159,14 @@ export default {
 	methods: {
 		// 显示问答按钮
 		showAnswerMenu(item) {
-			let that=this
+			let that = this;
 			uni.showActionSheet({
 				title: '请选择操作',
 				itemList: ['回复', '编辑', '删除'],
 				success(e) {
 					// 如过是回复
 					if (e.tapIndex == 0) {
-						that.$refs.editor.open()
+						that.$refs.editor.open();
 					}
 				}
 			});
