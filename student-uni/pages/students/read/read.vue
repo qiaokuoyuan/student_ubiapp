@@ -14,25 +14,7 @@
 
 		<!-- 如过是视频 -->
 		<view v-if="resType == 'video'">
-			<view>
-				<video
-					id="myVideo"
-					:src="resUrl"
-					:danmu-list="danmuList"
-					enable-danmu
-					danmu-btn
-					controls
-					poster="https://img-cdn-qiniu.dcloud.net.cn/uniapp/doc/poster.png"
-				></video>
-			</view>
-			<!-- 发送弹幕 -->
-			<view class="uni-list uni-common-mt" v-if="false">
-				<view class="uni-list-cell">
-					<view><view class="uni-label" v-if="false">弹幕内容</view></view>
-					<view class="uni-list-cell-db" v-if="false"><input v-model="danmuValue" class="uni-input" type="text" placeholder="在此处输入弹幕内容" /></view>
-				</view>
-			</view>
-			<view class="uni-btn-v" v-if="false"><button @click="sendDanmu" class="page-body-button">发送弹幕</button></view>
+			<view><video id="myVideo" :src="resUrl" danmu-btn controls poster="https://img-cdn-qiniu.dcloud.net.cn/uniapp/doc/poster.png"></video></view>
 		</view>
 	</view>
 </template>
@@ -61,765 +43,111 @@ export default {
 		uniPopup
 	},
 	onLoad(option) {
-		// 刷新笔记
-		this.reloadNotes();
+		let that = this;
+		this.isLocal = option.isLocal;
 
-		// 刷新问答
-		this.reloadAnswers();
+		// 如果是本地资源,根据fileid从本地读取
+		if (this.isLocal) {
+			let res = uni.getStorageSync('download_task');
+			res = res.find(e => {
+				return (e.fileid = option.fileid);
+			});
 
-		// 如过是视频
-		if (option.resType == 'video') {
-			this.resType = option.resType;
-			this.resTitle = option.resTitle;
-			this.resUrl = this.fhttp(option.resUrl);
+			if (res) {
+				// 如过找到资源
+				console.log('本地资源为：', JSON.stringify(res));
 
-			// #ifndef MP-ALIPAY || MP-TOUTIAO
-			this.videoContext = uni.createVideoContext('myVideo');
-			// #endif
-			// #ifdef APP-PLUS || MP-BAIDU
-			setTimeout(() => {
-				this.showVideo = true;
-			}, 350);
-			// #endif
-			// #ifndef APP-PLUS || MP-BAIDU
-			this.showVideo = true;
-			// #endif
-		}
+				// 根据文件名称判断文件类型
+				let filename = res.filename;
+				let save_dir = res.save_dir.savedFilePath;
 
-		// 如过是文档
-		if (option.resType == 'doc') {
-			this.resType = 'doc';
-
-			// 设置头部定位定时器
-			clearInterval(window.it_doc_head);
-			window.it_doc_head = setInterval(function() {
-				try {
-					document.getElementsByTagName('iframe')[0].style.top = '90px';
-				} catch (e) {
-					//TODO handle the exception
+				// 如果是docx
+				if (filename.indexOf('.docx') >= 0) {
+					console.log('识别为 docx');
+					uni.openDocument({
+						filePath: save_dir,
+						fileType: 'docx'
+					});
+					return false;
 				}
-			}, 100);
+				// 如果是doc
+				if (filename.indexOf('.doc') >= 0) {
+					console.log('识别为 doc');
+					uni.openDocument({
+						filePath: save_dir,
+						fileType: 'doc'
+					});
+					return false;
+				}
+
+				// 如果是pdf
+				if (filename.indexOf('.pdf') >= 0) {
+					console.log('识别为 pdf');
+					uni.openDocument({
+						filePath: save_dir,
+						fileType: 'pdf'
+					});
+					return false;
+				}
+
+				// 如果是视频
+				if (filename.indexOf('.mp4') >= 0) {
+					console.log('识别为 mp4');
+					this.resType = 'video';
+					this.resTitle = filename;
+					this.resUrl = save_dir;
+
+					// #ifndef MP-ALIPAY || MP-TOUTIAO
+					this.videoContext = uni.createVideoContext('myVideo');
+					// #endif
+					// #ifdef APP-PLUS || MP-BAIDU
+					setTimeout(() => {
+						this.showVideo = true;
+					}, 350);
+					// #endif
+					// #ifndef APP-PLUS || MP-BAIDU
+					this.showVideo = true;
+					// #endif
+				}
+			} else {
+				// 如过未找到资源
+				uni.showToast({
+					mask: true,
+					title: '未找到资源，请重新下载'
+				});
+			}
+		} else {
+			// 如过不是本地资源
+			// 如过是视频
+			if (option.resType == 'video') {
+				this.resType = option.resType;
+				this.resTitle = option.resTitle;
+				this.resUrl = this.fhttp(option.resUrl);
+
+				// #ifndef MP-ALIPAY || MP-TOUTIAO
+				this.videoContext = uni.createVideoContext('myVideo');
+				// #endif
+				// #ifdef APP-PLUS || MP-BAIDU
+				setTimeout(() => {
+					this.showVideo = true;
+				}, 350);
+				// #endif
+				// #ifndef APP-PLUS || MP-BAIDU
+				this.showVideo = true;
+				// #endif
+			}
 		}
 	},
-	beforeDestroy() {
-		clearInterval(window.it_doc_head);
-	},
+
 	data() {
 		return {
-			editorContent: '',
-			swipOption: [
-				{
-					text: '取消',
-					style: {
-						backgroundColor: '#007aff'
-					}
-				},
-				{
-					text: '确认',
-					style: {
-						backgroundColor: '#dd524d'
-					}
-				}
-			],
-			// 右侧抽屉tab
-			currentRightTab: 0,
-			rightTabs: ['问答', '笔记'],
+			isLocal: false,
 			resType: '',
 			resUrl: '',
-			resTitle: '',
-			webviewStyles: {
-				top: '78px'
-			},
-			// 右侧的问答和笔记
-			list_answers: [],
-			list_notes: [],
-			show_right_drawer: false,
-			show_left_drawer: false,
-			danmuList: [
-				// {
-				// 	text: '第 1s 出现的弹幕',
-				// 	color: '#ff0000',
-				// 	time: 1
-				// },
-				// {
-				// 	text: '第 3s 出现的弹幕',
-				// 	color: '#ff00ff',
-				// 	time: 3
-				// }
-			],
-			danmuValue: '',
-			ed: {
-				note: {
-					id: '',
-					content: ''
-				}
-			}
+			resTitle: ''
 		};
 	},
-	methods: {
-		// 显示问答按钮
-		showAnswerMenu(item) {
-			let that = this;
-			uni.showActionSheet({
-				title: '请选择操作',
-				itemList: ['回复', '编辑', '删除'],
-				success(e) {
-					// 如过是回复
-					if (e.tapIndex == 0) {
-						that.$refs.editor.open();
-					}
-				}
-			});
-		},
-		lp() {
-			console.log('long press');
-		},
-		swipeClick(e, index) {
-			console.log(e, index);
-		},
-		swipeChange(e) {
-			console.log(e);
-		},
-		// 刷新问答
-		reloadAnswers() {
-			let r = {
-				Code: 200,
-				Data: {
-					List: [
-						{
-							AccessoryUrl: null,
-							AdoptStatus: 0,
-							AppId: 'coedu',
-							AppendixCount: 0,
-							AppendixList: null,
-							AudioSrc: null,
-							Author: null,
-							AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Authority: 1,
-							Content: '<p>asdad</p>',
-							CreateTime: '2020-02-06T22:19:11',
-							Duration: 0,
-							EndOffset: 0,
-							Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-							Format: null,
-							HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Id: '5a156277-f5ba-4c3d-8b70-f902b21a98b0',
-							IsApproved: 0,
-							IsLocked: 0,
-							IsNoteThumbsUp: false,
-							IsOwn: true,
-							Level: 0,
-							Location: null,
-							MarkContent: null,
-							ModifyTime: '2020-02-06T22:19:11Z',
-							Order: 0,
-							OrderNum: 0,
-							Origin: null,
-							ParAuthId: null,
-							ParagraphId: null,
-							ParentFloor: 0,
-							ParentId: null,
-							ParentRealName: null,
-							Quote: null,
-							RealName: '乔阔远',
-							RepliesNum: 0,
-							ReplyCount: 4,
-							ReplyInfoList: [
-								{
-									AccessoryUrl: null,
-									AdoptStatus: 0,
-									AppId: 'coedu',
-									AppendixCount: 0,
-									AppendixList: null,
-									AudioSrc: null,
-									Author: null,
-									AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Authority: 1,
-									Content: '<p>asdad</p>',
-									CreateTime: '2020-02-06T22:19:45',
-									Duration: 0,
-									EndOffset: 0,
-									Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-									Format: null,
-									HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Id: '9d0a798c-ee67-4d5e-9a65-d7ea50a3dcc3',
-									IsApproved: 0,
-									IsLocked: 0,
-									IsNoteThumbsUp: false,
-									IsOwn: true,
-									Level: 0,
-									Location: null,
-									MarkContent: null,
-									ModifyTime: '2020-02-06T22:19:45Z',
-									Order: 0,
-									OrderNum: 0,
-									Origin: null,
-									ParAuthId: null,
-									ParagraphId: null,
-									ParentFloor: 0,
-									ParentId: '5a156277-f5ba-4c3d-8b70-f902b21a98b0',
-									ParentRealName: '乔阔远',
-									Quote: null,
-									RealName: '乔阔远',
-									RepliesNum: 0,
-									ReplyCount: 0,
-									ReplyInfoList: null,
-									SectionId: null,
-									SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-									SourceType: 0,
-									StartOffset: 0,
-									Status: 1,
-									ThreadId: '9d0a798c-ee67-4d5e-9a65-d7ea50a3dcc3',
-									ThumbSupNum: 0,
-									Title: null,
-									Type: 0,
-									Url: null,
-									Width: null,
-									XmlContent: null
-								},
-								{
-									AccessoryUrl: null,
-									AdoptStatus: 0,
-									AppId: 'coedu',
-									AppendixCount: 0,
-									AppendixList: null,
-									AudioSrc: null,
-									Author: null,
-									AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Authority: 1,
-									Content: '<p>ad</p>',
-									CreateTime: '2020-02-06T22:19:49',
-									Duration: 0,
-									EndOffset: 0,
-									Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-									Format: null,
-									HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Id: '968af112-b6cb-4629-891d-80d69d6b16b6',
-									IsApproved: 0,
-									IsLocked: 0,
-									IsNoteThumbsUp: false,
-									IsOwn: true,
-									Level: 0,
-									Location: null,
-									MarkContent: null,
-									ModifyTime: '2020-02-06T22:19:49Z',
-									Order: 0,
-									OrderNum: 0,
-									Origin: null,
-									ParAuthId: null,
-									ParagraphId: null,
-									ParentFloor: 0,
-									ParentId: '9d0a798c-ee67-4d5e-9a65-d7ea50a3dcc3',
-									ParentRealName: '乔阔远',
-									Quote: null,
-									RealName: '乔阔远',
-									RepliesNum: 0,
-									ReplyCount: 0,
-									ReplyInfoList: null,
-									SectionId: null,
-									SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-									SourceType: 0,
-									StartOffset: 0,
-									Status: 1,
-									ThreadId: '968af112-b6cb-4629-891d-80d69d6b16b6',
-									ThumbSupNum: 0,
-									Title: null,
-									Type: 0,
-									Url: null,
-									Width: null,
-									XmlContent: null
-								},
-								{
-									AccessoryUrl: null,
-									AdoptStatus: 0,
-									AppId: 'coedu',
-									AppendixCount: 0,
-									AppendixList: null,
-									AudioSrc: null,
-									Author: null,
-									AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Authority: 1,
-									Content: '<p>asdad</p>',
-									CreateTime: '2020-02-06T22:19:42',
-									Duration: 0,
-									EndOffset: 0,
-									Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-									Format: null,
-									HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Id: '8246fbe0-37e4-4dda-8af8-365e1b548c82',
-									IsApproved: 0,
-									IsLocked: 0,
-									IsNoteThumbsUp: false,
-									IsOwn: true,
-									Level: 0,
-									Location: null,
-									MarkContent: null,
-									ModifyTime: '2020-02-06T22:19:42Z',
-									Order: 0,
-									OrderNum: 0,
-									Origin: null,
-									ParAuthId: null,
-									ParagraphId: null,
-									ParentFloor: 0,
-									ParentId: '5a156277-f5ba-4c3d-8b70-f902b21a98b0',
-									ParentRealName: '乔阔远',
-									Quote: null,
-									RealName: '乔阔远',
-									RepliesNum: 0,
-									ReplyCount: 0,
-									ReplyInfoList: null,
-									SectionId: null,
-									SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-									SourceType: 0,
-									StartOffset: 0,
-									Status: 1,
-									ThreadId: '8246fbe0-37e4-4dda-8af8-365e1b548c82',
-									ThumbSupNum: 0,
-									Title: null,
-									Type: 0,
-									Url: null,
-									Width: null,
-									XmlContent: null
-								},
-								{
-									AccessoryUrl: null,
-									AdoptStatus: 0,
-									AppId: 'coedu',
-									AppendixCount: 0,
-									AppendixList: null,
-									AudioSrc: null,
-									Author: null,
-									AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Authority: 1,
-									Content: '<p>asd</p>',
-									CreateTime: '2020-02-07T07:50:33',
-									Duration: 0,
-									EndOffset: 0,
-									Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-									Format: null,
-									HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-									Id: '2a169032-27fd-40bb-8d19-7bc6ccb38990',
-									IsApproved: 0,
-									IsLocked: 0,
-									IsNoteThumbsUp: false,
-									IsOwn: true,
-									Level: 0,
-									Location: null,
-									MarkContent: null,
-									ModifyTime: '2020-02-07T07:50:33Z',
-									Order: 0,
-									OrderNum: 0,
-									Origin: null,
-									ParAuthId: null,
-									ParagraphId: null,
-									ParentFloor: 0,
-									ParentId: '8246fbe0-37e4-4dda-8af8-365e1b548c82',
-									ParentRealName: '乔阔远',
-									Quote: null,
-									RealName: '乔阔远',
-									RepliesNum: 0,
-									ReplyCount: 0,
-									ReplyInfoList: null,
-									SectionId: null,
-									SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-									SourceType: 0,
-									StartOffset: 0,
-									Status: 1,
-									ThreadId: '2a169032-27fd-40bb-8d19-7bc6ccb38990',
-									ThumbSupNum: 0,
-									Title: null,
-									Type: 0,
-									Url: null,
-									Width: null,
-									XmlContent: null
-								}
-							],
-							SectionId: null,
-							SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-							SourceType: 0,
-							StartOffset: 0,
-							Status: 1,
-							ThreadId: '5a156277-f5ba-4c3d-8b70-f902b21a98b0',
-							ThumbSupNum: 0,
-							Title: null,
-							Type: 0,
-							Url: null,
-							Width: null,
-							XmlContent: null
-						},
-						{
-							AccessoryUrl: null,
-							AdoptStatus: 0,
-							AppId: 'coedu',
-							AppendixCount: 0,
-							AppendixList: null,
-							AudioSrc: null,
-							Author: null,
-							AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Authority: 1,
-							Content: '<p>asdad</p>',
-							CreateTime: '2020-02-06T22:19:07',
-							Duration: 0,
-							EndOffset: 0,
-							Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-							Format: null,
-							HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Id: '73fb8be0-fb89-4f34-b351-ff1ab02b7a81',
-							IsApproved: 0,
-							IsLocked: 0,
-							IsNoteThumbsUp: false,
-							IsOwn: true,
-							Level: 0,
-							Location: null,
-							MarkContent: null,
-							ModifyTime: '2020-02-06T22:19:07Z',
-							Order: 0,
-							OrderNum: 0,
-							Origin: null,
-							ParAuthId: null,
-							ParagraphId: null,
-							ParentFloor: 0,
-							ParentId: null,
-							ParentRealName: null,
-							Quote: null,
-							RealName: '乔阔远',
-							RepliesNum: 0,
-							ReplyCount: 0,
-							ReplyInfoList: [],
-							SectionId: null,
-							SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-							SourceType: 0,
-							StartOffset: 0,
-							Status: 1,
-							ThreadId: '73fb8be0-fb89-4f34-b351-ff1ab02b7a81',
-							ThumbSupNum: 0,
-							Title: null,
-							Type: 0,
-							Url: null,
-							Width: null,
-							XmlContent: null
-						}
-					],
-					LastModifiedTime: '2020/2/7 7:50:33'
-				},
-				Error: '获取数据成功',
-				Other: null,
-				IsMult: false,
-				Ext: null,
-				Extension: null,
-				Total: 0
-			};
-			this.list_answers = r.Data.List;
-		},
-		// 添加笔记
-		addNote() {
-			let that = this;
-			this.list_notes.push({
-				AccessoryUrl: null,
-				AdoptStatus: 0,
-				AppId: 'coedu',
-				AppendixCount: 0,
-				AppendixList: null,
-				AudioSrc: null,
-				Author: null,
-				AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-				Authority: 1,
-				Content: that.ed.note.content,
-				CreateTime: '2020-02-06T22:19:02',
-				Duration: 0,
-				EndOffset: 0,
-				Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-				Format: null,
-				HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-				Id: '8971dc68-7377-4abf-9b3b-7581305dd075',
-				IsApproved: 0,
-				IsLocked: 0,
-				IsNoteThumbsUp: false,
-				IsOwn: true,
-				Level: 0,
-				Location: null,
-				MarkContent: null,
-				ModifyTime: '2020-02-06T22:19:02Z',
-				Order: 0,
-				OrderNum: 0,
-				Origin: null,
-				ParAuthId: null,
-				ParagraphId: null,
-				ParentFloor: 0,
-				ParentId: null,
-				ParentRealName: null,
-				Quote: null,
-				RealName: '乔阔远',
-				RepliesNum: 0,
-				ReplyCount: 0,
-				ReplyInfoList: [],
-				SectionId: null,
-				SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-				SourceType: 0,
-				StartOffset: 0,
-				Status: 0,
-				ThreadId: '8971dc68-7377-4abf-9b3b-7581305dd075',
-				ThumbSupNum: 0,
-				Title: null,
-				Type: 0,
-				Url: null,
-				Width: null,
-				XmlContent: null
-			});
-
-			// 添加完成后清空
-			that.ed.note.content = '';
-		},
-		// 刷新笔记
-		reloadNotes() {
-			let r = {
-				Code: 200,
-				Data: {
-					List: [
-						{
-							AccessoryUrl: null,
-							AdoptStatus: 0,
-							AppId: 'coedu',
-							AppendixCount: 0,
-							AppendixList: null,
-							AudioSrc: null,
-							Author: null,
-							AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Authority: 1,
-							Content: '<p>asd</p>',
-							CreateTime: '2020-02-06T22:40:24',
-							Duration: 0,
-							EndOffset: 0,
-							Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-							Format: null,
-							HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Id: '72a19ef2-509d-48e6-a81c-1858cbb1d968',
-							IsApproved: 0,
-							IsLocked: 0,
-							IsNoteThumbsUp: false,
-							IsOwn: true,
-							Level: 0,
-							Location: null,
-							MarkContent: null,
-							ModifyTime: '2020-02-06T22:40:24Z',
-							Order: 0,
-							OrderNum: 0,
-							Origin: null,
-							ParAuthId: null,
-							ParagraphId: null,
-							ParentFloor: 0,
-							ParentId: null,
-							ParentRealName: null,
-							Quote: null,
-							RealName: '乔阔远',
-							RepliesNum: 0,
-							ReplyCount: 0,
-							ReplyInfoList: [],
-							SectionId: null,
-							SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-							SourceType: 0,
-							StartOffset: 0,
-							Status: 0,
-							ThreadId: '72a19ef2-509d-48e6-a81c-1858cbb1d968',
-							ThumbSupNum: 0,
-							Title: null,
-							Type: 0,
-							Url: null,
-							Width: null,
-							XmlContent: null
-						},
-						{
-							AccessoryUrl: null,
-							AdoptStatus: 0,
-							AppId: 'coedu',
-							AppendixCount: 0,
-							AppendixList: null,
-							AudioSrc: null,
-							Author: null,
-							AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Authority: 1,
-							Content: '<p>asdad</p>',
-							CreateTime: '2020-02-06T22:23:56',
-							Duration: 0,
-							EndOffset: 0,
-							Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-							Format: null,
-							HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Id: '6b4c42c9-b2c5-4b2a-a860-6cdd55439de1',
-							IsApproved: 0,
-							IsLocked: 0,
-							IsNoteThumbsUp: false,
-							IsOwn: true,
-							Level: 0,
-							Location: null,
-							MarkContent: null,
-							ModifyTime: '2020-02-06T22:23:56Z',
-							Order: 0,
-							OrderNum: 0,
-							Origin: null,
-							ParAuthId: null,
-							ParagraphId: null,
-							ParentFloor: 0,
-							ParentId: null,
-							ParentRealName: null,
-							Quote: null,
-							RealName: '乔阔远',
-							RepliesNum: 0,
-							ReplyCount: 0,
-							ReplyInfoList: [],
-							SectionId: null,
-							SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-							SourceType: 0,
-							StartOffset: 0,
-							Status: 0,
-							ThreadId: '6b4c42c9-b2c5-4b2a-a860-6cdd55439de1',
-							ThumbSupNum: 0,
-							Title: null,
-							Type: 0,
-							Url: null,
-							Width: null,
-							XmlContent: null
-						},
-						{
-							AccessoryUrl: null,
-							AdoptStatus: 0,
-							AppId: 'coedu',
-							AppendixCount: 0,
-							AppendixList: null,
-							AudioSrc: null,
-							Author: null,
-							AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Authority: 1,
-							Content: '<p>asd</p>',
-							CreateTime: '2020-02-06T22:19:16',
-							Duration: 0,
-							EndOffset: 0,
-							Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-							Format: null,
-							HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Id: '8e9d268e-bdff-4554-95d7-097679f966d2',
-							IsApproved: 0,
-							IsLocked: 0,
-							IsNoteThumbsUp: false,
-							IsOwn: true,
-							Level: 0,
-							Location: null,
-							MarkContent: null,
-							ModifyTime: '2020-02-06T22:19:16Z',
-							Order: 0,
-							OrderNum: 0,
-							Origin: null,
-							ParAuthId: null,
-							ParagraphId: null,
-							ParentFloor: 0,
-							ParentId: null,
-							ParentRealName: null,
-							Quote: null,
-							RealName: '乔阔远',
-							RepliesNum: 0,
-							ReplyCount: 0,
-							ReplyInfoList: [],
-							SectionId: null,
-							SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-							SourceType: 0,
-							StartOffset: 0,
-							Status: 0,
-							ThreadId: '8e9d268e-bdff-4554-95d7-097679f966d2',
-							ThumbSupNum: 0,
-							Title: null,
-							Type: 0,
-							Url: null,
-							Width: null,
-							XmlContent: null
-						},
-						{
-							AccessoryUrl: null,
-							AdoptStatus: 0,
-							AppId: 'coedu',
-							AppendixCount: 0,
-							AppendixList: null,
-							AudioSrc: null,
-							Author: null,
-							AuthorId: 'd7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Authority: 1,
-							Content: '<p>asdad</p>',
-							CreateTime: '2020-02-06T22:19:02',
-							Duration: 0,
-							EndOffset: 0,
-							Extension: 'a27e86db-4661-4d5e-8fc4-48b25bdd638b',
-							Format: null,
-							HeadImg: 'http://ve.cnki.net/sso/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d',
-							Id: '8971dc68-7377-4abf-9b3b-7581305dd075',
-							IsApproved: 0,
-							IsLocked: 0,
-							IsNoteThumbsUp: false,
-							IsOwn: true,
-							Level: 0,
-							Location: null,
-							MarkContent: null,
-							ModifyTime: '2020-02-06T22:19:02Z',
-							Order: 0,
-							OrderNum: 0,
-							Origin: null,
-							ParAuthId: null,
-							ParagraphId: null,
-							ParentFloor: 0,
-							ParentId: null,
-							ParentRealName: null,
-							Quote: null,
-							RealName: '乔阔远',
-							RepliesNum: 0,
-							ReplyCount: 0,
-							ReplyInfoList: [],
-							SectionId: null,
-							SourceId: '5ae5bb88-66e3-49c7-a3c8-a78a4ef629c3',
-							SourceType: 0,
-							StartOffset: 0,
-							Status: 0,
-							ThreadId: '8971dc68-7377-4abf-9b3b-7581305dd075',
-							ThumbSupNum: 0,
-							Title: null,
-							Type: 0,
-							Url: null,
-							Width: null,
-							XmlContent: null
-						}
-					],
-					LastModifiedTime: '2020/2/6 22:40:24'
-				},
-				Error: '获取数据成功',
-				Other: null,
-				IsMult: false,
-				Ext: null,
-				Extension: null,
-				Total: 0
-			};
-			this.list_notes = r.Data.List;
-		},
-		// 右侧抽屉中tab点击方法
-		onClickRightTab(e) {
-			this.currentRightTab = e.currentIndex;
-		},
-		// 发送弹幕方法
-		sendDanmu: function() {
-			this.videoContext.sendDanmu({
-				text: this.danmuValue,
-				color: this.getRandomColor()
-			});
-			this.danmuValue = '';
-		},
-
-		// 弹幕随机颜色
-		getRandomColor: function() {
-			const rgb = [];
-			for (let i = 0; i < 3; ++i) {
-				let color = Math.floor(Math.random() * 256).toString(16);
-				color = color.length == 1 ? '0' + color : color;
-				rgb.push(color);
-			}
-			return '#' + rgb.join('');
-		}
-	}
+	methods: {}
 };
 </script>
 

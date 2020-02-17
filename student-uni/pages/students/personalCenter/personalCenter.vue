@@ -12,7 +12,7 @@
 
 			<uni-section title="修改cookie:"></uni-section>
 			<view class="" style="margin: 30rpx;">
-				<textarea v-model="input_head_cookie" placeholder="输入新cookie" />
+				<textarea maxlength="-1" v-model="input_head_cookie" placeholder="输入新cookie" />
 				<button type="primary" @click="changeHeaderCookie()">确认修改</button>
 			</view>
 		</view>

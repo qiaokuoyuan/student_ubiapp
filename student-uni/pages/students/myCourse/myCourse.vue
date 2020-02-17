@@ -54,6 +54,11 @@ export default {
 		// 刷新所有课程
 		reloadCourse() {
 			let that = this;
+			
+			uni.showLoading({
+				mask:true
+			})
+			
 			http.request({
 				url: '/api/Student/GetMyCourseList',
 				method: 'POST',
@@ -69,6 +74,10 @@ export default {
 					classType: 0
 				}
 			}).then(r => {
+				
+				
+				uni.hideLoading()
+				
 				r = that.fr(r);
 
 				console.log('reloadCourse==>', r);

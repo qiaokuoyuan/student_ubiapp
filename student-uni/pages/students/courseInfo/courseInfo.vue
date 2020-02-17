@@ -91,9 +91,16 @@ export default {
 		// 获取课程信息
 		reloadCourseInfo() {
 			let that = this;
+			
+			uni.showLoading({
+				mask:true
+			})
 			http.request({
 				url: `/api/Course/GetCourseInfo?courseCode=${that.courseCode}`
 			}).then(r => {
+				
+				uni.hideLoading()
+				
 				r = that.fr(r);
 				if (r.Code == 200) {
 					that.courseTitle = r.Data.main.CourseName;
