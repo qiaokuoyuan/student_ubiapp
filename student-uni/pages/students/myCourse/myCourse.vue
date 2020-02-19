@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 头部导航 -->
-		<uni-nav-bar rightText="我的缓存" title="我的课程" @clickRight="toOffileFiles()"></uni-nav-bar>
+		<uni-nav-bar right-text="我的缓存" title="我的课程" @clickRight="toOffileFiles()"></uni-nav-bar>
 
 		<!-- 所有课程列表 -->
 		<view class="">
@@ -54,11 +54,11 @@ export default {
 		// 刷新所有课程
 		reloadCourse() {
 			let that = this;
-			
+
 			uni.showLoading({
-				mask:true
-			})
-			
+				mask: true
+			});
+
 			http.request({
 				url: '/api/Student/GetMyCourseList',
 				method: 'POST',
@@ -74,10 +74,8 @@ export default {
 					classType: 0
 				}
 			}).then(r => {
-				
-				
-				uni.hideLoading()
-				
+				uni.hideLoading();
+
 				r = that.fr(r);
 
 				console.log('reloadCourse==>', r);
@@ -91,7 +89,7 @@ export default {
 		},
 		// 跳转到离线文件页面
 		toOffileFiles() {
-			uni.redirectTo({
+			uni.navigateTo({
 				url: '../offlineFiles/offlineFiles'
 			});
 		}

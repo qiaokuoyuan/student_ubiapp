@@ -1,0 +1,13 @@
+{
+  "usingComponents": {
+    "uni-drawer": "/components/uni-drawer/uni-drawer",
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-segmented-control": "/components/uni-segmented-control/uni-segmented-control",
+    "uni-list": "/components/uni-list/uni-list",
+    "uni-list-item": "/components/uni-list-item/uni-list-item",
+    "section": "/components/uni-section/uni-section",
+    "uni-swipe-action": "/components/uni-swipe-action/uni-swipe-action",
+    "uni-swipe-action-item": "/components/uni-swipe-action-item/uni-swipe-action-item",
+    "uni-popup": "/components/uni-popup/uni-popup"
+  }
+}

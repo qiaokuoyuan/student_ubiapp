@@ -12,35 +12,44 @@
 
 		<view class="">
 			<!-- 一级目录 -->
-			<view class="" v-for="(c1, c1i) in list_catalog" :key="c1i" @click="c1.showChildren = !c1.showChildren">
-				<!-- 一级目录标题 -->
-				<view style="font-size: large; padding: 20rpx; background-color:#DCDFE6; margin: 10rpx 0;">{{ c1.fullName }}</view>
+			<view class="" v-for="(c1, c1i) in list_catalog" :key="c1i">
+				<view class="" @click="changeAttr(c1, 'showChildren', !c1.showChildren)">
+					<!-- 一级目录标题 -->
+					<view style="font-size: large; padding: 20rpx; background-color:#DCDFE6; margin: 10rpx 0;">{{ c1.fullName }}</view>
 
-				<!-- 二级目录 -->
-				<view class="" v-for="(c2, c2i) in c1.children" :key="c2i" v-if="c1.showChildren" @click.stop="c2.showChildren = !c2.showChildren">
-					<!-- 2级目录标题 -->
-					<view style="font-size:larger ; padding: 20rpx; padding-left: 40rpx;" @click="toggleShowResource(c2)">
-						<uni-icons type="circle" color="#8f8f94" size="25" />
-						<text style="margin-left: 20rpx;">{{ c2.fullName }}</text>
-						<uni-icons type="arrowdown" color="#8f8f94" size="25" v-if="c2.showResource" />
-						<uni-icons type="arrowright" color="#8f8f94" size="25" v-else />
-					</view>
+					<!-- 二级目录 -->
+					<view class="" v-for="(c2, c2i) in c1.children" :key="c2i" v-if="c1.showChildren" @click.stop="changeAttr(c2, 'showChildren', !c2.showChildren)">
+						<!-- 2级目录标题 -->
+						<view style="font-size:larger ; padding: 20rpx; padding-left: 40rpx;" @click="toggleShowResource(c2)">
+							<uni-icons type="circle" color="#8f8f94" size="25" />
+							<text style="margin-left: 20rpx;">{{ c2.fullName }}</text>
+							<uni-icons type="arrowdown" color="#8f8f94" size="25" v-if="c2.showResource" />
+							<uni-icons type="arrowright" color="#8f8f94" size="25" v-else />
+						</view>
 
-					<!-- 二级资源的 资源 -->
-					<view class="" v-if="c2.showResource">
-						<view class="uni-flex uni-row" v-for="(r, ri) in c2._res" :key="ri" style="height: 100rpx ; margin-left: 60rpx;">
-							<uni-tag style="width: 50rpx; margin-top: 30rpx;" :text="r.ResourceType" type="primary" :circle="true"></uni-tag>
-							<view class="" style="margin-left: 30rpx; width: 400rpx; overflow: hidden; ">
-								<text style="line-height: 100rpx;">{{ r.ResourceName }}</text>
-							</view>
+						<!-- 二级资源的 资源 -->
+						<view class="" v-show="c2.showResource">
+							<view class="uni-flex uni-row" v-for="(r, ri) in c2._res" :key="ri" style="height: 100rpx ; margin-left: 60rpx;">
+								<uni-tag style="width: 50rpx; margin-top: 30rpx;" :text="r.ResourceType" type="primary" :circle="true"></uni-tag>
+								<view class="" style="margin-left: 30rpx; width: 400rpx; overflow: hidden; ">
+									<text style="line-height: 100rpx;">{{ r.ResourceName }}</text>
+								</view>
 
-							<!-- 是否已经下载 -->
-							<view class="" style="margin-left: 30rpx; overflow: hidden; ">
-								<!-- 如过已经下载 -->
-								<!-- <text v-if="downloadStatus(r)=='已下载'">已下载</text> -->
-								<uni-icons v-if="downloadStatus(r) == '已下载'" type="checkbox-filled" style="line-height:100rpx ; float: right;" size="30" color="#87CEEB" />
-								<text v-if="downloadStatus(r) == '下载中'" style="line-height:100rpx">下载中</text>
-								<uni-icons v-if="downloadStatus(r) == '未下载'" @click="askDownload(r)" type="download" style="line-height:100rpx ;" size="30" color="#87CEEB" />
+								<!-- 是否已经下载 -->
+								<view class="" style="margin-left: 30rpx; overflow: hidden; ">
+									<!-- 如过已经下载 -->
+									
+									<uni-icons v-if="downloadStatus(r) == '已下载'" type="checkbox-filled" style="line-height:100rpx ; float: right;" size="30" color="#87CEEB" />
+									<text v-if="downloadStatus(r) == '下载中'" style="line-height:100rpx">下载中</text>
+									<uni-icons
+										v-if="downloadStatus(r) == '未下载'"
+										@click="askDownload(r)"
+										type="download"
+										style="line-height:100rpx ;"
+										size="30"
+										color="#87CEEB"
+									/>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -91,6 +100,10 @@ export default {
 		this.reloadCatalog();
 	},
 	methods: {
+		// 由于微信小程序不支持将 表达式写在标签上,单独使用一个函数
+		changeShowChildren(item) {
+			item.showChildren = !item.showChildren;
+		},
 		// 询问是否要下载一个资源
 		askDownload(res) {
 			console.log('enter askDownload');
@@ -225,38 +238,41 @@ export default {
 		},
 		// 检查一个资源是否已经下载
 		downloadStatus(res) {
-			
-			// 如过在 add_task_ids 中,直接判断为 下载中
-			if(this.add_task_ids.indexOf(res.ResourceCode)>=0){
-				return "下载中"
+			try {
+				// 如过在 add_task_ids 中,直接判断为 下载中
+				if (this.add_task_ids.indexOf(res.ResourceCode) >= 0) {
+					return '下载中';
+				} else {
+					// 如过不在,从  getStorageSync 中找
+					let task = uni.getStorageSync('download_task') || [];
+
+					
+					console.log("JSON task is ==>",task)
+					let task_item = task.find(e => {
+						return e.fileid == res.ResourceCode;
+					});
+
+					if (task_item) {
+						// 如过找到task_item
+						if (task_item.is_downloaded) {
+							// 如过已经下载完成
+							return  '已下载';
+						} else if (task_item.rate >= 0 && task_item.rate < 100) {
+							// 如过是正在下载
+							return '下载中';
+						} else {
+							// 其他情况返回未知
+							return '未知';
+						}
+					} else {
+						// 如过未找到task_item,返回未下载
+						return '未下载';
+					}
+				}
+			} catch (e) {
+				// 异常返回异常
+				return '异常' + e;
 			}
-			
-			
-			let task = uni.getStorageSync('download_task');
-
-			let task_item = task.find(e => {
-				return e.fileid == res.ResourceCode;
-			});
-
-			if (!task_item) {
-				// 如过没摘到,则是未下载
-				return '未下载';
-			}
-
-			if (task_item.is_downloaded) {
-				// 如过已经下载完成
-				return '已下载';
-			}
-
-			if (task_item.rate >= 0 && task_item.rate < 100) {
-				// 如过是正在下载
-				return '下载中';
-			}
-
-			// 其他情况返回未知
-			return '未知';
-
-			return false;
 		},
 		// 获取一个章节的资源
 		toggleShowResource(item) {

@@ -42,6 +42,13 @@ Vue.prototype.fhttp = (url) => {
 // 文件下载信息存储位置 (storage/ golbalData)
 Vue.prototype.download_task_save_place="storage"
 
+
+// 修改一个对象的属性,由于微信小程序无法将表达式写在标签里,可以使用该方法
+Vue.prototype.changeAttr=(item,attr_name,attr_value)=>{
+	item[attr_name]=attr_value
+}
+
+
 // 扁平化结构转树接结构
 Vue.prototype.toTree = (data) => {
 	let result = [];

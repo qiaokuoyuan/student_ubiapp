@@ -25,7 +25,11 @@ import uniNavBar from '../../../components/uni-nav-bar/uni-nav-bar.vue';
 import uniSegmentedControl from '../../../components/uni-segmented-control/uni-segmented-control.vue';
 import uniList from '../../../components/uni-list/uni-list.vue';
 import uniListItem from '../../../components/uni-list-item/uni-list-item.vue';
-import section from '../../extUI/section/section.nvue';
+
+
+
+
+import section from '../../../components/uni-section/uni-section.vue';
 import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue';
 import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue';
 import uniPopup from '../../../components/uni-popup/uni-popup.vue';
@@ -147,7 +151,13 @@ export default {
 			resTitle: ''
 		};
 	},
-	methods: {}
+	methods: {
+		back(){
+			uni.navigateBack({
+				
+			})
+		}
+	}
 };
 </script>
 

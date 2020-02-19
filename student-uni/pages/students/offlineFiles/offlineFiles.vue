@@ -12,6 +12,7 @@
 		<view class="">
 			<view class="" v-for="(t, ti) in list_download_task" :key="ti">
 				<!-- 下载中的任务 （当tab是 downloading的时候显示）-->
+				
 				<view
 					class="uni-flex uni-row"
 					:style="`border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 ${t.rate}%, #F8F8FF 0);`"
@@ -154,7 +155,14 @@ export default {
 
 			// 如过是确认删除任务
 			if (t == 'confirm') {
-				let tasks = uni.getStorageSync('download_task');
+				let tasks = uni.getStorageSync('download_task') ;
+				
+				try{
+					tasks = JSON.stringify(tasks)
+				} catch(e){
+					tasks=[]
+				}
+				
 				tasks = tasks.filter(e => {
 					return that.deleteTaskIds.indexOf(e.fileid) == -1;
 				});
@@ -189,14 +197,7 @@ export default {
 		},
 		// 测试接口
 
-		test() {
-			console.log('测试 接口 test');
-			http.request({
-				url: 'http://ve.cnki.net/coeduApi/api/UserExtended/GetUser?userId='
-			}).then(r => {
-				console.log('测试 接口 返回', JSON.stringify(r));
-			});
-		},
+		
 		// 刷新缓存过的离线文件
 		reload_offline_files() {
 			let that = this;

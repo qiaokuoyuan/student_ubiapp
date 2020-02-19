@@ -27,13 +27,7 @@
 		},
 		methods: {
 			
-			test(){
-				console.log("测试 接口 test")
-				http.request("http://ve.cnki.net/coeduApi/api/UserExtended/GetUser?userId=").then(r=>{
-					
-					console.log('测试 接口 返回',r)
-				})
-			},
+			
 			
 			back(){
 				

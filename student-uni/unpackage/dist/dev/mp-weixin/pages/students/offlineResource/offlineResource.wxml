@@ -1,0 +1,1 @@
+<view><uni-nav-bar vue-id="1" left-icon="arrowleft" leftText="返回" data-event-opts="{{[['^clickLeft',[['back']]]]}}" bind:clickLeft="__e" bind:__l="__l"></uni-nav-bar>this is offline</view>
