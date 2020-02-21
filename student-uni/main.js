@@ -20,7 +20,8 @@ Vue.prototype.fr = (r) => {
 	try {
 		console.log("原始返回值:", JSON.stringify(r))
 		return r[1].data
-	} catch (e) {
+	} catch (e) { 
+		console.log("fr 转换异常:", e)
 		return r
 	}
 }

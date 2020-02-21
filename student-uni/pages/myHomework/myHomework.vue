@@ -1,6 +1,8 @@
 <template>
 	<view>
 		<view class="">
+			<button type="primary" @click="toTest()">测试地址</button>
+
 			<view class="" v-for="(h, hi) in list_homework" :key="hi">
 				<view class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx;">
 					<text style="line-height: 100rpx;" @click="doHomework(h)">{{ h.Content }}</text>
@@ -25,13 +27,20 @@ export default {
 		this.reloadHomework();
 	},
 	methods: {
+		toTest() {
+			uni.navigateTo({
+				url: '../students/doMyHomework/doMyHomework?homeworkId=136'
+				
+				// url:"../students/doHomework/doHomework?homeworkId=130"
+			});
+		},
 		// 跳转到做作业
 		doHomework(item) {
 			let homeworkId = item.RedirectParameter;
 
 			homeworkId = homeworkId.split(',')[0];
-			
-			console.log("homeworkId:",homeworkId)
+
+			console.log('homeworkId:', homeworkId);
 
 			uni.navigateTo({
 				url: '../students/doHomework/doHomework?homeworkId=' + homeworkId

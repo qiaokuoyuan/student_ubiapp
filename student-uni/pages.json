@@ -411,6 +411,10 @@
             "path" : "pages/students/doHomework/doHomework",
             "style" : {}
         }
+        ,{
+            "path" : "pages/students/doMyHomework/doMyHomework",
+            "style" : {}
+        }
     ],
 	"subPackages": [{
 			"root": "pages/API",

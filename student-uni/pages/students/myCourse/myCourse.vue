@@ -62,6 +62,7 @@ export default {
 			http.request({
 				url: '/api/Student/GetMyCourseList',
 				method: 'POST',
+
 				data: {
 					semesterId: '',
 					pageIndex: 1,
@@ -78,12 +79,8 @@ export default {
 
 				r = that.fr(r);
 
-				console.log('reloadCourse==>', r);
-
 				if (r.Code == 200) {
 					that.list_course = r.Data.courstList || [];
-
-					console.log('that.list_course==>', that.list_course);
 				}
 			});
 		},
