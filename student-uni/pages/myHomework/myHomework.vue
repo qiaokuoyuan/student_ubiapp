@@ -29,7 +29,7 @@ export default {
 	methods: {
 		toTest() {
 			uni.navigateTo({
-				url: '../students/doMyHomework/doMyHomework?homeworkId=136'
+				url: '../students/doMyHomework/doMyHomework?homeworkId=137'
 				
 				// url:"../students/doHomework/doHomework?homeworkId=130"
 			});

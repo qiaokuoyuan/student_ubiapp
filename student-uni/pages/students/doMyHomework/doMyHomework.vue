@@ -3,7 +3,6 @@
 		<view class="">
 			<!-- 题目  1：单选题，2：多选题，3：填空题，4：判断题，5 ：简答题-->
 			<view class="" v-for="(q, qi) in list" :key="qi">
-									
 				<!-- 标题 （如过是未提交的） -->
 				<uni-section v-if="submitFlag != 2" :title="q.Exercise.Content.replace(/<\/?.+?>/g, '')" type="line"></uni-section>
 
@@ -20,7 +19,7 @@
 				<!-- <view v-if="submitFlag == 2 && q.Exercise.IsRight == 0" style="height: 100rpx; background-color: #FFF68F;">
 					<text style="line-height: 100rpx; margin-left: 30rpx;">【部分正确】{{ q.Exercise.Content.replace(/<\/?.+?>/g, '') }}</text>
 				</view> -->
-				
+
 				<!-- 未批改  -->
 				<view v-if="submitFlag == 2 && q.Exercise.IsRight == 0" style="height: 100rpx; background-color: #FAFAD2;">
 					<text style="line-height: 100rpx; margin-left: 30rpx;">【未批改】{{ q.Exercise.Content.replace(/<\/?.+?>/g, '') }}</text>
@@ -59,25 +58,13 @@
 					</view>
 
 					<!-- 如果是判断题 -->
-					<radio-group v-if="q.Exercise.TypeID == 4">
-						<!-- 正确 -->
-						<label @click="q._choosePotion = true">
-							<view class="">
-								<radio :checked="q._choosePotion" />
-								<!-- 选项文字 -->
-								<text>正确</text>
-							</view>
-						</label>
+					<view v-for="(o, oi) in q.Exercise.Options" :key="oi" @click="q.Exercise.StudentAnswers = o.IsTrue" v-if="q.Exercise.TypeID == 4">
+						<!-- 选中样式和未选中样式 -->
+						<uni-icons type="checkbox" size="25" style="color: #0066CC;" v-if="q.Exercise.StudentAnswers == o.IsTrue"></uni-icons>
+						<uni-icons type="checkbox" size="25" style="color: #B9D3EE;" v-else></uni-icons>
 
-						<!-- 错误 -->
-						<label @click="q._choosePotion = false">
-							<view class="">
-								<radio :checked="q._choosePotion" />
-								<!-- 选项文字 -->
-								<text>错误</text>
-							</view>
-						</label>
-					</radio-group>
+						<text style="margin-left: 20rpx;" @click="q.Exercise.StudentAnswers = o.IsTrue">{{ o.IsTrue == '1' ? '正确' : '错误' }}</text>
+					</view>
 				</view>
 
 				<!-- 如过是  填空题  简答题 -->
