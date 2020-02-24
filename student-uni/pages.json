@@ -415,6 +415,14 @@
             "path" : "pages/students/doMyHomework/doMyHomework",
             "style" : {}
         }
+        ,{
+            "path" : "pages/students/myArtifact/myArtifact",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/students/myArtifactDetail/myArtifactDetail",
+            "style" : {}
+        }
     ],
 	"subPackages": [{
 			"root": "pages/API",
@@ -1263,6 +1271,13 @@
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
 				"text": "个人中心"
+			},
+			
+			{
+				"pagePath": "pages/students/myArtifact/myArtifact",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "学生作品"
 			},
 			
 			
