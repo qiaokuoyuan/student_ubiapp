@@ -423,6 +423,10 @@
             "path" : "pages/students/myArtifactDetail/myArtifactDetail",
             "style" : {}
         }
+        ,{
+            "path" : "pages/students/addArtifact/addArtifact",
+            "style" : {}
+        }
     ],
 	"subPackages": [{
 			"root": "pages/API",

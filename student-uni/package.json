@@ -14,8 +14,9 @@
     },
     "dependencies": {
         "axios": "^0.19.2",
-        "mint-ui": "^2.2.13",
         "qs": "^6.9.1",
-        "weapp-cookie": "^1.4.6"
+        "weapp-cookie": "^1.4.6",
+        "cnchar": "2.0.9",
+        "cos-js-sdk-v5": "^0.5.19"
     }
 }

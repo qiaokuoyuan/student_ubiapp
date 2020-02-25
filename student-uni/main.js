@@ -8,6 +8,7 @@ import store from './store'
 
 
 
+
 Vue.config.productionTip = false
 
 
@@ -16,11 +17,14 @@ Vue.prototype.offline_file_info_map_name = "offline_file_info_map_name"
 
 
 
+// 文件上传地址
+Vue.prototype.uploadDir = "http//ve.cnki.net/coeduApi/api/File/Upload"
+
 Vue.prototype.fr = (r) => {
 	try {
-		console.log("原始返回值:", JSON.stringify(r))
+		console.log("原始返回值(fr之前):", JSON.stringify(r))
 		return r[1].data
-	} catch (e) { 
+	} catch (e) {
 		console.log("fr 转换异常:", e)
 		return r
 	}
@@ -41,12 +45,12 @@ Vue.prototype.fhttp = (url) => {
 }
 
 // 文件下载信息存储位置 (storage/ golbalData)
-Vue.prototype.download_task_save_place="storage"
+Vue.prototype.download_task_save_place = "storage"
 
 
 // 修改一个对象的属性,由于微信小程序无法将表达式写在标签里,可以使用该方法
-Vue.prototype.changeAttr=(item,attr_name,attr_value)=>{
-	item[attr_name]=attr_value
+Vue.prototype.changeAttr = (item, attr_name, attr_value) => {
+	item[attr_name] = attr_value
 }
 
 
@@ -73,6 +77,8 @@ Vue.prototype.toTree = (data) => {
 	});
 	return result;
 }
+
+
 
 Vue.prototype.$store = store
 Vue.prototype.$backgroundAudioData = {
