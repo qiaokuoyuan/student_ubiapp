@@ -68,6 +68,7 @@
 		</view>
 		<button type="primary" @click="step = step - 1" style="margin: 30rpx;" v-if="step > 0">上一步</button>
 		<button type="primary" @click="step = step + 1" style="margin: 30rpx;" v-if="step < 3">下一步</button>
+		<button type="warn" @click="step = step + 1" style="margin: 30rpx;" v-if="step == 3">提交</button>
 
 		<!-- 选择人员抽屉 -->
 
@@ -246,6 +247,27 @@ export default {
 		chooseCover() {
 			let that = this;
 
+			// plus.gallery.pick(
+			// 	e => {
+			// 		console.log('plus.gallery.pick 1==>', e);
+
+			// 		uni.uploadFile({
+			// 			url: 'http://ve.cnki.net/coeduApi/api/File/Upload', //https://kt.cnki.net/subjectApi/api/File/Upload
+			// 			filePath: e,
+			// 			name: 'xxxxxxxxxxxxxxxxxxxxx',
+			// 			complete(r) {
+			// 				console.log(JSON.stringify(r));
+			// 			}
+			// 		});
+			// 	},
+			// 	e => {
+			// 		console.log('plus.gallery.pick 2==>', e);
+			// 	},
+			// 	e => {
+			// 		console.log('plus.gallery.pick 3==>', e);
+			// 	}
+			// );
+
 			// 选择图片
 			uni.chooseImage({
 				success: chooseImageRes => {
@@ -255,18 +277,25 @@ export default {
 
 					console.log('上传地址：', that.uploadDir);
 
+					let path = tempFilePaths[0];
+
+					console.log('path is==>', path);
+
+					// =====================
+
 					uni.uploadFile({
-						url: that.uploadDir, //仅为示例，非真实的接口地址
+						url: "https://kt.cnki.net/subjectApi/api/File/Upload", //'http://ve.cnki.net/coeduApi/api/File/Upload', //https://kt.cnki.net/subjectApi/api/File/Upload
 						filePath: tempFilePaths[0],
 						name: 'file',
-						formData: {
-							user: 'test'
+						header:{
+							Cookie: "UM_distinctid=1704cab6c9524e-0427fcbff74525-b383f66-100200-1704cab6c961d9; DID=6d2ed024-ccd6-4e76-8f15-7cde11238a88; LLOGO_QIAOKUOYUAN=~/pic/8eaa9554-2d42-45cc-b0cb-20baa02021c0; LLOGO_STU_QIAOKUOYUAN=~/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d; LLOGO_A00001=~/pic/d62c892f-52f4-4013-bdcd-1f16702c2b0b; Ecp_ClientId=2200219164602271778; LLOGO_DENGGAOFENG=~/pic/d3ddb3b3-0760-4eb3-8e93-5f545c8883ef; KNET_SSO_COOKIE_DID=c6301f4e-c5a1-49e0-8359-73247c9fb8e1; Ecp_IpLoginFail=200225106.33.42.137; CNZZDATA1277770830=366119379-1581834224-http%253A%252F%252Fve.cnki.net%252F%7C1582590740; BID=67ed7ce9cab14b959e575da46a5c59d9; SID=012011; token=7a2326cdff7946b483dd15a0822eb000"
 						},
+
 						success: uploadFileRes => {
 							console.log('uploadFile：==》', uploadFileRes.data);
 						},
 						complete(r) {
-							console.log('complete==>', r);
+							console.log('complete==>', JSON.stringify(r));
 						}
 					});
 				}
