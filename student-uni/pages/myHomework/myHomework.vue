@@ -54,6 +54,7 @@ export default {
 
 			http.request({
 				url: '/api/Msg/GetMsgInfoByToUserId',
+				method:"GET",
 				data: {
 					userId: user.UserID,
 					type: 37,

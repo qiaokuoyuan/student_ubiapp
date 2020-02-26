@@ -2,6 +2,8 @@
 	<view>
 		<view><uni-steps :options="list1" style="margin: 30rpx;" active-color="#007AFF" :active="step" /></view>
 
+
+
 		<view class="" style="margin: 30rpx;">
 			<!-- 内容编创页面 -->
 			<view class="" v-show="step == 0"><myeditor ref="editor" @contentchange="contentchange"></myeditor></view>
@@ -61,14 +63,19 @@
 
 			<!-- 选择封面、关键词页面 -->
 			<view class="" v-show="step == 3">
-				选择封面、关键词页面
+				<view class="title"><text class="uni-form-item__title">作品标题</text></view>
+				<view class="uni-input-wrapper"><input class="uni-input" v-model="title" focus placeholder="作品标题" /></view>
 
 				<button type="primary" @click="chooseCover()">选择封面</button>
 			</view>
 		</view>
-		<button type="primary" @click="step = step - 1" style="margin: 30rpx;" v-if="step > 0">上一步</button>
-		<button type="primary" @click="step = step + 1" style="margin: 30rpx;" v-if="step < 3">下一步</button>
-		<button type="warn" @click="step = step + 1" style="margin: 30rpx;" v-if="step == 3">提交</button>
+
+		<!-- 下方按钮 -->
+		<view class="" style="margin: 30rpx; margin-top: 40rpx;">
+			<button type="primary" style="margin-bottom: 30rpx;" @click="step = step - 1" v-if="step > 0">上一步</button>
+			<button type="primary" style="margin-bottom: 30rpx;" @click="step = step + 1" v-if="step < 3">下一步</button>
+			<button type="warn" @click="submitArtifact()" v-if="step == 3">提交</button>
+		</view>
 
 		<!-- 选择人员抽屉 -->
 
@@ -148,6 +155,9 @@ export default {
 			// 作品内容
 			content: '',
 
+			// 作品名称
+			title: '',
+
 			// 步骤条
 			list1: [
 				{
@@ -166,6 +176,68 @@ export default {
 		};
 	},
 	methods: {
+		// 提交作品
+		submitArtifact() {
+			let that = this;
+
+			let users = [];
+
+			// 将成员添加进去
+			that.list_zuzhang.forEach(e => {
+				users.push({
+					Type: 0,
+					UserId: e.id || '',
+					RealName: e.label || '',
+					DepartmentName: e.deptName || ''
+				});
+			});
+			that.list_chengyuan.forEach(e => {
+				users.push({
+					Type: 1,
+					UserId: e.id || '',
+					RealName: e.label || '',
+					DepartmentName: e.deptName || ''
+				});
+			});
+			that.list_jiaoshi.forEach(e => {
+				users.push({
+					Type: 2,
+					UserId: e.id || '',
+					RealName: e.label || '',
+					DepartmentName: e.deptName || ''
+				});
+			});
+
+			console.log('title==>', that.title);
+			http.request({
+				url: '/api/StudentWork/AddStudentWork',
+				method: 'POST',
+				data: {
+					StudentWorkName: that.title,
+					CourseCode: that.select_course_id,
+					Template: 1,
+					ReviewFlag: 2,
+					StudentWorkType: 2,
+					Cover: '',
+					KeyWords: '',
+					Content: that.content,
+					StudentWorkMember: users
+				}
+			}).then(r => {
+				r = that.fr(r);
+				if (r.Code == 200) {
+					uni.showToast({
+						title: '提交成功',
+						icon: 'none'
+					});
+				} else {
+					uni.showToast({
+						title: '提交失败',
+						icon: 'none'
+					});
+				}
+			});
+		},
 		// 选中一个用户
 		checkUser(user) {
 			let that = this;
@@ -284,11 +356,13 @@ export default {
 					// =====================
 
 					uni.uploadFile({
-						url: "https://kt.cnki.net/subjectApi/api/File/Upload", //'http://ve.cnki.net/coeduApi/api/File/Upload', //https://kt.cnki.net/subjectApi/api/File/Upload
+						url: 'https://kt.cnki.net/subjectApi/api/File/Upload', //'http://ve.cnki.net/coeduApi/api/File/Upload', //https://kt.cnki.net/subjectApi/api/File/Upload
 						filePath: tempFilePaths[0],
-						name: 'file',
-						header:{
-							Cookie: "UM_distinctid=1704cab6c9524e-0427fcbff74525-b383f66-100200-1704cab6c961d9; DID=6d2ed024-ccd6-4e76-8f15-7cde11238a88; LLOGO_QIAOKUOYUAN=~/pic/8eaa9554-2d42-45cc-b0cb-20baa02021c0; LLOGO_STU_QIAOKUOYUAN=~/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d; LLOGO_A00001=~/pic/d62c892f-52f4-4013-bdcd-1f16702c2b0b; Ecp_ClientId=2200219164602271778; LLOGO_DENGGAOFENG=~/pic/d3ddb3b3-0760-4eb3-8e93-5f545c8883ef; KNET_SSO_COOKIE_DID=c6301f4e-c5a1-49e0-8359-73247c9fb8e1; Ecp_IpLoginFail=200225106.33.42.137; CNZZDATA1277770830=366119379-1581834224-http%253A%252F%252Fve.cnki.net%252F%7C1582590740; BID=67ed7ce9cab14b959e575da46a5c59d9; SID=012011; token=7a2326cdff7946b483dd15a0822eb000"
+						name: 'FileData',
+						header: {
+							'content-type': 'multipart/form-data',
+							Cookie:
+								"UM_distinctid=1704cab6c9524e-0427fcbff74525-b383f66-100200-1704cab6c961d9; DID=6d2ed024-ccd6-4e76-8f15-7cde11238a88; LLOGO_QIAOKUOYUAN=~/pic/8eaa9554-2d42-45cc-b0cb-20baa02021c0; LLOGO_STU_QIAOKUOYUAN=~/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d; LLOGO_A00001=~/pic/d62c892f-52f4-4013-bdcd-1f16702c2b0b; Ecp_ClientId=2200219164602271778; LLOGO_DENGGAOFENG=~/pic/d3ddb3b3-0760-4eb3-8e93-5f545c8883ef; KNET_SSO_COOKIE_DID=c6301f4e-c5a1-49e0-8359-73247c9fb8e1; Ecp_IpLoginFail=200225106.33.42.137; CNZZDATA1277770830=366119379-1581834224-http%253A%252F%252Fve.cnki.net%252F%7C1582590740; BID=67ed7ce9cab14b959e575da46a5c59d9; SID=012011; token=07cb447188ce4605ad467b17902abc24"
 						},
 
 						success: uploadFileRes => {
@@ -369,4 +443,75 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.nvue-page-root {
+	background-color: #f8f8f8;
+	padding-bottom: 20px;
+}
+
+.page-title {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 35rpx;
+}
+
+.page-title__wrapper {
+	padding: 0px 20px;
+	border-bottom-color: #d8d8d8;
+	border-bottom-width: 1px;
+}
+
+.page-title__text {
+	font-size: 16px;
+	height: 48px;
+	line-height: 48px;
+	color: #bebebe;
+}
+
+.title {
+	padding: 5px 13px;
+}
+
+.uni-form-item__title {
+	font-size: 16px;
+	line-height: 24px;
+}
+
+.uni-input-wrapper {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	padding: 8px 13px;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	background-color: #ffffff;
+}
+
+.uni-input {
+	height: 28px;
+	line-height: 28px;
+	font-size: 15px;
+	padding: 0px;
+	flex: 1;
+	background-color: #ffffff;
+}
+
+.uni-icon {
+	font-family: uniicons;
+	font-size: 24px;
+	font-weight: normal;
+	font-style: normal;
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	color: #999999;
+}
+
+.uni-eye-active {
+	color: #007aff;
+}
+</style>
