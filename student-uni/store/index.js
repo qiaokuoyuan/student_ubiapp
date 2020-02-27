@@ -7,26 +7,33 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		islogin:false,
 		hasLogin: false,
 		loginProvider: "",
 		openid: null,
 		testvuex: false,
 		colorIndex: 0,
 		colorList: ['#FF0000', '#00FF00', '#0000FF'],
-		userInfo:{}
+		userInfo: {},
+		sid: "",
+		token: ""
 	},
 	mutations: {
-		setUserInfo(state,v){
-			state.userInfo=v
+		
+		setSid(state, v) {
+			state.sid = v
+		},
+		setToken(state, v) {
+			state.token = v
+		},
+		setUserInfo(state, v) {
+			state.userInfo = v
 		},
 		login(state, provider) {
 			state.hasLogin = true;
 			state.loginProvider = provider;
 		},
-		logout(state) {
-			state.hasLogin = false
-			state.openid = null
-		},
+
 		setOpenid(state, openid) {
 			state.openid = openid
 		},
@@ -41,36 +48,50 @@ const store = new Vuex.Store({
 		}
 	},
 	getters: {
+
+		getToken(state) {
+			return state.token
+		},
+		getSid(state) {
+			return state.sid
+		},
+
 		currentColor(state) {
 			return state.colorList[state.colorIndex]
 		},
-		
-		getUserInfo(state){
+
+		getUserInfo(state) {
 			return state.userInfo
 		}
 	},
 	actions: {
 
+		// 登出
+		logout(commit, state) {
+			console.log("logout")
+			// state.userInfo = {
+			// 	a: 1
+			// }
+			commit.commit('setUserInfo', {
+				a: 1
+			})
+		},
+
 		// 获取用户信息		
-		getUserInfo(commit,state) {
+		getUserInfo(commit, state) {
+			let that = this
 			http.request({
 				url: "/api/Student/StudentInfo",
 				method: "post"
 			}).then(r => {
 				try {
-					
-					
-					
-					r = r[1].data.Data.UserInfo
-					
-					console.log(JSON.stringify(r))
-					
-					commit.commit('setUserInfo',r)
-					
-					
-					
+					r = Vue.prototype.fr(r)
+					r = r.Data.UserInfo
+
+					commit.commit('setUserInfo', r)
+
 				} catch (e) {
-					commit.commit('setUserInfo',{})
+					commit.commit('setUserInfo', {})
 					console.log(e)
 				}
 			})

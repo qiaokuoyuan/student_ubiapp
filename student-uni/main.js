@@ -23,9 +23,22 @@ Vue.prototype.uploadDir = "http//ve.cnki.net/coeduApi/api/File/Upload"
 Vue.prototype.fr = (r) => {
 	try {
 		console.log("原始返回值(fr之前):", JSON.stringify(r))
+
+		if (r[1].data.Code != 200) {
+			uni.hideLoading()
+			uni.showToast({
+				title: "请求失败,请检查登陆状态",
+				icon: "none"
+			})
+		}
 		return r[1].data
 	} catch (e) {
 		console.log("fr 转换异常:", e)
+		uni.hideLoading()
+		uni.showToast({
+			title: "请求失败,请检查登陆状态",
+			icon: "none"
+		})
 		return r
 	}
 }
