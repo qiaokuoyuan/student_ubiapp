@@ -1,18 +1,27 @@
 <template>
 	<view>
-		<uni-nav-bar leftIcon="arrowleft" @clickLeft="toMyCourse()" rightIcon="gear" @clickRight="delTask('show', '')"></uni-nav-bar>
+		<uni-nav-bar leftIcon="arrowleft" title="离线缓存" @clickLeft="toMyCourse()" rightIcon="gear" @clickRight="delTask('show', '')"></uni-nav-bar>
 
 		<!-- 上方按钮切换是下载中的还是已下载的 -->
-		<view class="uni-flex uni-row" style="margin: 30rpx 80rpx;">
+		<view class="uni-flex uni-row" style="margin: 30rpx 80rpx;" v-if="false">
 			<button @click="tab = 'downloading'" :type="tab == 'downloading' ? 'primary' : 'default'" style="margin: 0 30rpx;">下载中</button>
 			<button @click="tab = 'downloaded'" :type="tab == 'downloaded' ? 'primary' : 'default'" style="margin: 0 30rpx;">已下载</button>
+		</view>
+
+		<view class="uni-flex uni-row">
+			<view :class="[{ select: tab == 'downloading' }, { unselect: tab == 'downloaded' }]" @click="tab = 'downloading'">
+				<text style="line-height: 100rpx; font-size: larger;">下载中</text>
+			</view>
+			<view :class="[{ unselect: tab == 'downloading' }, { select: tab == 'downloaded' }]" @click="tab = 'downloaded'">
+				<text style="line-height: 100rpx; font-size: larger;">已下载</text>
+			</view>
 		</view>
 
 		<!-- 下载文件列表 -->
 		<view class="">
 			<view class="" v-for="(t, ti) in list_download_task" :key="ti">
 				<!-- 下载中的任务 （当tab是 downloading的时候显示）-->
-				
+
 				<view
 					class="uni-flex uni-row"
 					:style="`border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 ${t.rate}%, #F8F8FF 0);`"
@@ -23,7 +32,7 @@
 					</view>
 
 					<!-- 下载的文件名 -->
-					<view class="" style="width: 600rpx; height: 150rpx; padding-left: 30rpx;">
+					<view class="" style="width: 600rpx; height: 150rpx; padding-left: 30rpx;  overflow: hidden;">
 						<text style="line-height: 150rpx; font-size: large;" @click="read(t)">{{ t.filename }}</text>
 					</view>
 
@@ -41,7 +50,7 @@
 					</view>
 
 					<!-- 下载的文件名 -->
-					<view class="" style="width: 600rpx; height: 150rpx; padding-left: 30rpx;">
+					<view class="" style="width: 600rpx; height: 150rpx; padding-left: 30rpx; overflow: hidden;">
 						<text style="line-height: 150rpx; font-size: large;" @click="read(t)">{{ t.filename }}</text>
 					</view>
 
@@ -55,7 +64,7 @@
 		</view>
 
 		<!-- 如果显示 选择哪些任务删除，显示删除按钮 -->
-		<button v-if="show_select_delete_task" type="primary" style="margin: 30rpx;" @click="delTask('confirm')">删除任务</button>
+		<button v-if="show_select_delete_task" type="primary" style="margin: 30rpx;" @click="delTask('confirm')">删除选中的任务</button>
 	</view>
 </template>
 
@@ -114,7 +123,6 @@ export default {
 
 	onLoad() {
 		this.reload_offline_files();
-		this.test();
 	},
 	methods: {
 		// 删除下载任务
@@ -155,14 +163,14 @@ export default {
 
 			// 如过是确认删除任务
 			if (t == 'confirm') {
-				let tasks = uni.getStorageSync('download_task') ;
-				
-				try{
-					tasks = JSON.stringify(tasks)
-				} catch(e){
-					tasks=[]
+				let tasks = uni.getStorageSync('download_task');
+
+				try {
+					tasks = JSON.stringify(tasks);
+				} catch (e) {
+					tasks = [];
 				}
-				
+
 				tasks = tasks.filter(e => {
 					return that.deleteTaskIds.indexOf(e.fileid) == -1;
 				});
@@ -197,7 +205,6 @@ export default {
 		},
 		// 测试接口
 
-		
 		// 刷新缓存过的离线文件
 		reload_offline_files() {
 			let that = this;
@@ -231,4 +238,20 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.select {
+	width: 100%;
+	height: 100rpx;
+	background-color: #00ced1;
+	border-bottom: solid 5rpx #1e90ff;
+	text-align: center;
+}
+
+.unselect {
+	width: 100%;
+	height: 100rpx;
+	background-color: #faebd7;
+	border-bottom: solid 5rpx #faebd7;
+	text-align: center;
+}
+</style>

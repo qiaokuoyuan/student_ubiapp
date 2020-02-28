@@ -81,12 +81,12 @@ export default {
 				buttonColor: '#007AFF'
 			},
 			fab_content: [
-				{
-					iconPath: '/static/component.png',
-					selectedIconPath: '/static/componentHL.png',
-					text: '作品上传',
-					active: false
-				},
+				// {
+				// 	iconPath: '/static/component.png',
+				// 	selectedIconPath: '/static/componentHL.png',
+				// 	text: '作品上传',
+				// 	active: false
+				// },
 				{
 					iconPath: '/static/api.png',
 					selectedIconPath: '/static/apiHL.png',

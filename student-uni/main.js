@@ -36,7 +36,7 @@ Vue.prototype.fr = (r) => {
 		console.log("fr 转换异常:", e)
 		uni.hideLoading()
 		uni.showToast({
-			title: "请求失败,请检查登陆状态",
+			title: "您尚未登陆,请先登陆",
 			icon: "none"
 		})
 		return r

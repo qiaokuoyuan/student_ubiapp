@@ -113,18 +113,18 @@ export default {
 
 	created() {},
 	watch: {
-		// step(v) {
-		// 	console.log('step=>', v);
-		// 	// 如过步骤为刷新课程
-		// 	if (v == 1) {
-		// 		this.reloadCourse();
-		// 	}
+		step(v) {
+			console.log('step=>', v);
+			// 如过步骤为刷新课程
+			if (v == 1) {
+				this.reloadCourse();
+			}
 
-		// 	// 如果是选择成员
-		// 	if (v == 2) {
-		// 		this.reloadUsers();
-		// 	}
-		// }
+			// 如果是选择成员
+			if (v == 2) {
+				this.reloadUsers();
+			}
+		}
 	},
 	data() {
 		return {

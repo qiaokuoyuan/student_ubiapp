@@ -58,11 +58,11 @@ export default {
 		uniNavBar
 	},
 	onShow() {
-		this.login();
+		// this.login();
 
-		// this.$store.dispatch('getUserInfo');
+		this.$store.dispatch('getUserInfo');
 
-		// this.getOffileFilesSize();
+		this.getOffileFilesSize();
 	},
 
 	computed: {
@@ -100,8 +100,8 @@ export default {
 		return {
 			current_head_cookie: '',
 			input_head_cookie: '',
-			username: '',
-			password: '',
+			username: 'stu_qiaokuoyuan',
+			password: '123456',
 			total_size: 0
 		};
 	},
@@ -198,7 +198,6 @@ export default {
 					http.request({
 						url: '/api/nologin/GetEncodePass?password=' + _p
 					}).then(r_p => {
-						
 						r_p = that.fr(r_p);
 						if (r_p.Code == 200) {
 							encoded_passwrod = r_p.Data;
@@ -214,14 +213,24 @@ export default {
 								}
 							}).then(r3 => {
 								r3 = that.fr(r3);
-								token = r3.Body.token;
-								console.log('token is==>', token);
-								uni.setStorageSync('token', token);
-								uni.setStorageSync('sid', sid);
-								uni.showToast({
-									title: '登陆成功'
-								});
-								that.$store.dispatch('getUserInfo');
+
+								if (r3.Head.ErrorCode == 0) {
+									// 如过密码正确
+									token = r3.Body.token;
+									console.log('token is==>', token);
+									uni.setStorageSync('token', token);
+									uni.setStorageSync('sid', sid);
+									uni.showToast({
+										title: '登陆成功'
+									});
+									that.$store.dispatch('getUserInfo');
+								} else {
+									// 如过密码错误
+									uni.showToast({
+										title: r3.Head.ErrorMessage,
+										icon: 'none'
+									});
+								}
 							});
 						}
 					});
