@@ -8,7 +8,7 @@
 			<web-view
 				ref="webView"
 				style="top: 90px;"
-				src="http://ve.cnki.net//OnlineEditor/api/editor/gate?ID=9084506d-36c2-400b-bab8-f271370f0bfc&UserID=0f79635f-80c0-4a6e-a634-30b925a9413a&Edit=false&version=0.74833&Type=embedded"
+				src="http://ve.cnki.net/OnlineEditor/api/editor/gate?ID=9084506d-36c2-400b-bab8-f271370f0bfc&UserID=0f79635f-80c0-4a6e-a634-30b925a9413a&Edit=false&version=0.74833&Type=embedded"
 			></web-view>
 		</view>
 

@@ -32,13 +32,13 @@
 							<view class="uni-flex uni-row" v-for="(r, ri) in c2._res" :key="ri" style="height: 100rpx ; margin-left: 60rpx;">
 								<uni-tag style="width: 50rpx; margin-top: 30rpx;" :text="r.ResourceType" type="primary" :circle="true"></uni-tag>
 								<view class="" style="margin-left: 30rpx; width: 400rpx; overflow: hidden; ">
-									<text style="line-height: 100rpx;">{{ r.ResourceName }}</text>
+									<text style="line-height: 100rpx;" @click="readResource(r)">{{ r.ResourceName }}</text>
 								</view>
 
 								<!-- 是否已经下载 -->
 								<view class="" style="margin-left: 30rpx; overflow: hidden; ">
 									<!-- 如过已经下载 -->
-									
+
 									<uni-icons v-if="downloadStatus(r) == '已下载'" type="checkbox-filled" style="line-height:100rpx ; float: right;" size="30" color="#87CEEB" />
 									<text v-if="downloadStatus(r) == '下载中'" style="line-height:100rpx">下载中</text>
 									<uni-icons
@@ -100,6 +100,19 @@ export default {
 		this.reloadCatalog();
 	},
 	methods: {
+		// 在线阅读资源
+		readResource(item) {
+			// 如果是视频,跳转阅读页面
+			if (item.ResourceName.indexOf('.mp4') >= 0) {
+				let url = '../read/read';
+				url += "?resType='video'";
+				url += '&resTitle=' + item.ResourceName;
+				url += 'resUrl=' + item.Link;
+				uni.navigateTo({
+					url: url
+				});
+			}
+		},
 		// 由于微信小程序不支持将 表达式写在标签上,单独使用一个函数
 		changeShowChildren(item) {
 			item.showChildren = !item.showChildren;
@@ -246,8 +259,7 @@ export default {
 					// 如过不在,从  getStorageSync 中找
 					let task = uni.getStorageSync('download_task') || [];
 
-					
-					console.log("JSON task is ==>",task)
+					console.log('JSON task is ==>', task);
 					let task_item = task.find(e => {
 						return e.fileid == res.ResourceCode;
 					});
@@ -256,7 +268,7 @@ export default {
 						// 如过找到task_item
 						if (task_item.is_downloaded) {
 							// 如过已经下载完成
-							return  '已下载';
+							return '已下载';
 						} else if (task_item.rate >= 0 && task_item.rate < 100) {
 							// 如过是正在下载
 							return '下载中';

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 我的作品详情页面 -->
-		<uni-nav-bar leftIcon="arrowleft" @clickLeft="back()" :title="artifactInfo.title" rightText="作品详情" @clickRight="show.artifactInfo = true"></uni-nav-bar>
+		<uni-nav-bar :statusBar="true" leftIcon="arrowleft" @clickLeft="back()" :title="artifactInfo.title" rightText="作品详情" @clickRight="show.artifactInfo = true"></uni-nav-bar>
 
 		<!-- 中间的作品内容 -->
 		<view class="" style="margin: 40rpx; word-break: break-all;">

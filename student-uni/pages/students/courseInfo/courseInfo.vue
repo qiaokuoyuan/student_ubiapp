@@ -5,11 +5,14 @@
 
 		<!-- 头部轮播图 -->
 
-		<swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="4000">
+		<swiper v-if="false" class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="4000">
 			<swiper-item><view class="swiper-item uni-bg-red">A</view></swiper-item>
 			<swiper-item><view class="swiper-item uni-bg-green">B</view></swiper-item>
 			<swiper-item><view class="swiper-item uni-bg-blue">C</view></swiper-item>
 		</swiper>
+		
+		
+		
 
 		<!-- 中间课程简介 -->
 		<view class="">

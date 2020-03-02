@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<uni-nav-bar :statusBar="true" title="习题作业"></uni-nav-bar>
 		<view class="">
 			<!-- 题目  1：单选题，2：多选题，3：填空题，4：判断题，5 ：简答题-->
 			<view class="" v-for="(q, qi) in list" :key="qi">

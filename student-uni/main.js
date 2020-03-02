@@ -5,6 +5,7 @@ import pageHead from './components/page-head.vue'
 import pageFoot from './components/page-foot.vue'
 import uLink from '@/components/uLink.vue'
 import store from './store'
+import http from "./common/request.js"
 
 
 
@@ -15,13 +16,32 @@ Vue.config.productionTip = false
 // 离线缓存文件信息映射关系key
 Vue.prototype.offline_file_info_map_name = "offline_file_info_map_name"
 
-
+// 获取图片缓存后的src
+Vue.prototype.cacheFile = (src,callback) => {
+	
+	let token = uni.getStorageInfoSync("token")
+	uni.downloadFile({
+		url: "http://ve.cnki.net/coeduApi/api/File/Down?fileCode=7e0c5c34-c131-42f5-ada5-b587fe0dd6e0.jpg&fileName=tp01.jpg",
+		header: {
+			appToken: token,
+			appSid: "012011"
+		},
+		success(res) {			
+			console.log("cachedFile success==>",src,res.tempFilePath)			
+			callback(res.tempFilePath)			
+		},
+		fail(res){
+			console.log("cachedFile fail==>", JSON.stringify(res))		
+		}
+	})
+}
 
 // 文件上传地址
 Vue.prototype.uploadDir = "http//ve.cnki.net/coeduApi/api/File/Upload"
 
 Vue.prototype.fr = (r) => {
 	try {
+		uni.hideLoading()
 		console.log("原始返回值(fr之前):", JSON.stringify(r))
 
 		if (r[1].data.Code != 200) {

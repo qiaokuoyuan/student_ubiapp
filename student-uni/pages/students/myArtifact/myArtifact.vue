@@ -2,7 +2,7 @@
 	<!-- 我的作品页面 -->
 	<view>
 		<!-- 头部导航 -->
-		<uni-nav-bar leftIcon="arrowleft" @clickLeft="back()" title="我的作品"></uni-nav-bar>
+		<uni-nav-bar :statusBar="true" title="我的作品"></uni-nav-bar>
 
 		<!-- 作品列表 -->
 		<view class="" v-show="!show_editor" style="margin:30rpx">
@@ -100,10 +100,6 @@ export default {
 		addArtifact(t, item) {
 			let that = this;
 			if (t == 'confirm') {
-				
-				
-				
-				
 				that.addArtifact('close');
 			}
 
@@ -112,14 +108,14 @@ export default {
 			}
 		},
 		trigger(e) {
-			// 如果是上传文档
 			if (e.index == 0) {
-			} else if (e.index == 1) {
 				// 如过是在线编写
 				// this.show_editor = true;
 				uni.navigateTo({
-					url:"../addArtifact/addArtifact"
-				})
+					url: '../addArtifact/addArtifact'
+				});
+			} else if (e.index == 1) {
+				// 如果是上传文档
 			}
 		},
 		// 跳转 我的作品详情

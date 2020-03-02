@@ -2,7 +2,7 @@
 	"pages": [{
 			"path": "pages/students/myCourse/myCourse",
 			"style": {
-				// "navigationStyle": "custom"
+				"navigationStyle": "custom"
 
 			}
 		},
@@ -10,6 +10,7 @@
 		{
 			"path": "pages/students/study/study",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "课程学习",
 				"app-plus": {
 					"bounce": "vertical",
@@ -28,6 +29,7 @@
 		{
 			"path": "pages/tabBar/component/component",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "内置组件",
 				"app-plus": {
 					"bounce": "vertical",
@@ -60,6 +62,7 @@
 		{
 			"path": "pages/students/offlineFiles/offlineFiles",
 			"style": {
+				"navigationStyle": "custom"
 
 			}
 		},
@@ -68,6 +71,7 @@
 			"path": "pages/students/artifact/artifact/artifact",
 			"style": {
 				"navigationBarTitleText": "我的作品",
+
 				"navigationStyle": "custom",
 				"app-plus": {
 					"bounce": "vertical",
@@ -391,35 +395,52 @@
 			"style": {}
 		}, {
 			"path": "pages/students/personalCenter/personalCenter",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/students/courseInfo/courseInfo",
 			"style": {
+				"navigationStyle": "custom",
 				"app-plus": {
 					// "titleNView": false //禁用原生导航栏
 				}
 			}
 		}, {
 			"path": "pages/students/leanCourse/leanCourse",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/myHomework/myHomework",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/students/doHomework/doHomework",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/students/doMyHomework/doMyHomework",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/students/myArtifact/myArtifact",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/students/myArtifactDetail/myArtifactDetail",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/students/addArtifact/addArtifact",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"subPackages": [{
@@ -1276,24 +1297,8 @@
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
 				"text": "个人中心"
-			},
-
-
-			{
-				"pagePath": "pages/tabBar/component/component",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
-				"text": "内置组件"
 			}
 
-			,
-
-			{
-				"pagePath": "pages/tabBar/extUI/extUI",
-				"iconPath": "static/extui.png",
-				"selectedIconPath": "static/extuiHL.png",
-				"text": "扩展组件"
-			}
 		]
 	}
 }

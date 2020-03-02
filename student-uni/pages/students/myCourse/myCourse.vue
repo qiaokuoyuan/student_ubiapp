@@ -1,15 +1,16 @@
 <template>
 	<view>
 		<!-- 头部导航 -->
-		<uni-nav-bar right-text="我的缓存" title="我的课程" @clickRight="toOffileFiles()"></uni-nav-bar>
+		<uni-nav-bar :status-bar="true" right-text="我的缓存" title="我的课程" @clickRight="toOffileFiles()"></uni-nav-bar>
 
 		<!-- 所有课程列表 -->
 		<view class="">
 			<view class="uni-flex uni-row" v-for="(c, ci) in list_course" :key="ci" style="margin: 30rpx;" @click="toCourseInfo(c)">
 				<!-- 左侧课程图片 -->
 				<view class="">
-					<image v-if="c.CoverImgSmall" :src="c.CoverImgSmall" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
-					<image v-else src="../../../static/app-plus/uni@2x.png" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
+					
+					<image v-if="c.CoverUri && c.CoverUri.indexOf('cos')>=0" :src="c.CoverUri" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
+					<image v-else src="../../../static/f3d867b7-72cf-48d9-89fd-b5e0d90f5cd7.png" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
 				</view>
 
 				<!-- 右侧课程名称 -->
@@ -45,6 +46,27 @@ export default {
 		};
 	},
 	methods: {
+		async secondPerson() {
+			const res = await fetch('http://ve.cnki.net/coeduApi/api/File/Down?fileCode=7e0c5c34-c131-42f5-ada5-b587fe0dd6e0.jpg&fileName=tp01.jpg');
+			const json = await res.json();
+			const person = json[1];
+			alert(`我是${person.name}，我今年${person.age}岁。`);
+			return 'eeeeeeeee';
+		},
+
+		stf(d) {
+			return JSON.stringify(d);
+		},
+
+		async getImgSrc(r) {
+			let d = 1;
+
+			setTimeout(function() {
+				d = 2;
+			}, 10000);
+
+			return d;
+		},
 		// 跳转课程详情页面
 		toCourseInfo(course) {
 			uni.redirectTo({
@@ -53,6 +75,7 @@ export default {
 		},
 		// 刷新所有课程
 		reloadCourse() {
+			console.log("reloadCourse")
 			let that = this;
 
 			uni.showLoading({
@@ -80,6 +103,30 @@ export default {
 				r = that.fr(r);
 
 				if (r.Code == 200) {
+					r.Data.courstList = r.Data.courstList || [];
+					// let _total_count = r.Data.courstList.length;
+					// let _cache_count = 0;
+					// r.Data.courstList.forEach(e => {
+					// 	that.cacheFile(e.CoverUri, function(_src) {
+					// 		e._cache_src = _src;
+					// 		++_cache_count;
+							
+							
+					// 		uni.getImageInfo({
+					// 			src:_src,
+					// 			success(r_getImageInfo) {
+					// 				console.log("r_getImageInfo",JSON.stringify(r_getImageInfo))
+					// 			},
+					// 			complete(r_getImageInfo_complete){
+					// 				console.log(r_getImageInfo_complete,JSON.stringify(r_getImageInfo_complete))
+					// 			}
+					// 		})
+							
+					// 		if (_cache_count == _total_count) {
+					// 			that.list_course = r.Data.courstList;
+					// 		}
+					// 	});
+					// });
 					that.list_course = r.Data.courstList || [];
 				}
 			});
