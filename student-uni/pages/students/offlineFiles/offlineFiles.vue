@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar leftIcon="arrowleft" title="离线缓存" @clickLeft="toMyCourse()" rightIcon="gear" @clickRight="delTask('show', '')"></uni-nav-bar>
+		<uni-nav-bar :statusBar="true" leftIcon="arrowleft" title="离线缓存" @clickLeft="toMyCourse()" rightIcon="gear" @clickRight="delTask('show', '')"></uni-nav-bar>
 
 		<!-- 上方按钮切换是下载中的还是已下载的 -->
 		<view class="uni-flex uni-row" style="margin: 30rpx 80rpx;" v-if="false">

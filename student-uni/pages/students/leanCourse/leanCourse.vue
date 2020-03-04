@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 头部导航 -->
-		<uni-nav-bar leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar>
+		<!-- <uni-nav-bar leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar> -->
 
 		<!-- 头部图片 -->
 		<view class=""><image @click="lgThis()" style="width: 100%; height: 400rpx;" src="../../../static/default_course_logo.jpg" mode=""></image></view>
@@ -100,17 +100,51 @@ export default {
 		this.reloadCatalog();
 	},
 	methods: {
-		// 在线阅读资源
-		readResource(item) {
+		// 在线阅读
+		readOnline(item) {
 			// 如果是视频,跳转阅读页面
 			if (item.ResourceName.indexOf('.mp4') >= 0) {
 				let url = '../read/read';
-				url += "?resType='video'";
+				url += '?resType=video';
 				url += '&resTitle=' + item.ResourceName;
-				url += 'resUrl=' + item.Link;
+				url += '&resUrl=' + item.Link;
 				uni.navigateTo({
 					url: url
 				});
+			} else if (item.ResourceName.indexOf('.pdf') >= 0 || item.ResourceName.indexOf('.doc') >= 0) {
+				let url = '../read/read';
+				url += "?resType=''";
+				url += '&resTitle=' + item.ResourceName;
+				url += '&resUrl=' + item.Link;
+				uni.navigateTo({
+					url: url
+				});
+			}
+		},
+
+		// 阅读离线缓存
+		readOffline(item) {
+			// 跳转到阅读页面
+			uni.navigateTo({
+				url: `../read/read?isLocal=1&fileid=${item.ResourceCode}`
+			});
+		},
+
+		// 在线阅读资源
+		readResource(item) {
+			console.log('尝试阅读：', JSON.stringify(item));
+
+			// 检查当前元素是否被下载过
+			let _status = this.downloadStatus(item);
+			console.log('_status：', _status);
+			// 如果是未下载,在线阅读
+			if ('未下载' == _status) {
+				this.readOnline(item);
+			}
+
+			// 如果是未下载,在线阅读
+			if ('已下载' == _status) {
+				this.readOffline(item);
 			}
 		},
 		// 由于微信小程序不支持将 表达式写在标签上,单独使用一个函数

@@ -1,5 +1,7 @@
 <template>
 	<view>
+		
+		<uni-nav-bar :statusBar="true" title="作品创作"></uni-nav-bar>
 		<view><uni-steps :options="list1" style="margin: 30rpx;" active-color="#007AFF" :active="step" /></view>
 
 
@@ -108,7 +110,8 @@ export default {
 		uniSection,
 		uniIcons,
 		uniDrawer,
-		uniIndexedList
+		uniIndexedList,
+		uniNavBar
 	},
 
 	created() {},

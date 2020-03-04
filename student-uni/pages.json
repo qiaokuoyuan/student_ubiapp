@@ -98,7 +98,7 @@
 		{
 			"path": "pages/students/read/read",
 			"style": {
-
+				"navigationStyle": "custom"
 			}
 		},
 		{

@@ -69,7 +69,7 @@ export default {
 		},
 		// 跳转课程详情页面
 		toCourseInfo(course) {
-			uni.redirectTo({
+			uni.navigateTo({
 				url: `../courseInfo/courseInfo?courseCode=${course.CourseCode}`
 			});
 		},

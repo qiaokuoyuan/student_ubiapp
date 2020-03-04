@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 资源标题 -->
-		<uni-nav-bar :title="resTitle" leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar>
+		<uni-nav-bar :statusBar="true" :title="resTitle" leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar>
 
 		<!-- 如果是文档 -->
 		<view v-if="resType == 'doc'">
@@ -14,6 +14,7 @@
 
 		<!-- 如过是视频 -->
 		<view v-if="resType == 'video'">
+			{{ resUrl }}
 			<view><video id="myVideo" :src="resUrl" danmu-btn controls poster="https://img-cdn-qiniu.dcloud.net.cn/uniapp/doc/poster.png"></video></view>
 		</view>
 	</view>
@@ -25,10 +26,6 @@ import uniNavBar from '../../../components/uni-nav-bar/uni-nav-bar.vue';
 import uniSegmentedControl from '../../../components/uni-segmented-control/uni-segmented-control.vue';
 import uniList from '../../../components/uni-list/uni-list.vue';
 import uniListItem from '../../../components/uni-list-item/uni-list-item.vue';
-
-
-
-
 import section from '../../../components/uni-section/uni-section.vue';
 import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue';
 import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue';
@@ -49,12 +46,13 @@ export default {
 	onLoad(option) {
 		let that = this;
 		this.isLocal = option.isLocal;
+		console.log('阅读页参数：', JSON.stringify(option));
 
 		// 如果是本地资源,根据fileid从本地读取
 		if (this.isLocal) {
 			let res = uni.getStorageSync('download_task');
 			res = res.find(e => {
-				return (e.fileid = option.fileid);
+				return (e.fileid == option.fileid);
 			});
 
 			if (res) {
@@ -123,6 +121,11 @@ export default {
 		} else {
 			// 如过不是本地资源
 			// 如过是视频
+
+			console.log('阅读页识别为在线阅读');
+			console.log('option', option);
+			console.log('option.resType', option.resType);
+
 			if (option.resType == 'video') {
 				this.resType = option.resType;
 				this.resTitle = option.resTitle;
@@ -139,6 +142,39 @@ export default {
 				// #ifndef APP-PLUS || MP-BAIDU
 				this.showVideo = true;
 				// #endif
+			} else {
+				// 如过不是视频,需要提前下载到本地
+				uni.showLoading({
+					mask: true
+				});
+				uni.downloadFile({
+					url: option.resUrl,
+					success: function(res) {
+						var filePath = res.tempFilePath;
+						if (option.resUrl.indexOf('.docx') >= 0) {
+							// 如果是docx
+							uni.openDocument({
+								filePath: filePath,
+								fileType: 'docx'
+							});
+						} else if (option.resUrl.indexOf('.doc') >= 0) {
+							// 如果是doc
+							uni.openDocument({
+								filePath: filePath,
+								fileType: 'doc'
+							});
+						} else if (option.resUrl.indexOf('.pdf') >= 0) {
+							// 如果是pdf
+							uni.openDocument({
+								filePath: filePath,
+								fileType: 'pdf'
+							});
+						}
+					},
+					complete() {
+						uni.hideLoading();
+					}
+				});
 			}
 		}
 	},
@@ -152,10 +188,8 @@ export default {
 		};
 	},
 	methods: {
-		back(){
-			uni.navigateBack({
-				
-			})
+		back() {
+			uni.navigateBack({});
 		}
 	}
 };

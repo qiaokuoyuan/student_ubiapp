@@ -47,7 +47,7 @@ export default {
 			console.log('homeworkId:', homeworkId);
 
 			uni.navigateTo({
-				url: '../students/doMyHomework/doMyHomework?homeworkId' + homeworkId
+				url: '../students/doMyHomework/doMyHomework?homeworkId=' + homeworkId
 			});
 		},
 		// 刷新习题作业
