@@ -1,0 +1,11 @@
+
+.select {
+	color: #836fff;
+}
+.unselect {
+	color: #ffe1ff;
+}
+.disable {
+	color: #b9d3ee;
+}
+

@@ -21,11 +21,10 @@
 		<view class="">
 			<view class="" v-for="(t, ti) in list_download_task" :key="ti">
 				<!-- 下载中的任务 （当tab是 downloading的时候显示）-->
-
 				<view
 					class="uni-flex uni-row"
 					:style="`border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 ${t.rate}%, #F8F8FF 0);`"
-					v-if="tab == 'downloading' && !t.is_downloaded"
+					v-if="tab == 'downloading' && t.rate != 100"
 				>
 					<view v-if="show_select_delete_task">
 						<radio style="line-height: 150rpx;margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" />
@@ -44,7 +43,7 @@
 				</view>
 
 				<!-- 已下载的任务 （当tab是 downloaded的时候显示）-->
-				<view class="uni-flex uni-row" style="border-bottom: solid 1px #07C160;" v-if="tab == 'downloaded' && t.is_downloaded">
+				<view class="uni-flex uni-row" style="border-bottom: solid 1px #07C160;" v-if="tab == 'downloaded' && t.rate == 100">
 					<view v-if="show_select_delete_task">
 						<radio style="line-height: 150rpx; margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" />
 					</view>
@@ -56,8 +55,7 @@
 
 					<!-- 下载进度 -->
 					<view class="" style="margin-left: 20rpx;height: 150rpx; width: 150rpx; text-align: center;">
-						<text v-if="t.is_downloaded" style="font-size: large; text-align: center; line-height: 150rpx;">已下载</text>
-						<text v-else style="font-size: xx-large; line-height: 150rpx;">{{ t.rate }}%</text>
+						<text style="font-size: large; text-align: center; line-height: 150rpx;">已下载</text>
 					</view>
 				</view>
 			</view>
@@ -78,15 +76,17 @@ export default {
 		uniIcons
 	},
 
-	created() {
+	onShow() {
 		let that = this;
 
 		// 获取下载队列
 		this.it = setInterval(function() {
 			let get_task = uni.getStorageSync('download_task');
+			console.log('get_task', get_task);
 
+			get_task = JSON.parse(get_task);
 			that.list_download_task = get_task;
-		}, 500);
+		}, 3000);
 	},
 
 	beforeDestroy() {

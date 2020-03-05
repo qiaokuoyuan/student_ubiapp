@@ -1,0 +1,9 @@
+
+.btn {
+	width: 48%;
+	height: 100rpx;
+	background-color: #00e5ee;
+	/* border-radius: 10rpx; */
+	border: solid 1rpx #00e5ee;
+}
+

@@ -98,6 +98,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var l0 = _vm.__map(_vm.list_course, function(c, ci) {
+    var g0 = c.CoverUri.indexOf("cos")
+    return {
+      $orig: _vm.__get_orig(c),
+      g0: g0
+    }
+  })
+
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        l0: l0
+      }
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -131,7 +147,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 16));
 
 
 
@@ -162,7 +178,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.js */ 20));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 1148));};var _default =
+
+var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.js */ 20));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 1224));};var _default =
 
 {
   components: {
@@ -178,14 +195,36 @@ var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.j
 
   },
   methods: {
+    secondPerson: function () {var _secondPerson = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var res, json, person;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:_context.next = 2;return (
+                  fetch('http://ve.cnki.net/coeduApi/api/File/Down?fileCode=7e0c5c34-c131-42f5-ada5-b587fe0dd6e0.jpg&fileName=tp01.jpg'));case 2:res = _context.sent;_context.next = 5;return (
+                  res.json());case 5:json = _context.sent;
+                person = json[1];
+                alert("\u6211\u662F".concat(person.name, "\uFF0C\u6211\u4ECA\u5E74").concat(person.age, "\u5C81\u3002"));return _context.abrupt("return",
+                'eeeeeeeee');case 9:case "end":return _context.stop();}}}, _callee, this);}));function secondPerson() {return _secondPerson.apply(this, arguments);}return secondPerson;}(),
+
+
+    stf: function stf(d) {
+      return JSON.stringify(d);
+    },
+
+    getImgSrc: function () {var _getImgSrc = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(r) {var d;return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
+                d = 1;
+
+                setTimeout(function () {
+                  d = 2;
+                }, 10000);return _context2.abrupt("return",
+
+                d);case 3:case "end":return _context2.stop();}}}, _callee2, this);}));function getImgSrc(_x) {return _getImgSrc.apply(this, arguments);}return getImgSrc;}(),
+
     // 跳转课程详情页面
     toCourseInfo: function toCourseInfo(course) {
-      uni.redirectTo({
+      uni.navigateTo({
         url: "../courseInfo/courseInfo?courseCode=".concat(course.CourseCode) });
 
     },
     // 刷新所有课程
     reloadCourse: function reloadCourse() {
+      console.log("reloadCourse");
       var that = this;
 
       uni.showLoading({
@@ -195,6 +234,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.j
       _request.default.request({
         url: '/api/Student/GetMyCourseList',
         method: 'POST',
+
         data: {
           semesterId: '',
           pageIndex: 1,
@@ -211,12 +251,32 @@ var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.j
 
         r = that.fr(r);
 
-        console.log('reloadCourse==>', r);
-
         if (r.Code == 200) {
-          that.list_course = r.Data.courstList || [];
+          r.Data.courstList = r.Data.courstList || [];
+          // let _total_count = r.Data.courstList.length;
+          // let _cache_count = 0;
+          // r.Data.courstList.forEach(e => {
+          // 	that.cacheFile(e.CoverUri, function(_src) {
+          // 		e._cache_src = _src;
+          // 		++_cache_count;
 
-          console.log('that.list_course==>', that.list_course);
+
+          // 		uni.getImageInfo({
+          // 			src:_src,
+          // 			success(r_getImageInfo) {
+          // 				console.log("r_getImageInfo",JSON.stringify(r_getImageInfo))
+          // 			},
+          // 			complete(r_getImageInfo_complete){
+          // 				console.log(r_getImageInfo_complete,JSON.stringify(r_getImageInfo_complete))
+          // 			}
+          // 		})
+
+          // 		if (_cache_count == _total_count) {
+          // 			that.list_course = r.Data.courstList;
+          // 		}
+          // 	});
+          // });
+          that.list_course = r.Data.courstList || [];
         }
       });
     },

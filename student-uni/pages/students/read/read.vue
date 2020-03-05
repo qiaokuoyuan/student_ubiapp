@@ -51,8 +51,15 @@ export default {
 		// 如果是本地资源,根据fileid从本地读取
 		if (this.isLocal) {
 			let res = uni.getStorageSync('download_task');
+
+			try {
+				res = JSON.parse(res);
+			} catch (_) {
+				res = [];
+			}
+
 			res = res.find(e => {
-				return (e.fileid == option.fileid);
+				return e.fileid == option.fileid;
 			});
 
 			if (res) {
@@ -61,7 +68,7 @@ export default {
 
 				// 根据文件名称判断文件类型
 				let filename = res.filename;
-				let save_dir = res.save_dir.savedFilePath;
+				let save_dir = res.path;
 
 				// 如果是docx
 				if (filename.indexOf('.docx') >= 0) {

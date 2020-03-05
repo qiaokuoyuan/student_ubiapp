@@ -7,14 +7,16 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(createApp) {__webpack_require__(/*! uni-pages */ 4);__webpack_require__(/*! @dcloudio/uni-stat */ 5);
+/* WEBPACK VAR INJECTION */(function(uni, createApp) {__webpack_require__(/*! uni-pages */ 4);__webpack_require__(/*! @dcloudio/uni-stat */ 5);
 var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
 var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 9));
 
 
 
 
-var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var pageHead = function pageHead() {return __webpack_require__.e(/*! import() | components/page-head */ "components/page-head").then(__webpack_require__.bind(null, /*! ./components/page-head.vue */ 1131));};var pageFoot = function pageFoot() {return __webpack_require__.e(/*! import() | components/page-foot */ "components/page-foot").then(__webpack_require__.bind(null, /*! ./components/page-foot.vue */ 1136));};var uLink = function uLink() {return __webpack_require__.e(/*! import() | components/uLink */ "components/uLink").then(__webpack_require__.bind(null, /*! @/components/uLink.vue */ 1143));};
+var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 15));
+var _request = _interopRequireDefault(__webpack_require__(/*! ./common/request.js */ 20));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var pageHead = function pageHead() {return __webpack_require__.e(/*! import() | components/page-head */ "components/page-head").then(__webpack_require__.bind(null, /*! ./components/page-head.vue */ 1207));};var pageFoot = function pageFoot() {return __webpack_require__.e(/*! import() | components/page-foot */ "components/page-foot").then(__webpack_require__.bind(null, /*! ./components/page-foot.vue */ 1212));};var uLink = function uLink() {return __webpack_require__.e(/*! import() | components/uLink */ "components/uLink").then(__webpack_require__.bind(null, /*! @/components/uLink.vue */ 1219));};
+
 
 
 
@@ -24,13 +26,49 @@ _vue.default.config.productionTip = false;
 // 离线缓存文件信息映射关系key
 _vue.default.prototype.offline_file_info_map_name = "offline_file_info_map_name";
 
+// 获取图片缓存后的src
+_vue.default.prototype.cacheFile = function (src, callback) {
 
+  var token = uni.getStorageInfoSync("token");
+  uni.downloadFile({
+    url: "http://ve.cnki.net/coeduApi/api/File/Down?fileCode=7e0c5c34-c131-42f5-ada5-b587fe0dd6e0.jpg&fileName=tp01.jpg",
+    header: {
+      appToken: token,
+      appSid: "012011" },
+
+    success: function success(res) {
+      console.log("cachedFile success==>", src, res.tempFilePath);
+      callback(res.tempFilePath);
+    },
+    fail: function fail(res) {
+      console.log("cachedFile fail==>", JSON.stringify(res));
+    } });
+
+};
+
+// 文件上传地址
+_vue.default.prototype.uploadDir = "http//ve.cnki.net/coeduApi/api/File/Upload";
 
 _vue.default.prototype.fr = function (r) {
   try {
-    console.log("原始返回值:", JSON.stringify(r));
+    uni.hideLoading();
+    console.log("原始返回值(fr之前):", JSON.stringify(r));
+
+    if (r[1].data.Code != 200) {
+      uni.hideLoading();
+      uni.showToast({
+        title: "请求失败,请检查登陆状态",
+        icon: "none" });
+
+    }
     return r[1].data;
   } catch (e) {
+    console.log("fr 转换异常:", e);
+    uni.hideLoading();
+    uni.showToast({
+      title: "您尚未登陆,请先登陆",
+      icon: "none" });
+
     return r;
   }
 };
@@ -83,11 +121,85 @@ _vue.default.prototype.toTree = function (data) {
   return result;
 };
 
+
+
 _vue.default.prototype.$store = _store.default;
 _vue.default.prototype.$backgroundAudioData = {
   playing: false,
   playTime: 0,
   formatedPlayTime: '00:00:00' };
+
+
+
+_vue.default.prototype.listFilter = function (list, f) {
+  var new_list = [];
+  list = list || [];
+  for (var i = 0; i < list.length; ++i) {
+    if (f(list[i])) {
+      new_list.push(list[i]);
+    }
+  }
+  return new_list;
+};
+
+
+// 映射关系格式
+// {
+// 	fileId,
+// 	fileName,
+// 	path
+// }
+
+// 根据id获取文件存储路径
+_vue.default.prototype.getSavedFilePathById = function (fileId) {
+  var map = uni.getStorageSync(_vue.default.prototype.offline_file_info_map_name);
+  for (var i = 0; i < map.length; ++i) {
+    if (map[i].fileId == fileId) {
+      return map[i].path;
+    }
+  }
+};
+
+// 保存id和文件存储路径的映射关系
+_vue.default.prototype.addIdToSavedFilePath = function (fileId, path, filename) {
+  var map = uni.getStorageSync(_vue.default.prototype.offline_file_info_map_name);
+  map.push({
+    fileId: fileId,
+    fileName: filename,
+    path: path });
+
+};
+
+// 根据保存路径删除文件
+_vue.default.prototype.delSavedFileByPath = function (path) {
+  // 首先根据 id 找到映射关系
+  var map = uni.getStorageSync(_vue.default.prototype.offline_file_info_map_name);
+  map = _vue.default.prototype.listFilter(map, function (e) {
+    return e.path != path;
+  });
+
+  // 删除映射关系
+  uni.setStorageSync(_vue.default.prototype.offline_file_info_map_name, map);
+
+  // 删除文件实体	
+  uni.removeSavedFile({
+    filePath: path });
+
+};
+
+// 根据id删除文件
+_vue.default.prototype.delSavedFileById = function (fileId) {
+
+  // 获取文件path
+  var path = _vue.default.prototype.setSavedFilePathById(fileId);
+
+  // 通过path删除
+  _vue.default.prototype.delSavedFileByPath(path);
+};
+
+
+
+
 
 
 _vue.default.component('page-head', pageHead);
@@ -101,7 +213,7 @@ var app = new _vue.default(_objectSpread({
 _App.default));
 
 createApp(app).$mount();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createApp"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"], __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["createApp"]))
 
 /***/ }),
 /* 1 */,

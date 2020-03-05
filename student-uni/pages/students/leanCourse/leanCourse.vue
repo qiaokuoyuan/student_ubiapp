@@ -190,98 +190,77 @@ export default {
 			// 获取文件下载信息的计时器(先清空)
 			let it = '';
 
+			// 先将原始任务放入 download_task
+			let _download_task = uni.getStorageSync('download_task');
+			try {
+				_download_task = JSON.parse(_download_task);
+			} catch (_) {
+				_download_task = [];
+			}
+			_download_task.push({
+				fileid: fileid,
+				rate: 0,
+				filename: res.ResourceName,
+				url: res.Link
+			});
+			uni.setStorageSync('download_task', JSON.stringify(_download_task));
+
 			let downloadTask = uni.downloadFile({
 				url: url,
 				success: res => {
 					if (res.statusCode === 200) {
-						console.log('下载成功');
-						// 清除下载进度检查器
-						clearInterval(it);
+						console.log('下载成功,开始保存到本地');
 
-						// 将文件 用 saveFile 存储
-						console.log('开始 save 到永久目录');
+						// 将文件保存到本地
 						uni.saveFile({
 							tempFilePath: res.tempFilePath,
-							success: savedFilePath => {
-								console.log('开始 save 到永久目录完成==>', savedFilePath);
+							success: saveFile_success => {
+								console.log('保存到本地成功');
 
-								// 如果存储在 storage 中
-								let download_task = uni.getStorageSync('download_task') || [];
-
-								// 将下载任务标记为已下载
-
-								let task_find = false;
-								for (let i = 0; i < download_task.length; ++i) {
-									if (download_task[i].fileid == fileid) {
-										console.log(' save 设置100% 完成');
-										task_find = true;
-										download_task[i].rate = 100;
-										download_task[i].save_dir = savedFilePath;
-										download_task[i].is_downloaded = true;
-										break;
+								// 将状态设置为已经下载
+								let _download_task = uni.getStorageSync('download_task') || '[]';
+								_download_task = JSON.parse(_download_task);
+								_download_task.forEach(e => {
+									if (e.fileid == fileid) {
+										e.rate = 100;
+										e.path = saveFile_success.savedFilePath;
 									}
-								}
+								});
 
-								// 如过未找到任务,则将任务加入到队列,并取消计时器
-								if (!task_find) {
-									clearInterval(it);
-									download_task.push({
-										filename,
-										fileid,
-										rate: 100,
-										save_dir: savedFilePath,
-										is_downloaded: true
-									});
-								}
-
-								uni.setStorageSync('download_task', download_task);
+								// 更新download_task列表
+								uni.setStorageSync('download_task', JSON.stringify(_download_task));
 							}
 						});
 					}
 				}
 			});
 
-			console.log('开始下载');
-			// 将下载任务放入队列
+			// 下载进度
+			let lastUpdateRateTime = new Date().getTime();
+			downloadTask.onProgressUpdate(function(r) {
+				// 获取当前时间,如果频率超过 1000ms 才记录
+				let nowTime = new Date().getTime();
+				if (nowTime - lastUpdateRateTime > 1000 && r.progress < 99) {
+					lastUpdateRateTime = nowTime;
+					console.log('设置进度：', r.progress);
+					let _download_task = uni.getStorageSync('download_task') || '[]';
 
-			let download_task = uni.getStorageSync('download_task');
-			download_task = download_task || [];
-
-			// 先检查任务队列中有没有已经存在当前任务
-			if (
-				!download_task.find(function(e) {
-					return e.fileid == fileid;
-				})
-			) {
-				download_task.push({
-					fileid: fileid,
-					filename: filename,
-					rate: 0,
-					save_dir: '',
-					is_downloaded: false
-				});
-				uni.setStorageSync('download_task', download_task);
-				// 记录下载进度
-				downloadTask.onProgressUpdate(function(r) {
-					rate = r.progress;
-				});
-
-				// 定时检查下载进度,并将下载进度存放在 getApp 中
-				it = setInterval(function() {
-					console.log('rate：', rate);
-
-					let task = uni.getStorageSync('download_task') || [];
-					for (let i = 0; i < task.length; ++i) {
-						if (task[i].fileid == fileid) {
-							task[i].rate = rate;
-							break;
-						}
+					try {
+						_download_task = JSON.parse(_download_task);
+					} catch (_) {
+						_download_task = [];
 					}
 
-					console.log('setStorageSync：', JSON.stringify(task));
-					uni.setStorageSync('download_task', task);
-				}, 2000);
-			}
+					_download_task.forEach(e => {
+						if (e.fileid == fileid) {
+							e.rate = r.progress;
+						}
+					});
+					_download_task = JSON.stringify(_download_task);
+
+					uni.setStorageSync('download_task', _download_task);
+				}
+			});
 		},
 		// 检查一个资源是否已经下载
 		downloadStatus(res) {
@@ -291,29 +270,22 @@ export default {
 					return '下载中';
 				} else {
 					// 如过不在,从  getStorageSync 中找
-					let task = uni.getStorageSync('download_task') || [];
+					let _download_task = uni.getStorageSync('download_task');
 
-					console.log('JSON task is ==>', task);
-					let task_item = task.find(e => {
-						return e.fileid == res.ResourceCode;
+					try {
+						_download_task = JSON.parse(_download_task);
+					} catch (_) {
+						_download_task = [];
+					}
+
+					let status = '未下载';
+					_download_task.forEach(e => {
+						if (e.fileid == res.ResourceCode && e.rate == 100) {
+							status = '已下载';
+						}
 					});
 
-					if (task_item) {
-						// 如过找到task_item
-						if (task_item.is_downloaded) {
-							// 如过已经下载完成
-							return '已下载';
-						} else if (task_item.rate >= 0 && task_item.rate < 100) {
-							// 如过是正在下载
-							return '下载中';
-						} else {
-							// 其他情况返回未知
-							return '未知';
-						}
-					} else {
-						// 如过未找到task_item,返回未下载
-						return '未下载';
-					}
+					return status;
 				}
 			} catch (e) {
 				// 异常返回异常

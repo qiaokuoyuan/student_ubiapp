@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-fab": "/components/uni-fab/uni-fab",
+    "myeditor": "/components/student/editor"
+  }
+}

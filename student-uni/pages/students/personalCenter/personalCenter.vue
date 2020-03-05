@@ -118,7 +118,7 @@ export default {
 				success(r) {
 					// 如过确定删除
 					if (r.confirm) {
-						uni.setStorageSync('download_task', []);
+						uni.setStorageSync('download_task', '[]');
 
 						// 先获取已经缓存的文件
 						uni.getSavedFileList({
