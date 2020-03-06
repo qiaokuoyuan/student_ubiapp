@@ -27,7 +27,8 @@
 					v-if="tab == 'downloading' && t.rate != 100"
 				>
 					<view v-if="show_select_delete_task">
-						<radio style="line-height: 150rpx;margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" />
+						<!-- <radio style="line-height: 150rpx;margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" /> -->
+						<radio style="line-height: 150rpx;margin-left: 20rpx;" :checked="deleteTaskPaths.indexOf(t.path) >= 0" @click="delTask('add', t.path)" />
 					</view>
 
 					<!-- 下载的文件名 -->
@@ -45,7 +46,8 @@
 				<!-- 已下载的任务 （当tab是 downloaded的时候显示）-->
 				<view class="uni-flex uni-row" style="border-bottom: solid 1px #07C160;" v-if="tab == 'downloaded' && t.rate == 100">
 					<view v-if="show_select_delete_task">
-						<radio style="line-height: 150rpx; margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" />
+						<!-- <radio style="line-height: 150rpx; margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" /> -->
+						<radio style="line-height: 150rpx; margin-left: 20rpx;" :checked="deleteTaskPaths.indexOf(t.path) >= 0" @click="delTask('add', t.path)" />
 					</view>
 
 					<!-- 下载的文件名 -->
@@ -76,7 +78,7 @@ export default {
 		uniIcons
 	},
 
-	onShow() {
+	onLoad() {
 		let that = this;
 
 		// 获取下载队列
@@ -84,9 +86,14 @@ export default {
 			let get_task = uni.getStorageSync('download_task');
 			console.log('get_task', get_task);
 
-			get_task = JSON.parse(get_task);
+			try {
+				get_task = JSON.parse(get_task); 
+			} catch (_) {
+				get_task = [];
+			}
+
 			that.list_download_task = get_task;
-		}, 3000);
+		}, 1000);
 	},
 
 	beforeDestroy() {
@@ -109,6 +116,7 @@ export default {
 
 			// 要删除的任务id集合
 			deleteTaskIds: '',
+			deleteTaskPaths: '',
 
 			// 是否显示选择删除那些任务
 			show_select_delete_task: false
@@ -121,12 +129,12 @@ export default {
 		}
 	},
 
-	onLoad() {
+	onShow() {
 		this.reload_offline_files();
 	},
 	methods: {
 		// 删除下载任务
-		delTask(t, id) {
+		delTask(t, path) {
 			let that = this;
 
 			console.log('delTask', t);
@@ -140,6 +148,7 @@ export default {
 				} else {
 					// 如过当前是关闭,则打开
 					that.deleteTaskIds = '';
+					that.deleteTaskPaths = '';
 					that.show_select_delete_task = true;
 				}
 			}
@@ -147,17 +156,21 @@ export default {
 			// 如果是关闭选择删除哪些任务
 			if (t == 'close') {
 				that.deleteTaskIds = '';
+				that.deleteTaskPaths = '';
 				that.show_select_delete_task = false;
 			}
 
 			// 如果是添加(再次添加删除)
 			if (t == 'add') {
-				if (that.deleteTaskIds.indexOf(id) >= 0) {
+				// if (that.deleteTaskIds.indexOf(id) >= 0) {
+				if (that.deleteTaskPaths.indexOf(path) >= 0) {
 					// 如过已经包含了当前id,则删除
-					that.deleteTaskIds = that.deleteTaskIds.replace(id, '');
+					// that.deleteTaskIds = that.deleteTaskIds.replace(id, '');
+					that.deleteTaskPaths = that.deleteTaskPaths.replace(path, '');
 				} else {
 					// 如过没有包含,则将其添加到 that.deleteTaskIds 中
-					that.deleteTaskIds += ',' + id;
+					// that.deleteTaskIds += ',' + id;
+					that.deleteTaskPaths += ',' + path;
 				}
 			}
 
@@ -165,21 +178,23 @@ export default {
 			if (t == 'confirm') {
 				let tasks = uni.getStorageSync('download_task');
 
+				// 修改映射文件
 				try {
-					tasks = JSON.stringify(tasks);
+					tasks = JSON.parse(tasks);
 				} catch (e) {
 					tasks = [];
 				}
 
 				tasks = tasks.filter(e => {
-					return that.deleteTaskIds.indexOf(e.fileid) == -1;
+					// return that.deleteTaskIds.indexOf(e.fileid) == -1;
+					return that.deleteTaskPaths.indexOf(e.path) == -1;
 				});
-				uni.setStorageSync('download_task', tasks);
+				uni.setStorageSync('download_task', JSON.stringify(tasks));
 
 				// 删除本地文件
 				uni.getSavedFileList({
-					success: (e, fileList) => {
-						fileList.forEach(f => {
+					success: (getSavedFileList_success) => {
+						getSavedFileList_success.fileList.forEach(f => {
 							uni.removeSavedFile({
 								filePath: f.filePath
 							});
