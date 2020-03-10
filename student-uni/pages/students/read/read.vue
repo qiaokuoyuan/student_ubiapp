@@ -14,7 +14,6 @@
 
 		<!-- 如过是视频 -->
 		<view v-if="resType == 'video'">
-			{{ resUrl }}
 			<view><video id="myVideo" :src="resUrl" danmu-btn controls poster="https://img-cdn-qiniu.dcloud.net.cn/uniapp/doc/poster.png"></video></view>
 		</view>
 	</view>

@@ -102,24 +102,44 @@ export default {
 	methods: {
 		// 在线阅读
 		readOnline(item) {
-			// 如果是视频,跳转阅读页面
-			if (item.ResourceName.indexOf('.mp4') >= 0) {
-				let url = '../read/read';
-				url += '?resType=video';
-				url += '&resTitle=' + item.ResourceName;
-				url += '&resUrl=' + item.Link;
-				uni.navigateTo({
-					url: url
-				});
-			} else if (item.ResourceName.indexOf('.pdf') >= 0 || item.ResourceName.indexOf('.doc') >= 0) {
-				let url = '../read/read';
-				url += "?resType=''";
-				url += '&resTitle=' + item.ResourceName;
-				url += '&resUrl=' + item.Link;
-				uni.navigateTo({
-					url: url
-				});
-			}
+			// 检查当前是否在 wifi模式下
+			uni.getNetworkType({
+				success(r) {
+					console.log('当前网络：', JSON.stringify(r));
+
+					// 如果当前不是wifi,弹窗警告
+					if (r.networkType != 'wifi') {
+						uni.showModal({
+							confirmText: '确定',
+							cancelText: '取消',
+							content: '当前未处于wifi模式下，确定要查看吗？',
+							title: '警告',
+							success(r2) {
+								if (r2.confirm) {
+									// 如果是视频,跳转阅读页面
+									if (item.ResourceName.indexOf('.mp4') >= 0) {
+										let url = '../read/read';
+										url += '?resType=video';
+										url += '&resTitle=' + item.ResourceName;
+										url += '&resUrl=' + item.Link;
+										uni.navigateTo({
+											url: url
+										});
+									} else if (item.ResourceName.indexOf('.pdf') >= 0 || item.ResourceName.indexOf('.doc') >= 0) {
+										let url = '../read/read';
+										url += "?resType=''";
+										url += '&resTitle=' + item.ResourceName;
+										url += '&resUrl=' + item.Link;
+										uni.navigateTo({
+											url: url
+										});
+									}
+								}
+							}
+						});
+					}
+				}
+			});
 		},
 
 		// 阅读离线缓存
@@ -142,7 +162,7 @@ export default {
 				this.readOnline(item);
 			}
 
-			// 如果是未下载,在线阅读
+			// 如果是已下载,在线阅读
 			if ('已下载' == _status) {
 				this.readOffline(item);
 			}
@@ -161,10 +181,26 @@ export default {
 				showCancel: true,
 				success: e => {
 					if (e.confirm) {
-						// 如果点击了确定按钮
-						that.downloadResource(res);
+						// 如果点击了确定按钮  再次检查是否是Wifi
 
-						that.add_task_ids += ',' + res.ResourceCode;
+						uni.getNetworkType({
+							success(r) {
+								if (r.networkType != 'wifi') {
+									uni.showModal({
+										confirmText: '确定',
+										cancelText: '取消',
+										content: '当前未处于wifi模式下，确定要查看吗？',
+										title: '警告',
+										success(r2) {
+											if (r2.confirm) {
+												that.downloadResource(res);
+												that.add_task_ids += ',' + res.ResourceCode;
+											}
+										}
+									});
+								}
+							}
+						});
 					}
 				}
 			});

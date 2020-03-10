@@ -442,7 +442,18 @@
 				"navigationStyle": "custom"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/students/zhibo/zhibo",
+            "style" : {
+				"navigationStyle": "custom"
+			}
+        }
+       
+        ,{
+            "path" : "components/myIframe/myIframe",
+            "style" : {}
+        }
+    ],
 	"subPackages": [{
 			"root": "pages/API",
 			"pages": [{
@@ -1291,6 +1302,12 @@
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
 				"text": "学生作品"
+			},
+			{
+				"pagePath": "pages/students/zhibo/zhibo",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "我的直播"
 			},
 			{
 				"pagePath": "pages/students/personalCenter/personalCenter",

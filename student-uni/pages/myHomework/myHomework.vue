@@ -5,7 +5,7 @@
 		
 		<view class="uni-flex uni-row">
 			
-			<view :class="[{ unselect: tab != 'all' }, { select: tab == 'all' }]" @click="tab = 'all'">
+			<view :class="[{ unselect: tab != 'all' }, { select: tab == 'all' }]" @click="tab = 'all'" v-if="false">
 				<text style="line-height: 100rpx; font-size: larger;">全部(debug)</text>
 			</view>
 			
@@ -58,7 +58,7 @@ export default {
 	data() {
 		return {
 			// finished unfinished all
-			tab:"all",
+			tab:"unfinished",
 			// 习题作业
 			list_homework: []
 		};

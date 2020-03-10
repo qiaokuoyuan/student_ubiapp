@@ -57,7 +57,7 @@ import uniFab from '@/components/uni-fab/uni-fab.vue';
 import myeditor from '../../../components/student/editor.vue';
 
 export default {
-	created() {
+	onShow() {
 		this.reloadMyArtifact();
 	},
 

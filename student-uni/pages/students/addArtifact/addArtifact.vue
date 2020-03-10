@@ -1,10 +1,7 @@
 <template>
 	<view>
-		
 		<uni-nav-bar :statusBar="true" title="作品创作"></uni-nav-bar>
 		<view><uni-steps :options="list1" style="margin: 30rpx;" active-color="#007AFF" :active="step" /></view>
-
-
 
 		<view class="" style="margin: 30rpx;">
 			<!-- 内容编创页面 -->
@@ -233,6 +230,10 @@ export default {
 						title: '提交成功',
 						icon: 'none'
 					});
+					// 提交成功后调整到我的作品页面
+					uni.switchTab({
+						url: '../myArtifact/myArtifact'
+					});
 				} else {
 					uni.showToast({
 						title: '提交失败',
@@ -363,9 +364,8 @@ export default {
 						filePath: tempFilePaths[0],
 						name: 'FileData',
 						header: {
-							
 							Cookie:
-								"UM_distinctid=1704cab6c9524e-0427fcbff74525-b383f66-100200-1704cab6c961d9; DID=6d2ed024-ccd6-4e76-8f15-7cde11238a88; LLOGO_QIAOKUOYUAN=~/pic/8eaa9554-2d42-45cc-b0cb-20baa02021c0; LLOGO_STU_QIAOKUOYUAN=~/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d; LLOGO_A00001=~/pic/d62c892f-52f4-4013-bdcd-1f16702c2b0b; Ecp_ClientId=2200219164602271778; LLOGO_DENGGAOFENG=~/pic/d3ddb3b3-0760-4eb3-8e93-5f545c8883ef; KNET_SSO_COOKIE_DID=c6301f4e-c5a1-49e0-8359-73247c9fb8e1; Ecp_IpLoginFail=200225106.33.42.137; BID=67ed7ce9cab14b959e575da46a5c59d9; SID=012011; CNZZDATA1277770830=366119379-1581834224-http%253A%252F%252Fve.cnki.net%252F%7C1582697575; token=d893cef827fc4a8dba017c1aaa00870f"
+								'UM_distinctid=1704cab6c9524e-0427fcbff74525-b383f66-100200-1704cab6c961d9; DID=6d2ed024-ccd6-4e76-8f15-7cde11238a88; LLOGO_QIAOKUOYUAN=~/pic/8eaa9554-2d42-45cc-b0cb-20baa02021c0; LLOGO_STU_QIAOKUOYUAN=~/pic/d7f8515d-67b8-4d91-9b30-d1f4c499768d; LLOGO_A00001=~/pic/d62c892f-52f4-4013-bdcd-1f16702c2b0b; Ecp_ClientId=2200219164602271778; LLOGO_DENGGAOFENG=~/pic/d3ddb3b3-0760-4eb3-8e93-5f545c8883ef; KNET_SSO_COOKIE_DID=c6301f4e-c5a1-49e0-8359-73247c9fb8e1; Ecp_IpLoginFail=200225106.33.42.137; BID=67ed7ce9cab14b959e575da46a5c59d9; SID=012011; CNZZDATA1277770830=366119379-1581834224-http%253A%252F%252Fve.cnki.net%252F%7C1582697575; token=d893cef827fc4a8dba017c1aaa00870f'
 						},
 
 						success: uploadFileRes => {
