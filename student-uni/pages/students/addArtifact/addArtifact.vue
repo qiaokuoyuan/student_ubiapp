@@ -79,10 +79,20 @@
 		<!-- 选择人员抽屉 -->
 
 		<uni-drawer :visible="show_drawer" @close="show_drawer = false" style="height: 100%; overflow: scroll;">
-			<view class="" v-for="(u, ui) in list_users" :key="ui" style="height: 80rpx; margin-left: 20rpx;" @click="checkUser(u)">
+			
+			<!-- 如果是选择老师 -->
+			<view class="" v-for="(u, ui) in list_all_teachers" :key="ui" style="height: 80rpx; margin-left: 20rpx; margin-top: 40rpx;" @click="checkUser(u)" v-if="select_user_type=='jiaoshi'">
 				<uni-icons style="line-height: 80rpx; " type="circle-filled" v-if="isUserChecked(u)"></uni-icons>
 				<uni-icons style="line-height: 80rpx; " type="circle" v-else></uni-icons>
 
+				<text style="line-height: 80rpx; margin-left: 30rpx;">{{ u.label }}</text>
+			</view>
+			
+			<!-- 如果是选择学生 -->
+			<view class="" v-for="(u, ui) in list_users" :key="ui" style="height: 80rpx; margin-left: 20rpx; margin-top: 40rpx;" @click="checkUser(u)" v-if="select_user_type=='zuzhang' || select_user_type=='chengyuan'">
+				<uni-icons style="line-height: 80rpx; " type="circle-filled" v-if="isUserChecked(u)"></uni-icons>
+				<uni-icons style="line-height: 80rpx; " type="circle" v-else></uni-icons>
+			
 				<text style="line-height: 80rpx; margin-left: 30rpx;">{{ u.label }}</text>
 			</view>
 		</uni-drawer>
@@ -122,12 +132,19 @@ export default {
 
 			// 如果是选择成员
 			if (v == 2) {
+				
 				this.reloadUsers();
+				this.reload_all_teachers()
 			}
 		}
 	},
 	data() {
-		return {
+		return { 
+			
+			select_teacher_or_student:"",
+			list_users: [],
+			list_all_teachers: [],
+
 			// 选择人员的模式 （jiaoshi/chengyuan/zuzhang）
 			select_user_type: '',
 
@@ -176,6 +193,23 @@ export default {
 		};
 	},
 	methods: {
+		// 刷新所有教师
+		reload_all_teachers() {
+			let that = this;
+			http.request({
+				url: `/api/Course/GetCourseMemberTree?courseCode=${that.select_course_id}&isAddAuthor=1`
+			}).then(r => {
+				console.log("GetCourseMemberTree====>",JSON.stringify(r))
+				r = that.fr(r);
+
+			
+
+				
+				that.list_all_teachers = r.Data.children;
+				console.log("list_all_teachers",JSON.stringify(that.list_all_teachers)) 
+			});
+		},
+
 		// 提交作品
 		submitArtifact() {
 			let that = this;
@@ -221,7 +255,8 @@ export default {
 					Cover: '',
 					KeyWords: '',
 					Content: that.content,
-					StudentWorkMember: users
+					StudentWorkMember: users,
+					Content:that.editor_content_html
 				}
 			}).then(r => {
 				r = that.fr(r);
@@ -426,7 +461,7 @@ export default {
 					// 将结构转为扁平结构
 					let flat_data = [];
 
-					const fn = source => {
+					let fn = source => {
 						source.forEach(el => {
 							flat_data.push(el);
 							el.children && el.children.length > 0 ? fn(el.children) : '';
