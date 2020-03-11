@@ -441,19 +441,18 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
-		}
-	    ,{
-            "path" : "pages/students/zhibo/zhibo",
-            "style" : {
+		}, {
+			"path": "pages/students/zhibo/zhibo",
+			"style": {
 				"navigationStyle": "custom"
 			}
-        }
-       
-        ,{
-            "path" : "components/myIframe/myIframe",
-            "style" : {}
-        }
-    ],
+		}
+
+		, {
+			"path": "components/myIframe/myIframe",
+			"style": {}
+		}
+	],
 	"subPackages": [{
 			"root": "pages/API",
 			"pages": [{
@@ -1314,6 +1313,12 @@
 				"iconPath": "static/component.png",
 				"selectedIconPath": "static/componentHL.png",
 				"text": "个人中心"
+			},
+			{
+				"pagePath": "pages/tabBar/extUI/extUI",
+				"iconPath": "static/extui.png",
+				"selectedIconPath": "static/extuiHL.png",
+				"text": "扩展组件"
 			}
 
 		]

@@ -3,6 +3,16 @@
 	<view>
 		<!-- 头部导航 -->
 		<uni-nav-bar :statusBar="true" title="我的作品"></uni-nav-bar>
+		
+		<uni-swipe-action>
+			<uni-swipe-action-item :options="options1" @click="bindClick">
+				<text class="cont">SwipeAction 基础使用场景</text>
+			</uni-swipe-action-item>
+		</uni-swipe-action>
+
+		<uni-swipe-action>
+			<uni-swipe-action-item :options="swipeOptions" @click="swipeClick"><text class="cont">SwipeAction 基础使用场景</text></uni-swipe-action-item>
+		</uni-swipe-action>
 
 		<!-- 作品列表 -->
 		<view class="" v-show="!show_editor" style="margin:30rpx">
@@ -56,6 +66,9 @@ import uniFab from '@/components/uni-fab/uni-fab.vue';
 
 import myeditor from '../../../components/student/editor.vue';
 
+import uniSwipeAction from '@/components/uni-swipe-action/uni-swipe-action.vue';
+import uniSwipeActionItem from '@/components/uni-swipe-action-item/uni-swipe-action-item.vue';
+
 export default {
 	onShow() {
 		this.reloadMyArtifact();
@@ -64,11 +77,24 @@ export default {
 	components: {
 		uniNavBar,
 		uniFab,
-		myeditor
+		myeditor,
+		uniSection,
+		uniSwipeAction,
+		uniSwipeActionItem
 	},
 
 	data() {
 		return {
+			options1: [{
+				text: '取消置顶'
+			}],
+			
+			
+			swipeOptions: [
+				{
+					text: '删除'
+				}
+			],
 			list_myArtifact: [],
 
 			// 是否显示编辑器
@@ -97,6 +123,16 @@ export default {
 		};
 	},
 	methods: {
+		bindClick(e) {
+			uni.showToast({
+				title: `点击了${e.content.text}按钮`,
+				icon: 'none'
+			})
+		},
+		
+		swipeClick() {
+			console.log(arguments);
+		},
 		addArtifact(t, item) {
 			let that = this;
 			if (t == 'confirm') {
@@ -143,4 +179,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.cont {
+	flex: 1;
+	height: 45px;
+	line-height: 45px;
+	padding: 0 15px;
+	position: relative;
+	background-color: #fff;
+	font-size: 15px;
+	border-bottom-color: #f5f5f5;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+</style>
