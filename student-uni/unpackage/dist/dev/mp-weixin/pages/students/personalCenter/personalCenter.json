@@ -1,9 +1,9 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "uni-section": "/components/uni-section/uni-section",
+    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
     "uni-list": "/components/uni-list/uni-list",
     "uni-list-item": "/components/uni-list-item/uni-list-item",
-    "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar"
+    "uni-section": "/components/uni-section/uni-section"
   }
 }

@@ -21,9 +21,15 @@
 		<view class="">
 			<view class="" v-for="(t, ti) in list_download_task" :key="ti">
 				<!-- 下载中的任务 （当tab是 downloading的时候显示）-->
-				<view
+				<!-- <view
 					class="uni-flex uni-row"
 					:style="`border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 ${t.rate}%, #F8F8FF 0);`"
+					v-if="tab == 'downloading' && t.rate != 100"
+				>
+				 -->
+				<view
+					class="uni-flex uni-row"
+					style="border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 30%, #F8F8FF 0);"
 					v-if="tab == 'downloading' && t.rate != 100"
 				>
 					<view v-if="show_select_delete_task">

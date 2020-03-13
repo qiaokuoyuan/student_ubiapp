@@ -92,7 +92,7 @@
 
 	/* 抽屉宽度
  */
-.uni-drawer.data-v-1730aeae {
+.uni-drawer.data-v-32282f35 {
 		
 		display: block;
 		
@@ -104,7 +104,7 @@
 		overflow: hidden;
 		z-index: 999;
 }
-.uni-drawer__content.data-v-1730aeae {
+.uni-drawer__content.data-v-32282f35 {
 		
 		display: block;
 		
@@ -118,21 +118,21 @@
 		transition: transform 0.3s ease;
 		transition: transform 0.3s ease, -webkit-transform 0.3s ease;
 }
-.uni-drawer--left.data-v-1730aeae {
+.uni-drawer--left.data-v-32282f35 {
 		left: 0;
 		-webkit-transform: translateX(-220px);
 		        transform: translateX(-220px);
 }
-.uni-drawer--right.data-v-1730aeae {
+.uni-drawer--right.data-v-32282f35 {
 		right: 0;
 		-webkit-transform: translateX(220px);
 		        transform: translateX(220px);
 }
-.uni-drawer__content--visible.data-v-1730aeae {
+.uni-drawer__content--visible.data-v-32282f35 {
 		-webkit-transform: translateX(0px);
 		        transform: translateX(0px);
 }
-.uni-drawer__mask.data-v-1730aeae {
+.uni-drawer__mask.data-v-32282f35 {
 		
 		display: block;
 		
@@ -146,7 +146,7 @@
 		-webkit-transition: opacity 0.3s;
 		transition: opacity 0.3s;
 }
-.uni-drawer__mask--visible.data-v-1730aeae {
+.uni-drawer__mask--visible.data-v-32282f35 {
 		
 		display: block;
 		

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar :statusBar="true" leftIcon="arrowleft" title="个人中心"></uni-nav-bar>
+		<uni-nav-bar :statusBar="true"  title="个人中心"></uni-nav-bar>
 
 		<!-- 如果登陆 -->
 		<view class="" v-show="isLogin">

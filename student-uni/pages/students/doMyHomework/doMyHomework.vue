@@ -565,6 +565,10 @@ export default {
 						uni.showToast({
 							title: '提交成功'
 						});
+						
+						uni.switchTab({
+							url:"../../myHomework/myHomework"
+						})
 					}
 				})
 				.catch(err => {});

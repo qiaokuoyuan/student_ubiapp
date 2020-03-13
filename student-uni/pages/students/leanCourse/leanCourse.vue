@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 头部导航 -->
-		<!-- <uni-nav-bar leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar> -->
+		<uni-nav-bar leftIcon="arrowleft" @clickLeft="back()"></uni-nav-bar>
 
 		<!-- 头部图片 -->
 		<view class=""><image @click="lgThis()" style="width: 100%; height: 400rpx;" src="../../../static/default_course_logo.jpg" mode=""></image></view>
@@ -182,7 +182,6 @@ export default {
 				success: e => {
 					if (e.confirm) {
 						// 如果点击了确定按钮  再次检查是否是Wifi
-
 						uni.getNetworkType({
 							success(r) {
 								if (r.networkType != 'wifi') {
@@ -198,6 +197,10 @@ export default {
 											}
 										}
 									});
+								} else {
+									// 如果已经是wifi,则直接下载
+									that.downloadResource(res);
+									that.add_task_ids += ',' + res.ResourceCode; 
 								}
 							}
 						});

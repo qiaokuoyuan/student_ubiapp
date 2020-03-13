@@ -1,8 +1,8 @@
 {
   "navigationStyle": "custom",
   "usingComponents": {
-    "uni-drawer": "/components/uni-drawer/uni-drawer",
     "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
+    "uni-drawer": "/components/uni-drawer/uni-drawer",
     "uni-segmented-control": "/components/uni-segmented-control/uni-segmented-control",
     "uni-list": "/components/uni-list/uni-list",
     "uni-list-item": "/components/uni-list-item/uni-list-item",

@@ -4,15 +4,7 @@
 		<!-- 头部导航 -->
 		<uni-nav-bar :statusBar="true" title="我的作品"></uni-nav-bar>
 		
-		<uni-swipe-action>
-			<uni-swipe-action-item :options="options1" @click="bindClick">
-				<text class="cont">SwipeAction 基础使用场景</text>
-			</uni-swipe-action-item>
-		</uni-swipe-action>
-
-		<uni-swipe-action>
-			<uni-swipe-action-item :options="swipeOptions" @click="swipeClick"><text class="cont">SwipeAction 基础使用场景</text></uni-swipe-action-item>
-		</uni-swipe-action>
+	
 
 		<!-- 作品列表 -->
 		<view class="" v-show="!show_editor" style="margin:30rpx">

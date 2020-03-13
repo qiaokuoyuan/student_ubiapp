@@ -2,11 +2,11 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "uni-nav-bar": "/components/uni-nav-bar/uni-nav-bar",
-    "uni-drawer": "/components/uni-drawer/uni-drawer",
-    "uni-notice-bar": "/components/uni-notice-bar/uni-notice-bar",
-    "uni-section": "/components/uni-section/uni-section",
-    "uni-card": "/components/uni-card/uni-card",
     "mix-tree": "/components/mix-tree/mix-tree",
+    "uni-drawer": "/components/uni-drawer/uni-drawer",
+    "uni-section": "/components/uni-section/uni-section",
+    "uni-notice-bar": "/components/uni-notice-bar/uni-notice-bar",
+    "uni-card": "/components/uni-card/uni-card",
     "uni-fab": "/components/uni-fab/uni-fab"
   }
 }

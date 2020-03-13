@@ -1,5 +1,5 @@
 
-.uni-popup.data-v-12bb7189 {
+.uni-popup.data-v-6fc42b15 {
 		position: fixed;
 		
 		
@@ -12,7 +12,7 @@
 		z-index: 99;
 		
 }
-.uni-popup__mask.data-v-12bb7189 {
+.uni-popup__mask.data-v-6fc42b15 {
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -21,42 +21,42 @@
 		background-color: rgba(0, 0, 0, 0.4);
 		opacity: 0;
 }
-.mask-ani.data-v-12bb7189 {
+.mask-ani.data-v-6fc42b15 {
 		-webkit-transition-property: opacity;
 		transition-property: opacity;
 		-webkit-transition-duration: 0.2s;
 		        transition-duration: 0.2s;
 }
-.uni-top-mask.data-v-12bb7189 {
+.uni-top-mask.data-v-6fc42b15 {
 		opacity: 1;
 }
-.uni-bottom-mask.data-v-12bb7189 {
+.uni-bottom-mask.data-v-6fc42b15 {
 		opacity: 1;
 }
-.uni-center-mask.data-v-12bb7189 {
+.uni-center-mask.data-v-6fc42b15 {
 		opacity: 1;
 }
-.uni-popup__wrapper.data-v-12bb7189 {
+.uni-popup__wrapper.data-v-6fc42b15 {
 		
 		display: block;
 		
 		position: absolute;
 }
-.top.data-v-12bb7189 {
+.top.data-v-6fc42b15 {
 		top: 0;
 		left: 0;
 		right: 0;
 		-webkit-transform: translateY(-500px);
 		        transform: translateY(-500px);
 }
-.bottom.data-v-12bb7189 {
+.bottom.data-v-6fc42b15 {
 		bottom: 0;
 		left: 0;
 		right: 0;
 		-webkit-transform: translateY(500px);
 		        transform: translateY(500px);
 }
-.center.data-v-12bb7189 {
+.center.data-v-6fc42b15 {
 		
 		display: -webkit-box;
 		display: -webkit-flex;
@@ -80,13 +80,13 @@
 		        transform: scale(1.2);
 		opacity: 0;
 }
-.uni-popup__wrapper-box.data-v-12bb7189 {
+.uni-popup__wrapper-box.data-v-6fc42b15 {
 		
 		display: block;
 		
 		position: relative;
 }
-.content-ani.data-v-12bb7189 {
+.content-ani.data-v-6fc42b15 {
 		/* transition: transform 0.3s;
  */
 		-webkit-transition-property: opacity, -webkit-transform;
@@ -96,15 +96,15 @@
 		-webkit-transition-duration: 0.2s;
 		        transition-duration: 0.2s;
 }
-.uni-top-content.data-v-12bb7189 {
+.uni-top-content.data-v-6fc42b15 {
 		-webkit-transform: translateY(0);
 		        transform: translateY(0);
 }
-.uni-bottom-content.data-v-12bb7189 {
+.uni-bottom-content.data-v-6fc42b15 {
 		-webkit-transform: translateY(0);
 		        transform: translateY(0);
 }
-.uni-center-content.data-v-12bb7189 {
+.uni-center-content.data-v-6fc42b15 {
 		-webkit-transform: scale(1);
 		        transform: scale(1);
 		opacity: 1;

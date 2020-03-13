@@ -9,10 +9,14 @@
 
 			<!-- 选择课程-->
 			<view class="" v-show="step == 1">
-				<view class="" v-for="(c, ci) in list_course" :key="ci" @click="select_course_id = c.CourseCode" style="height: 100rpx; margin-left: 30rpx;">
-					<uni-icons style="line-height: 100rpx;" type="circle-filled" v-if="select_course_id == c.CourseCode"></uni-icons>
-					<uni-icons style="line-height: 100rpx;" type="circle" v-else></uni-icons>
-					<text style="line-height: 100rpx; margin-left: 20rpx; font-size: larger;">{{ c.CourseName }}</text>
+				<view class="" v-for="(c, ci) in list_course" :key="ci">
+					
+					{{c.CourseCode}}
+					<view class="" @click="selectCourse(c) " style="height: 100rpx; margin-left: 30rpx;">
+						<uni-icons style="line-height: 100rpx;" type="circle-filled" v-if="select_course_id == c.CourseCode"></uni-icons>
+						<uni-icons style="line-height: 100rpx;" type="circle" v-else></uni-icons>
+						<text style="line-height: 100rpx; margin-left: 20rpx; font-size: larger;">{{ c.CourseName }}</text>
+					</view>
 				</view>
 			</view>
 
@@ -79,20 +83,33 @@
 		<!-- 选择人员抽屉 -->
 
 		<uni-drawer :visible="show_drawer" @close="show_drawer = false" style="height: 100%; overflow: scroll;">
-			
 			<!-- 如果是选择老师 -->
-			<view class="" v-for="(u, ui) in list_all_teachers" :key="ui" style="height: 80rpx; margin-left: 20rpx; margin-top: 40rpx;" @click="checkUser(u)" v-if="select_user_type=='jiaoshi'">
+			<view
+				class=""
+				v-for="(u, ui) in list_all_teachers"
+				:key="ui"
+				style="height: 80rpx; margin-left: 20rpx; margin-top: 40rpx;"
+				@click="checkUser(u)"
+				v-if="select_user_type == 'jiaoshi'"
+			>
 				<uni-icons style="line-height: 80rpx; " type="circle-filled" v-if="isUserChecked(u)"></uni-icons>
 				<uni-icons style="line-height: 80rpx; " type="circle" v-else></uni-icons>
 
 				<text style="line-height: 80rpx; margin-left: 30rpx;">{{ u.label }}</text>
 			</view>
-			
+
 			<!-- 如果是选择学生 -->
-			<view class="" v-for="(u, ui) in list_users" :key="ui" style="height: 80rpx; margin-left: 20rpx; margin-top: 40rpx;" @click="checkUser(u)" v-if="select_user_type=='zuzhang' || select_user_type=='chengyuan'">
+			<view
+				class=""
+				v-for="(u, ui) in list_users"
+				:key="ui"
+				style="height: 80rpx; margin-left: 20rpx; margin-top: 40rpx;"
+				@click="checkUser(u)"
+				v-if="select_user_type == 'zuzhang' || select_user_type == 'chengyuan'"
+			>
 				<uni-icons style="line-height: 80rpx; " type="circle-filled" v-if="isUserChecked(u)"></uni-icons>
 				<uni-icons style="line-height: 80rpx; " type="circle" v-else></uni-icons>
-			
+
 				<text style="line-height: 80rpx; margin-left: 30rpx;">{{ u.label }}</text>
 			</view>
 		</uni-drawer>
@@ -132,16 +149,14 @@ export default {
 
 			// 如果是选择成员
 			if (v == 2) {
-				
 				this.reloadUsers();
-				this.reload_all_teachers()
+				this.reload_all_teachers();
 			}
 		}
 	},
 	data() {
-		return { 
-			
-			select_teacher_or_student:"",
+		return {
+			select_teacher_or_student: '',
 			list_users: [],
 			list_all_teachers: [],
 
@@ -193,20 +208,21 @@ export default {
 		};
 	},
 	methods: {
+		// 选择课程
+		selectCourse(item){
+			 this.select_course_id = item.CourseCode
+		},
 		// 刷新所有教师
 		reload_all_teachers() {
 			let that = this;
 			http.request({
 				url: `/api/Course/GetCourseMemberTree?courseCode=${that.select_course_id}&isAddAuthor=1`
 			}).then(r => {
-				console.log("GetCourseMemberTree====>",JSON.stringify(r))
+				console.log('GetCourseMemberTree====>', JSON.stringify(r));
 				r = that.fr(r);
 
-			
-
-				
 				that.list_all_teachers = r.Data.children;
-				console.log("list_all_teachers",JSON.stringify(that.list_all_teachers)) 
+				console.log('list_all_teachers', JSON.stringify(that.list_all_teachers));
 			});
 		},
 
@@ -256,7 +272,7 @@ export default {
 					KeyWords: '',
 					Content: that.content,
 					StudentWorkMember: users,
-					Content:that.editor_content_html
+					Content: that.editor_content_html
 				}
 			}).then(r => {
 				r = that.fr(r);

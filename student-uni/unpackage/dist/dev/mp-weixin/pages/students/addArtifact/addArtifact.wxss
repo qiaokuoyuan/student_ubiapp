@@ -1,9 +1,9 @@
 
-.nvue-page-root.data-v-11d0b3fe {
+.nvue-page-root.data-v-707d218a {
 	background-color: #f8f8f8;
 	padding-bottom: 20px;
 }
-.page-title.data-v-11d0b3fe {
+.page-title.data-v-707d218a {
 	
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -21,25 +21,25 @@
 	        align-items: center;
 	padding: 35rpx;
 }
-.page-title__wrapper.data-v-11d0b3fe {
+.page-title__wrapper.data-v-707d218a {
 	padding: 0px 20px;
 	border-bottom-color: #d8d8d8;
 	border-bottom-width: 1px;
 }
-.page-title__text.data-v-11d0b3fe {
+.page-title__text.data-v-707d218a {
 	font-size: 16px;
 	height: 48px;
 	line-height: 48px;
 	color: #bebebe;
 }
-.title.data-v-11d0b3fe {
+.title.data-v-707d218a {
 	padding: 5px 13px;
 }
-.uni-form-item__title.data-v-11d0b3fe {
+.uni-form-item__title.data-v-707d218a {
 	font-size: 16px;
 	line-height: 24px;
 }
-.uni-input-wrapper.data-v-11d0b3fe {
+.uni-input-wrapper.data-v-707d218a {
 	
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -54,7 +54,7 @@
 	        flex-wrap: nowrap;
 	background-color: #ffffff;
 }
-.uni-input.data-v-11d0b3fe {
+.uni-input.data-v-707d218a {
 	height: 28px;
 	line-height: 28px;
 	font-size: 15px;
@@ -64,7 +64,7 @@
 	        flex: 1;
 	background-color: #ffffff;
 }
-.uni-icon.data-v-11d0b3fe {
+.uni-icon.data-v-707d218a {
 	font-family: uniicons;
 	font-size: 24px;
 	font-weight: normal;
@@ -74,7 +74,7 @@
 	line-height: 24px;
 	color: #999999;
 }
-.uni-eye-active.data-v-11d0b3fe {
+.uni-eye-active.data-v-707d218a {
 	color: #007aff;
 }
 

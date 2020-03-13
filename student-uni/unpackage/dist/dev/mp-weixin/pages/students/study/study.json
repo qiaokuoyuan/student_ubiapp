@@ -2,7 +2,7 @@
   "navigationStyle": "custom",
   "navigationBarTitleText": "课程学习",
   "usingComponents": {
-    "uni-combox": "/components/uni-combox/uni-combox",
-    "uni-icons": "/components/uni-icons/uni-icons"
+    "uni-icons": "/components/uni-icons/uni-icons",
+    "uni-combox": "/components/uni-combox/uni-combox"
   }
 }
