@@ -29,7 +29,8 @@
     "pages/students/myArtifactDetail/myArtifactDetail",
     "pages/students/addArtifact/addArtifact",
     "pages/students/zhibo/zhibo",
-    "components/myIframe/myIframe"
+    "components/myIframe/myIframe",
+    "pages/circleRate/circleRate"
   ],
   "subPackages": [],
   "window": {
@@ -48,32 +49,32 @@
     "list": [
       {
         "pagePath": "pages/students/myCourse/myCourse",
-        "iconPath": "static/template.png",
-        "selectedIconPath": "static/templateHL.png",
+        "iconPath": "static/课程.png",
+        "selectedIconPath": "static/课程 (1).png",
         "text": "我的课程"
       },
       {
         "pagePath": "pages/myHomework/myHomework",
-        "iconPath": "static/component.png",
-        "selectedIconPath": "static/componentHL.png",
+        "iconPath": "static/作业.png",
+        "selectedIconPath": "static/作业 (1).png",
         "text": "我的作业"
       },
       {
         "pagePath": "pages/students/myArtifact/myArtifact",
-        "iconPath": "static/component.png",
-        "selectedIconPath": "static/componentHL.png",
+        "iconPath": "static/作品.png",
+        "selectedIconPath": "static/作品 (1).png",
         "text": "学生作品"
       },
       {
         "pagePath": "pages/students/zhibo/zhibo",
-        "iconPath": "static/component.png",
-        "selectedIconPath": "static/componentHL.png",
+        "iconPath": "static/直播.png",
+        "selectedIconPath": "static/直播 (1).png",
         "text": "我的直播"
       },
       {
         "pagePath": "pages/students/personalCenter/personalCenter",
-        "iconPath": "static/component.png",
-        "selectedIconPath": "static/componentHL.png",
+        "iconPath": "static/个人中心.png",
+        "selectedIconPath": "static/个人中心 (1).png",
         "text": "个人中心"
       }
     ]
@@ -87,6 +88,5 @@
     "page-head": "/components/page-head",
     "page-foot": "/components/page-foot",
     "u-link": "/components/uLink"
-  },
-  "sitemapLocation": "sitemap33.json"
+  }
 }

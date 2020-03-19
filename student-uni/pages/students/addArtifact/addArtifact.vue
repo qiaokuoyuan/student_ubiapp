@@ -10,9 +10,7 @@
 			<!-- 选择课程-->
 			<view class="" v-show="step == 1">
 				<view class="" v-for="(c, ci) in list_course" :key="ci">
-					
-					{{c.CourseCode}}
-					<view class="" @click="selectCourse(c) " style="height: 100rpx; margin-left: 30rpx;">
+					<view class="" @click="selectCourse(c)" style="height: 100rpx; margin-left: 30rpx;">
 						<uni-icons style="line-height: 100rpx;" type="circle-filled" v-if="select_course_id == c.CourseCode"></uni-icons>
 						<uni-icons style="line-height: 100rpx;" type="circle" v-else></uni-icons>
 						<text style="line-height: 100rpx; margin-left: 20rpx; font-size: larger;">{{ c.CourseName }}</text>
@@ -24,7 +22,7 @@
 			<view class="" v-show="step == 2">
 				<uni-section type="line" title="指导教师"></uni-section>
 				<view class="">
-					<text>
+					<view>
 						{{
 							list_jiaoshi
 								.map(e => {
@@ -33,11 +31,11 @@
 								.join(',')
 						}}
 						<uni-icons style="margin-left: 50rpx;" type="personadd" @click="(select_user_type = 'jiaoshi'), (show_drawer = true)" size="30"></uni-icons>
-					</text>
+					</view>
 				</view>
 				<uni-section type="line" title="组长"></uni-section>
 				<view class="">
-					<text>
+					<view>
 						{{
 							list_zuzhang
 								.map(e => {
@@ -47,11 +45,11 @@
 						}}
 
 						<uni-icons style="margin-left: 50rpx;" type="personadd" @click="(select_user_type = 'zuzhang'), (show_drawer = true)" size="30"></uni-icons>
-					</text>
+					</view>
 				</view>
 				<uni-section type="line" title="成员"></uni-section>
 				<view class="">
-					<text>
+					<view>
 						{{
 							list_chengyuan
 								.map(e => {
@@ -59,7 +57,7 @@
 								})
 								.join(',')
 						}}
-					</text>
+					</view>
 					<uni-icons style="margin-left: 50rpx;" type="personadd" @click="(select_user_type = 'chengyuan'), (show_drawer = true)" size="30"></uni-icons>
 				</view>
 			</view>
@@ -209,8 +207,8 @@ export default {
 	},
 	methods: {
 		// 选择课程
-		selectCourse(item){
-			 this.select_course_id = item.CourseCode
+		selectCourse(item) {
+			this.select_course_id = item.CourseCode;
 		},
 		// 刷新所有教师
 		reload_all_teachers() {

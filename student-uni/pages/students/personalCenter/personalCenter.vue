@@ -32,12 +32,12 @@
 		<view class="" v-if="!isLogin" style="margin: 40rpx;">
 			<image src="../../../static/default_course_logo.jpg" style="height: 300rpx; width: 100%;" mode="scaleToFill"></image>
 
-			<input type="text" v-model="username" placeholder="账号" style="border: solid 3rpx #00E5EE; border-radius: 10rpx; font-size: x-large;" />
+			<input type="text" v-model="username" placeholder="账号" style="border: solid 8rpx #00E5EE; border-radius: 50rpx; height: 100rpx; font-size: 40rpx; padding-left: 40rpx; margin-top: 30rpx;" />
 			<input
 				type="text"
 				v-model="password"
 				placeholder="密码"
-				style="border: solid 3rpx #00E5EE; border-radius: 10rpx; font-size: x-large; margin-top: 20rpx; margin-bottom: 30rpx;"
+				style="border: solid 8rpx #00E5EE; border-radius: 50rpx; height: 100rpx; font-size: 40rpx; padding-left: 40rpx; margin-top: 30rpx; margin-bottom: 30rpx;" 
 			/>
 			<button type="primary" @click="login()">登陆</button>
 		</view>
@@ -205,7 +205,7 @@ export default {
 							// 根据加密后的密码 获取token
 
 							uni.request({
-								url: `http://ve.cnki.net/sso/m/login?appId=coeduapi&name=${_u}&pass=${encoded_passwrod}&code=local`,
+								url: `https://ve.cnki.net/sso/m/login?appId=coeduapi&name=${_u}&pass=${encoded_passwrod}&code=local`,
 								header: {
 									appid: 'coeduapi',
 									sign: sign,
@@ -258,7 +258,7 @@ export default {
 			// 	userInfo2[k] = '';
 			// });
 
-			// console.log('new userInfo:', JSON.stringify(userInfo2));
+			console.log('new userInfo:', JSON.stringify(userInfo));
 			this.$store.commit('setUserInfo', userInfo);
 			console.log('new userInfo:', JSON.stringify(userInfo));
 		}

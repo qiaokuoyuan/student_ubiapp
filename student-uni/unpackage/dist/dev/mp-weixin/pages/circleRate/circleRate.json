@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "circle-rate": "/components/circleRate"
+  }
+}

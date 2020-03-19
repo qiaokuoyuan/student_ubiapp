@@ -61,6 +61,25 @@ _vue.default.prototype.fr = function (r) {
         icon: "none" });
 
     }
+
+    // 如果是401,清空登陆状态
+    if (r[1].statusCode == 401) {
+      // 如果出现问题,清空登陆状态
+
+      console.log("401，清空登陆状态:");
+      console.log("旧store:", _store.default);
+      _store.default.state.UserInfo = "";
+      console.log("新store:", _store.default);
+
+      uni.switchTab({
+        url: "pages/students/personalCenter/personalCenter" });
+
+    }
+
+
+
+
+
     return r[1].data;
   } catch (e) {
     console.log("fr 转换异常:", e);
@@ -68,6 +87,9 @@ _vue.default.prototype.fr = function (r) {
     uni.showToast({
       title: "您尚未登陆,请先登陆",
       icon: "none" });
+
+
+
 
     return r;
   }

@@ -1,7 +1,9 @@
 <template>
 	<view>
 		<uni-nav-bar :statusBar="true" leftIcon="arrowleft" title="离线缓存" @clickLeft="toMyCourse()" rightIcon="gear" @clickRight="delTask('show', '')"></uni-nav-bar>
-
+		
+	
+		
 		<!-- 上方按钮切换是下载中的还是已下载的 -->
 		<view class="uni-flex uni-row" style="margin: 30rpx 80rpx;" v-if="false">
 			<button @click="tab = 'downloading'" :type="tab == 'downloading' ? 'primary' : 'default'" style="margin: 0 30rpx;">下载中</button>
@@ -21,17 +23,17 @@
 		<view class="">
 			<view class="" v-for="(t, ti) in list_download_task" :key="ti">
 				<!-- 下载中的任务 （当tab是 downloading的时候显示）-->
-				<!-- <view
+				<view
 					class="uni-flex uni-row"
-					:style="`border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 ${t.rate}%, #F8F8FF 0);`"
+					:style='{"border-bottom": "solid 1px #07C160", "background-image": "linear-gradient(to right, #FFDAB9 "+t.rate+"%, #F8F8FF 0)"}'
 					v-if="tab == 'downloading' && t.rate != 100"
 				>
-				 -->
-				<view
+				
+				<!-- <view
 					class="uni-flex uni-row"
 					style="border-bottom: solid 1px #07C160; background-image: linear-gradient(to right, #FFDAB9 30%, #F8F8FF 0);"
 					v-if="tab == 'downloading' && t.rate != 100"
-				>
+				> -->
 					<view v-if="show_select_delete_task">
 						<!-- <radio style="line-height: 150rpx;margin-left: 20rpx;" :checked="deleteTaskIds.indexOf(t.fileid) >= 0" @click="delTask('add', t.fileid)" /> -->
 						<radio style="line-height: 150rpx;margin-left: 20rpx;" :checked="deleteTaskPaths.indexOf(t.path) >= 0" @click="delTask('add', t.path)" />
@@ -47,7 +49,13 @@
 						<text v-if="t.is_downloaded" style="font-size: large; text-align: center; line-height: 150rpx;">已下载</text>
 						<text v-else style="font-size: xx-large; line-height: 150rpx;">{{ t.rate }}%</text>
 					</view>
+					
+					
 				</view>
+				
+				
+					
+				</progress>
 
 				<!-- 已下载的任务 （当tab是 downloaded的时候显示）-->
 				<view class="uni-flex uni-row" style="border-bottom: solid 1px #07C160;" v-if="tab == 'downloaded' && t.rate == 100">
@@ -139,6 +147,11 @@ export default {
 		this.reload_offline_files();
 	},
 	methods: {
+		test(){
+			uni.navigateTo({
+				url:"../../circleRate/circleRate"
+			})
+		},
 		// 删除下载任务
 		delTask(t, path) {
 			let that = this;

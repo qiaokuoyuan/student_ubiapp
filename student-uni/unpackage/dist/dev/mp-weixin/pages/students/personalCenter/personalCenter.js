@@ -345,7 +345,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.j
               // 根据加密后的密码 获取token
 
               uni.request({
-                url: "http://ve.cnki.net/sso/m/login?appId=coeduapi&name=".concat(_u, "&pass=").concat(encoded_passwrod, "&code=local"),
+                url: "https://ve.cnki.net/sso/m/login?appId=coeduapi&name=".concat(_u, "&pass=").concat(encoded_passwrod, "&code=local"),
                 header: {
                   appid: 'coeduapi',
                   sign: sign,
@@ -398,7 +398,7 @@ var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.j
       // 	userInfo2[k] = '';
       // });
 
-      // console.log('new userInfo:', JSON.stringify(userInfo2));
+      console.log('new userInfo:', JSON.stringify(userInfo));
       this.$store.commit('setUserInfo', userInfo);
       console.log('new userInfo:', JSON.stringify(userInfo));
     } } };exports.default = _default;

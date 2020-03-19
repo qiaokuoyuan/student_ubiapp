@@ -26,18 +26,18 @@
 			<view class="" v-for="(h, hi) in list_homework" :key="hi">
 				
 				<!-- 已完成的 -->
-				<view v-if="h.Extension=='已作答' && tab=='finished'" class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx;">
+				<view v-if="h.Extension=='已作答' && tab=='finished'" class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx; overflow: hidden;">
 					<text style="line-height: 100rpx;" @click="doHomework(h)">{{ h.Content }}</text>
 				</view>
 				
 				
 				<!-- 未完成的 -->
-				<view v-if="h.Extension=='未作答' && tab=='unfinished'" class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx;">
+				<view v-if="h.Extension=='未作答' && tab=='unfinished'" class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx;overflow: hidden;">
 					<text style="line-height: 100rpx;" @click="doHomework(h)">{{ h.Content }}</text>
 				</view>
 				
 				<!-- 全部 -->
-				<view v-if=" tab=='all'" class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx;">
+				<view v-if=" tab=='all'" class="" style="height: 100rpx; border-bottom: solid 1rpx #EEE8AA; padding:0 30rpx;overflow: hidden;">
 					<text style="line-height: 100rpx;" @click="doHomework(h)">{{ h.Content }}</text>
 				</view>
 				

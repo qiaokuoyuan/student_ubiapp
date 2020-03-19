@@ -1,4 +1,4 @@
-const base_url = "http://ve.cnki.net/coeduApi" // "http://ve.cnki.net/coeduApi"    //http://3eda7bc9.ngrok.io
+const base_url = "https://ve.cnki.net/coeduApi" // "http://ve.cnki.net/coeduApi"    //http://3eda7bc9.ngrok.io
 class HttpRequest {
 	constructor() {
 		console.log('HttpRequest');

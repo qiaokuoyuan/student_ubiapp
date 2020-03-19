@@ -249,7 +249,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
 var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.js */ 20));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -331,15 +347,12 @@ var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() 
       list_download_task: [], // 查询下载进度计时器
       it: '', // 要删除的任务id集合
       deleteTaskIds: '', deleteTaskPaths: '', // 是否显示选择删除那些任务
-      show_select_delete_task: false };}, computed: { rate: function rate() {return getApp().globalData.downloadRate;} }, onShow: function onShow() {this.reload_offline_files();}, methods: { // 删除下载任务
+      show_select_delete_task: false };}, computed: { rate: function rate() {return getApp().globalData.downloadRate;} }, onShow: function onShow() {this.reload_offline_files();}, methods: { test: function test() {uni.navigateTo({ url: "../../circleRate/circleRate" });}, // 删除下载任务
     delTask: function delTask(t, path) {var that = this;console.log('delTask', t); // 如果是显示选择删除哪些任务(再次点击show会关闭)
       if (t == 'show') {if (that.show_select_delete_task) {// 如过当前已经是show,则调用关闭
           console.log('二次show，调用关闭（close）');that.delTask('close');} else {// 如过当前是关闭,则打开
           that.deleteTaskIds = '';that.deleteTaskPaths = '';that.show_select_delete_task = true;}} // 如果是关闭选择删除哪些任务
-      if (t == 'close') {that.deleteTaskIds = '';that.deleteTaskPaths = '';
-        that.show_select_delete_task = false;
-      }
-
+      if (t == 'close') {that.deleteTaskIds = '';that.deleteTaskPaths = '';that.show_select_delete_task = false;}
       // 如果是添加(再次添加删除)
       if (t == 'add') {
         // if (that.deleteTaskIds.indexOf(id) >= 0) {
