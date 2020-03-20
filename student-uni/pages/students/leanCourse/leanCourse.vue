@@ -102,6 +102,8 @@ export default {
 	methods: {
 		// 在线阅读
 		readOnline(item) {
+			let that = this;
+
 			// 检查当前是否在 wifi模式下
 			uni.getNetworkType({
 				success(r) {
@@ -121,7 +123,7 @@ export default {
 										let url = '../read/read';
 										url += '?resType=video';
 										url += '&resTitle=' + item.ResourceName;
-										url += '&resUrl=' + item.Link;
+										url += '&resUrl=' + that.https(item.Link);
 										uni.navigateTo({
 											url: url
 										});
@@ -129,7 +131,7 @@ export default {
 										let url = '../read/read';
 										url += "?resType=''";
 										url += '&resTitle=' + item.ResourceName;
-										url += '&resUrl=' + item.Link;
+										url += '&resUrl=' + that.https(item.Link);
 										uni.navigateTo({
 											url: url
 										});
@@ -200,7 +202,7 @@ export default {
 								} else {
 									// 如果已经是wifi,则直接下载
 									that.downloadResource(res);
-									that.add_task_ids += ',' + res.ResourceCode; 
+									that.add_task_ids += ',' + res.ResourceCode;
 								}
 							}
 						});
@@ -271,6 +273,9 @@ export default {
 							}
 						});
 					}
+				},
+				fail(r_fail) {
+					console.log('下载失败', r_fail);
 				}
 			});
 

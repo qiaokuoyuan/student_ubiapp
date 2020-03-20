@@ -97,15 +97,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "uni-nav-bar": () =>
-    __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 279))
+    __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 285))
 }
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   var l0 = _vm.__map(_vm.list_download_task, function(t, ti) {
-    var g0 = _vm.deleteTaskPaths.indexOf(t.path)
-    var g1 = _vm.deleteTaskPaths.indexOf(t.path)
+    var g0 = _vm.deleteTaskIds.indexOf(t.fileid)
+    var g1 = _vm.deleteTaskIds.indexOf(t.fileid)
     return {
       $orig: _vm.__get_orig(t),
       g0: g0,
@@ -119,14 +119,6 @@ var render = function() {
     }
 
     _vm.e1 = function($event) {
-      _vm.tab = "downloaded"
-    }
-
-    _vm.e2 = function($event) {
-      _vm.tab = "downloading"
-    }
-
-    _vm.e3 = function($event) {
       _vm.tab = "downloaded"
     }
   }
@@ -173,25 +165,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -322,48 +295,39 @@ var _request = _interopRequireDefault(__webpack_require__(/*! @/common/request.j
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 279));};var uniIcons = function uniIcons() {return Promise.all(/*! import() | components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/components/uni-icons/uni-icons.vue */ 212));};var _default = { components: { uniNavBar: uniNavBar, uniIcons: uniIcons }, onLoad: function onLoad() {var that = this; // 获取下载队列
+var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 285));};var uniIcons = function uniIcons() {return Promise.all(/*! import() | components/uni-icons/uni-icons */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/uni-icons/uni-icons")]).then(__webpack_require__.bind(null, /*! @/components/uni-icons/uni-icons.vue */ 212));};var _default = { components: { uniNavBar: uniNavBar, uniIcons: uniIcons }, onLoad: function onLoad() {var that = this;clearInterval(that.it); // 获取下载队列
     this.it = setInterval(function () {var get_task = uni.getStorageSync('download_task');console.log('get_task', get_task);try {get_task = JSON.parse(get_task);} catch (_) {get_task = [];}that.list_download_task = get_task;}, 1000);}, beforeDestroy: function beforeDestroy() {clearInterval(this.it);}, data: function data() {return { // 当前的tab是下载中还是已下载（downloading/downloaded）
       tab: 'downloading', file_list: [], getAppRate: 0, // 下载队列
       list_download_task: [], // 查询下载进度计时器
       it: '', // 要删除的任务id集合
       deleteTaskIds: '', deleteTaskPaths: '', // 是否显示选择删除那些任务
-      show_select_delete_task: false };}, computed: { rate: function rate() {return getApp().globalData.downloadRate;} }, onShow: function onShow() {this.reload_offline_files();}, methods: { test: function test() {uni.navigateTo({ url: "../../circleRate/circleRate" });}, // 删除下载任务
-    delTask: function delTask(t, path) {var that = this;console.log('delTask', t); // 如果是显示选择删除哪些任务(再次点击show会关闭)
+      show_select_delete_task: false };}, onShow: function onShow() {this.reload_offline_files();}, methods: { test: function test() {uni.navigateTo({ url: '../../circleRate/circleRate' });}, // 删除下载任务
+    delTask: function delTask(t, item) {var that = this; // 如果是显示选择删除哪些任务(再次点击show会关闭)
       if (t == 'show') {if (that.show_select_delete_task) {// 如过当前已经是show,则调用关闭
-          console.log('二次show，调用关闭（close）');that.delTask('close');} else {// 如过当前是关闭,则打开
-          that.deleteTaskIds = '';that.deleteTaskPaths = '';that.show_select_delete_task = true;}} // 如果是关闭选择删除哪些任务
-      if (t == 'close') {that.deleteTaskIds = '';that.deleteTaskPaths = '';that.show_select_delete_task = false;}
+          console.log('二次show，调用关闭（close）');that.delTask('close');
+        } else {
+          // 如过当前是关闭,则打开
+          that.deleteTaskIds = '';
+          that.deleteTaskPaths = '';
+          that.show_select_delete_task = true;
+        }
+      }
+
+      // 如果是关闭选择删除哪些任务
+      if (t == 'close') {
+        that.deleteTaskIds = '';
+        that.deleteTaskPaths = '';
+        that.show_select_delete_task = false;
+      }
+
       // 如果是添加(再次添加删除)
       if (t == 'add') {
-        // if (that.deleteTaskIds.indexOf(id) >= 0) {
-        if (that.deleteTaskPaths.indexOf(path) >= 0) {
+        if (that.deleteTaskIds.indexOf(item.fileid) >= 0) {
           // 如过已经包含了当前id,则删除
-          // that.deleteTaskIds = that.deleteTaskIds.replace(id, '');
-          that.deleteTaskPaths = that.deleteTaskPaths.replace(path, '');
+          that.deleteTaskIds = that.deleteTaskIds.replace(item.fileid, '');
         } else {
           // 如过没有包含,则将其添加到 that.deleteTaskIds 中
-          // that.deleteTaskIds += ',' + id;
-          that.deleteTaskPaths += ',' + path;
+          that.deleteTaskIds += ',' + item.fileid;
         }
       }
 
@@ -378,22 +342,18 @@ var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() 
           tasks = [];
         }
 
-        tasks = tasks.filter(function (e) {
-          // return that.deleteTaskIds.indexOf(e.fileid) == -1;
-          return that.deleteTaskPaths.indexOf(e.path) == -1;
+        // 删除本地文件,并返回过滤
+        var new_tasks = tasks.filter(function (e) {
+          var is_delete = that.deleteTaskIds.indexOf(e.fileid) >= 0;
+          if (is_delete) {
+            uni.removeSavedFile({
+              filePath: e.filePath });
+
+          }
+          return !is_delete;
         });
-        uni.setStorageSync('download_task', JSON.stringify(tasks));
-
-        // 删除本地文件
-        uni.getSavedFileList({
-          success: function success(getSavedFileList_success) {
-            getSavedFileList_success.fileList.forEach(function (f) {
-              uni.removeSavedFile({
-                filePath: f.filePath });
-
-            });
-          } });
-
+        that.deleteTaskIds = '';
+        uni.setStorageSync('download_task', JSON.stringify(new_tasks));
       }
     },
     // 阅读资源

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar :statusBar="true"  title="个人中心"></uni-nav-bar>
+		<uni-nav-bar :statusBar="true" title="个人中心"></uni-nav-bar>
 
 		<!-- 如果登陆 -->
 		<view class="" v-show="isLogin">
@@ -32,12 +32,17 @@
 		<view class="" v-if="!isLogin" style="margin: 40rpx;">
 			<image src="../../../static/default_course_logo.jpg" style="height: 300rpx; width: 100%;" mode="scaleToFill"></image>
 
-			<input type="text" v-model="username" placeholder="账号" style="border: solid 8rpx #00E5EE; border-radius: 50rpx; height: 100rpx; font-size: 40rpx; padding-left: 40rpx; margin-top: 30rpx;" />
+			<input
+				type="text"
+				v-model="username"
+				placeholder="账号"
+				style="border: solid 8rpx #00E5EE; border-radius: 50rpx; height: 100rpx; font-size: 40rpx; padding-left: 40rpx; margin-top: 30rpx;"
+			/>
 			<input
 				type="text"
 				v-model="password"
 				placeholder="密码"
-				style="border: solid 8rpx #00E5EE; border-radius: 50rpx; height: 100rpx; font-size: 40rpx; padding-left: 40rpx; margin-top: 30rpx; margin-bottom: 30rpx;" 
+				style="border: solid 8rpx #00E5EE; border-radius: 50rpx; height: 100rpx; font-size: 40rpx; padding-left: 40rpx; margin-top: 30rpx; margin-bottom: 30rpx;"
 			/>
 			<button type="primary" @click="login()">登陆</button>
 		</view>
@@ -83,7 +88,7 @@ export default {
 
 		// 是否已经登陆
 		isLogin() {
-			return this.$store.getters.getUserInfo.UserID;
+			return this.$store.getters.getUserInfo && this.$store.getters.getUserInfo.UserID;
 		},
 
 		userLogo() {
@@ -125,12 +130,16 @@ export default {
 							success(r_fs) {
 								let file_count = r_fs.fileList.length;
 								let del_count = 0;
-								r_fs.fileList.forEach(f => {
+
+								let files = r_fs.fileList || [];
+
+								for (let i = 0; i < files.length; ++i) {
+									let delete_file_path= files[i].filePath
 									uni.removeSavedFile({
-										filePath: f.filePath,
+										filePath: delete_file_path,
 										success() {
 											++del_count;
-											console.log('已经删除' + del_count + '个');
+											console.log('已经删除' + del_count + '个', delete_file_path);
 											if (del_count == file_count) {
 												uni.showToast({
 													title: '删除完成'
@@ -138,7 +147,7 @@ export default {
 											}
 										}
 									});
-								});
+								}
 							}
 						});
 					}

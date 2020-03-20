@@ -86,12 +86,14 @@ const store = new Vuex.Store({
 			}).then(r => {
 				try {
 					r = Vue.prototype.fr(r)
-					r = r.Data.UserInfo
+					// r = r.Data.UserInfo
+					if(r && r.Data && r.Data.UserInfo){
+						commit.commit('setUserInfo', r.Data.UserInfo)
+					}
 
-					commit.commit('setUserInfo', r)
 
 				} catch (e) {
-					commit.commit('setUserInfo', {})
+					
 					console.log(e)
 				}
 			})

@@ -14,8 +14,12 @@ var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 9));
 
 
 
-var _store = _interopRequireDefault(__webpack_require__(/*! ./store */ 15));
-var _request = _interopRequireDefault(__webpack_require__(/*! ./common/request.js */ 20));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var pageHead = function pageHead() {return __webpack_require__.e(/*! import() | components/page-head */ "components/page-head").then(__webpack_require__.bind(null, /*! ./components/page-head.vue */ 262));};var pageFoot = function pageFoot() {return __webpack_require__.e(/*! import() | components/page-foot */ "components/page-foot").then(__webpack_require__.bind(null, /*! ./components/page-foot.vue */ 267));};var uLink = function uLink() {return __webpack_require__.e(/*! import() | components/uLink */ "components/uLink").then(__webpack_require__.bind(null, /*! @/components/uLink.vue */ 274));};
+var _index = _interopRequireDefault(__webpack_require__(/*! ./store/index.js */ 15));
+var _request = _interopRequireDefault(__webpack_require__(/*! ./common/request.js */ 20));
+var _vuex = __webpack_require__(/*! vuex */ 19);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};var ownKeys = Object.keys(source);if (typeof Object.getOwnPropertySymbols === 'function') {ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {return Object.getOwnPropertyDescriptor(source, sym).enumerable;}));}ownKeys.forEach(function (key) {_defineProperty(target, key, source[key]);});}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}var pageHead = function pageHead() {return __webpack_require__.e(/*! import() | components/page-head */ "components/page-head").then(__webpack_require__.bind(null, /*! ./components/page-head.vue */ 268));};var pageFoot = function pageFoot() {return __webpack_require__.e(/*! import() | components/page-foot */ "components/page-foot").then(__webpack_require__.bind(null, /*! ./components/page-foot.vue */ 273));};var uLink = function uLink() {return __webpack_require__.e(/*! import() | components/uLink */ "components/uLink").then(__webpack_require__.bind(null, /*! @/components/uLink.vue */ 280));};
+
+
+
 
 
 
@@ -67,9 +71,11 @@ _vue.default.prototype.fr = function (r) {
       // 如果出现问题,清空登陆状态
 
       console.log("401，清空登陆状态:");
-      console.log("旧store:", _store.default);
-      _store.default.state.UserInfo = "";
-      console.log("新store:", _store.default);
+      console.log("旧store:", _index.default);
+      _index.default.commit('setUserInfo', {
+        k1: 0,
+        k2: 0 });
+
 
       uni.switchTab({
         url: "pages/students/personalCenter/personalCenter" });
@@ -109,6 +115,15 @@ _vue.default.prototype.fhttp = function (url) {
 
 };
 
+
+_vue.default.prototype.https = function (url) {
+  if (url.indexOf("http://") >= 0) {
+    return url.replace("http://", "https://");
+  } else {
+    return "https://" + url;
+  }
+};
+
 // 文件下载信息存储位置 (storage/ golbalData)
 _vue.default.prototype.download_task_save_place = "storage";
 
@@ -145,7 +160,7 @@ _vue.default.prototype.toTree = function (data) {
 
 
 
-_vue.default.prototype.$store = _store.default;
+_vue.default.prototype.$store = _index.default;
 _vue.default.prototype.$backgroundAudioData = {
   playing: false,
   playTime: 0,
@@ -231,7 +246,7 @@ _vue.default.component('uLink', uLink);
 _App.default.mpType = 'app';
 
 var app = new _vue.default(_objectSpread({
-  store: _store.default },
+  store: _index.default },
 _App.default));
 
 createApp(app).$mount();

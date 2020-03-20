@@ -4,8 +4,12 @@ import App from './App'
 import pageHead from './components/page-head.vue'
 import pageFoot from './components/page-foot.vue'
 import uLink from '@/components/uLink.vue'
-import store from './store'
+import store from './store/index.js'
 import http from "./common/request.js"
+import {
+	mapState,
+	mapMutations
+} from 'vuex'
 
 
 
@@ -40,6 +44,14 @@ Vue.prototype.cacheFile = (src, callback) => {
 Vue.prototype.uploadDir = "http//ve.cnki.net/coeduApi/api/File/Upload"
 
 Vue.prototype.fr = (r) => {
+	
+	
+	// 获取当前页面
+	let pages= uni.getCurrentPages()
+	let currentPage=pages[pages.length-1]
+	console.log("当前页面地址：",currentPage.route)
+	
+	
 	try {
 		uni.hideLoading()
 		console.log("原始返回值(fr之前):", JSON.stringify(r))
@@ -55,15 +67,19 @@ Vue.prototype.fr = (r) => {
 		// 如果是401,清空登陆状态
 		if (r[1].statusCode == 401) {
 			// 如果出现问题,清空登陆状态
-			
+
 			console.log("401，清空登陆状态:")
-			console.log("旧store:",store)
-			store.state.UserInfo =""
-			console.log("新store:",store)
+			console.log("旧store:", store)
+			store.commit('setUserInfo', {
+				k1: 0,
+				k2: 0
+			});
 			
-			uni.switchTab({
-				url:"pages/students/personalCenter/personalCenter"
-			})
+			
+			
+			// uni.switchTab({
+			// 	url: "/pages/students/personalCenter/personalCenter"
+			// })
 		}
 
 
@@ -97,6 +113,15 @@ Vue.prototype.fhttp = (url) => {
 		return `${location.protocol}//${url}`
 	}
 
+}
+
+
+Vue.prototype.https = (url) => {
+	if (url.indexOf("http://") >= 0) {
+		return url.replace("http://", "https://")
+	} else {
+		return "https://" + url
+	}
 }
 
 // 文件下载信息存储位置 (storage/ golbalData)

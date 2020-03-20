@@ -97,7 +97,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   "uni-nav-bar": () =>
-    __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 279))
+    __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 285))
 }
 var render = function() {
   var _vm = this
@@ -255,7 +255,7 @@ var _myIframe = _interopRequireDefault(__webpack_require__(/*! @/components/myIf
 //
 //
 //
-var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 279));};var _default = { data: function data() {return { list_zhibo: [], // 直播状态 doing waiting end
+var uniNavBar = function uniNavBar() {return __webpack_require__.e(/*! import() | components/uni-nav-bar/uni-nav-bar */ "components/uni-nav-bar/uni-nav-bar").then(__webpack_require__.bind(null, /*! @/components/uni-nav-bar/uni-nav-bar.vue */ 285));};var _default = { data: function data() {return { list_zhibo: [], // 直播状态 doing waiting end
       tab: 'doing', zhibo_url: '', show: { zhibo_detail: false } };}, components: { uniNavBar: uniNavBar, myIframe: _myIframe.default }, onShow: function onShow() {this.reload_zhibos();}, methods: { // 去直播详情页面
     toZhibo: function toZhibo(item) {// http://ve.cnki.net/Live/LiveApp/Index?cid=432
       var url = 'http://ve.cnki.net/Live/LiveApp/Index?cid=' + item.LiveId;plus.runtime.openURL(url);}, // 刷新直播课程
