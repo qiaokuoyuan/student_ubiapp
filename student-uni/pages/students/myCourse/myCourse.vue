@@ -8,8 +8,7 @@
 			<view class="uni-flex uni-row" v-for="(c, ci) in list_course" :key="ci" style="margin: 30rpx;" @click="toCourseInfo(c)">
 				<!-- 左侧课程图片 -->
 				<view class="">
-					
-					<image v-if="c.CoverUri && c.CoverUri.indexOf('cos')>=0" :src="c.CoverUri" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
+					<image v-if="c.CoverUri && c.CoverUri.indexOf('cos') >= 0" :src="c.CoverUri" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
 					<image v-else src="../../../static/f3d867b7-72cf-48d9-89fd-b5e0d90f5cd7.png" style="width: 200rpx; height: 180rpx;" mode="scaleToFill"></image>
 				</view>
 
@@ -45,6 +44,12 @@ export default {
 			list_course: []
 		};
 	},
+
+	// 下拉操作
+	onPullDownRefresh() {
+		this.reloadCourse();
+	},
+
 	methods: {
 		async secondPerson() {
 			const res = await fetch('http://ve.cnki.net/coeduApi/api/File/Down?fileCode=7e0c5c34-c131-42f5-ada5-b587fe0dd6e0.jpg&fileName=tp01.jpg');
@@ -75,7 +80,7 @@ export default {
 		},
 		// 刷新所有课程
 		reloadCourse() {
-			console.log("reloadCourse")
+			console.log('reloadCourse');
 			let that = this;
 
 			uni.showLoading({
@@ -98,6 +103,9 @@ export default {
 					classType: 0
 				}
 			}).then(r => {
+				
+				uni.stopPullDownRefresh()
+				
 				uni.hideLoading();
 
 				r = that.fr(r);
@@ -110,8 +118,7 @@ export default {
 					// 	that.cacheFile(e.CoverUri, function(_src) {
 					// 		e._cache_src = _src;
 					// 		++_cache_count;
-							
-							
+
 					// 		uni.getImageInfo({
 					// 			src:_src,
 					// 			success(r_getImageInfo) {
@@ -121,7 +128,7 @@ export default {
 					// 				console.log(r_getImageInfo_complete,JSON.stringify(r_getImageInfo_complete))
 					// 			}
 					// 		})
-							
+
 					// 		if (_cache_count == _total_count) {
 					// 			that.list_course = r.Data.courstList;
 					// 		}

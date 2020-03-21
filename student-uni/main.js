@@ -47,14 +47,14 @@ Vue.prototype.fr = (r) => {
 	
 	
 	// 获取当前页面
-	let pages= uni.getCurrentPages()
-	let currentPage=pages[pages.length-1]
-	console.log("当前页面地址：",currentPage.route)
+	// let pages= uni.getCurrentPages()
+	// let currentPage=pages[pages.length-1]
+	// console.log("当前页面地址：",currentPage.route)
 	
 	
 	try {
 		uni.hideLoading()
-		console.log("原始返回值(fr之前):", JSON.stringify(r))
+		console.log("原始返回值(fr之前):", JSON.stringify(r)) 
 
 		if (r[1].data.Code != 200) {
 			uni.hideLoading()

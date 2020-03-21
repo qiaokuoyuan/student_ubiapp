@@ -3,6 +3,7 @@
 			"path": "pages/students/myCourse/myCourse",
 			"style": {
 				// "navigationStyle": "custom"
+				"enablePullDownRefresh":true 
 
 			}
 		},
@@ -280,7 +281,7 @@
 
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "Hello uniapp",
+		"navigationBarTitleText": "职教课堂",
 		"navigationBarBackgroundColor": "#007AFF",
 		"backgroundColor": "#F8F8F8",
 		"backgroundColorTop": "#F4F5F6",

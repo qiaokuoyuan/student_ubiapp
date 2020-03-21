@@ -19,10 +19,10 @@
 			</view>
 
 			<uni-list>
-				<uni-list-item title="我的离线课程" @click="toMyOffline()" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" />
-				<uni-list-item title="修改密码" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" />
-				<uni-list-item title="清除缓存" @click="clearOfflineFiles()" :badge-text="badge" :show-badge="true" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" />
-				<uni-list-item title="版本更新" thumb="https://img-cdn-qiniu.dcloud.net.cn/new-page/uni.png" />
+				<uni-list-item title="我的离线课程" @click="toMyOffline()" thumb="/static/离线下载.png" />
+				<uni-list-item title="修改密码" thumb="/static/修改密码.png" />
+				<uni-list-item title="清除缓存" @click="clearOfflineFiles()" :badge-text="badge" :show-badge="true" thumb="/static/清除缓存.png" />
+				<uni-list-item title="版本更新" thumb="/static/版本更新.png" />
 			</uni-list>
 
 			<button type="primary" @click="exit()" style="margin: 40rpx;">退出登陆</button>
