@@ -13,7 +13,7 @@
         }
     },
     "dependencies": {
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "qs": "^6.9.1",
         "weapp-cookie": "^1.4.6",
         "cnchar": "2.0.9",
