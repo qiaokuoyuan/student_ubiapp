@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "axios": "^0.19.2",
-        "qs": "^6.9.1",
+        "qs": "^6.9.7",
         "weapp-cookie": "^1.4.6",
         "cnchar": "2.0.9",
         "cos-js-sdk-v5": "^0.5.19"
